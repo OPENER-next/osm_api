@@ -1,0 +1,433 @@
+import 'package:osmapi/elements.dart';
+export 'package:osmapi/elements.dart';
+
+import 'osm-api.dart';
+import 'package:xml/xml.dart';
+
+/**
+ * A class for uploading, manipulating and retrieving OSM elements from and to the server.
+ */
+class OSMElementAPI extends OSMAPI {
+
+  OSMElementAPI({
+    String? baseUrl,
+    int? connectTimeout,
+    int? receiveTimeout,
+  }) : super(baseUrl: baseUrl, connectTimeout: connectTimeout, receiveTimeout: receiveTimeout);
+
+
+  /**
+   * A function for uploading an [OSMElement] to the server.
+   *
+   * This updates the [OSMElement.id] and [OSMElement.version] of the given [OSMElement].
+   * Returns the updated [OSMElement] as a [Future].
+   */
+  Future<T> createElement<T extends OSMElement>(T element, int changeset) async {
+    var additionalAttributes = '';
+    var type = element.type.toShortString();
+
+    if (element is OSMNode) {
+      additionalAttributes += 'lat="${element.lat}" lon="${element.lon}"';
+    }
+
+    // returns element id
+    var response = await sendRequest(
+      '/$type/create',
+      type: 'PUT',
+      body:
+        '<osm>'
+          '<$type changeset="$changeset" $additionalAttributes>'
+            '${element.bodyToXML()}'
+          '</$type>'
+        '</osm>'
+    );
+
+    // set server assigned id
+    element.id = int.parse(response.data);
+    // always set starting version
+    element.version = 1;
+
+    return element;
+  }
+
+
+  /**
+   * A function for updating an [OSMElement] on the server.
+   *
+   * This updates the [OSMElement.version] of the given [OSMElement].
+   * Returns the updated [OSMElement] as a [Future].
+   */
+  Future<T> updateElement<T extends OSMElement>(T element, int changeset) async {
+    var additionalAttributes = '';
+    var type = element.type.toShortString();
+
+    if (element is OSMNode) {
+      additionalAttributes += 'lat="${element.lat}" lon="${element.lon}"';
+    }
+
+    // returns new version number
+    var response = await sendRequest(
+      '/$type/${element.id}',
+      type: 'PUT',
+      body:
+        '<osm>'
+          '<$type changeset="$changeset" version="${element.version}" id="${element.id}" $additionalAttributes>'
+            '${element.bodyToXML()}'
+          '</$type>'
+        '</osm>'
+    );
+
+    // set new server assigned version
+    element.version = int.parse(response.data);
+
+    return element;
+  }
+
+
+  /**
+   * A function for deleting an [OSMElement] from the server.
+   *
+   * This updates the [OSMElement.version] of the given [OSMElement].
+   * Returns the updated [OSMElement] as a [Future].
+   */
+  Future<T> deleteElement<T extends OSMElement>(T element, int changeset) async {
+    var additionalAttributes = '';
+    var type = element.type.toShortString();
+
+    if (element is OSMNode) {
+      additionalAttributes += 'lat="${element.lat}" lon="${element.lon}"';
+    }
+
+    // returns new version number
+    var response = await sendRequest(
+      '/$type/${element.id}',
+      type: 'DELETE',
+      body:
+        '<osm>'
+          '<$type changeset="$changeset" version="${element.version}" id="${element.id}" $additionalAttributes/>'
+        '</osm>'
+    );
+
+    // set new server assigned version
+    element.version = int.parse(response.data);
+
+    return element;
+  }
+
+
+  /**
+   * A function for getting an [OSMNode] from the server by its id.
+   *
+   * Optionally a specific version of the node can be requested by using the [version] parameter.
+   * Returns the [OSMNode] as a [Future].
+   */
+  Future<OSMNode> getNode(int id, [ int? version ]) async {
+    var versionParameter = version == null ? '' : '/$version';
+    return await _getElement<OSMNode>('/node/$id$versionParameter');
+  }
+
+
+  /**
+   * A function for getting an [OSMWay] from the server by its id.
+   *
+   * Optionally a specific version of the way can be requested by using the [version] parameter.
+   * Returns the [OSMWay] as a [Future].
+   */
+  Future<OSMWay> getWay(int id, [ int? version ]) async {
+    var versionParameter = version == null ? '' : '/$version';
+    return await _getElement<OSMWay>('/way/$id$versionParameter');
+  }
+
+
+  /**
+   * A function for getting an [OSMRelation] from the server by its id.
+   *
+   * Optionally a specific version of the relation can be requested by using the [version] parameter.
+   * Returns the [OSMRelation] as a [Future].
+   */
+  Future<OSMRelation> getRelation(int id, [ int? version ]) async {
+    var versionParameter = version == null ? '' : '/$version';
+    return await _getElement<OSMRelation>('/relation/$id$versionParameter');
+  }
+
+
+  /**
+   * A function for getting an [OSMElement] from the server by its type and a request url.
+   * The generic type must be set to [OSMNode], [OSMWay] or [OSMRelation]
+   *
+   * Returns the typed [OSMElement] as a [Future].
+   */
+  Future<T> _getElement<T extends OSMElement>(String request) async {
+    assert(T != OSMElement);
+
+    // returns element xml
+    var response = await sendRequest(request);
+
+    switch (T) {
+      case OSMNode:
+        return OSMNode.fromXMLString(response.data) as T;
+
+      case OSMWay:
+        return OSMWay.fromXMLString(response.data) as T;
+
+      case OSMRelation:
+        return OSMRelation.fromXMLString(response.data) as T;
+      default:
+        throw('TODO ERROR');
+    }
+  }
+
+
+  /**
+   * A function for getting multiple [OSNode]s from the server by their ids.
+   *
+   * Returns a [Future] with a lazy [Iterable] of [OSMNode]s.
+   */
+  Future<Iterable<OSMNode>> getNodes(List<int> ids) async {
+    return await _getElements<OSMNode>('/nodes/?nodes=${ids.join(',')}');
+  }
+
+
+  /**
+   * A function for getting multiple [OSMWay]s from the server by their ids.
+   *
+   * Returns a [Future] with a lazy [Iterable] of [OSMWay]s.
+   */
+  Future<Iterable<OSMWay>> getWays(List<int> ids) async {
+    return await _getElements<OSMWay>('/ways/?ways=${ids.join(',')}');
+  }
+
+
+  /**
+   * A function for getting multiple [OSMRelation]s from the server by their ids.
+   *
+   * Returns a [Future] with a lazy [Iterable] of [OSMRelation]s.
+   */
+  Future<Iterable<OSMRelation>> getRelations(List<int> ids) async {
+    return await _getElements<OSMRelation>('/relations/?relations=${ids.join(',')}');
+  }
+
+
+  // TODO
+  Future<OSMWay> getCompleteWay(int id) async {
+    throw(UnimplementedError);
+  }
+
+
+  // TODO
+  Future<OSMRelation> _getCompleteRelation(int id) async {
+    throw(UnimplementedError);
+  }
+
+
+  // TODO
+  Future<T> _getCompleteElement<T extends OSMElement>(String request) async {
+    throw(UnimplementedError);
+  }
+
+
+  /**
+   * A function for getting multiple [OSMNode]s from the server by their ids and version numbers.
+   *
+   * To get the latest version of an element set the version number to [null].
+   * Returns a [Future] with a lazy [Iterable] of [OSMNode]s.
+   *
+   * Example:
+   * ```
+   * osmapi.getNodsWithVersion({ 34432: 3, 4554: 1, 32122: null, 43443: null });
+   * ```
+   */
+  Future<Iterable<OSMNode>> getNodesWithVersion(Map<int, int?> idVersionMap) async {
+    return await _getElementsWithVersion<OSMNode>('/nodes?nodes=', idVersionMap);
+  }
+
+
+  /**
+   * A function for getting multiple [OSMWay]s from the server by their ids and version numbers.
+   *
+   * To get the latest version of an element set the version number to [null].
+   * Returns a [Future] with a lazy [Iterable] of [OSMElement]s.
+   *
+   * Example:
+   * ```
+   * osmapi.getWaysWithVersion({ 34432: 3, 4554: 1, 32122: null, 43443: null });
+   * ```
+   */
+  Future<Iterable<OSMWay>> getWaysWithVersion(Map<int, int?> idVersionMap) async {
+    return await _getElementsWithVersion<OSMWay>('/ways?ways=', idVersionMap);
+  }
+
+
+  /**
+   * A function for getting multiple [OSMRelation]s from the server by their ids and version numbers.
+   *
+   * To get the latest version of an element set the version number to [null].
+   * Returns a [Future] with a lazy [Iterable] of [OSMRelation]s.
+   *
+   * Example:
+   * ```
+   * osmapi.getRelationsWithVersion({ 34432: 3, 4554: 1, 32122: null, 43443: null });
+   * ```
+   */
+  Future<Iterable<OSMRelation>> getRelationsWithVersion(Map<int, int?> idVersionMap) async {
+    return await _getElementsWithVersion<OSMRelation>('/relations?relations=', idVersionMap);
+  }
+
+
+  /**
+   * A function for getting multiple [OSMElement]s of the same type from the server by their ids and version numbers.
+   * The generic type must be set to [OSMNode], [OSMWay] or [OSMRelation]
+   *
+   * To get the latest version of an element set the version number to [null].
+   * Returns a [Future] with a lazy [Iterable] of typed [OSMElement]s.
+   */
+  Future<Iterable<T>> _getElementsWithVersion<T extends OSMElement>(String request, Map<int, int?> idVersionMap) async {
+    var elementList = '';
+
+    idVersionMap.forEach((id, version) {
+      elementList += elementList.isEmpty ? '$id' : ',$id';
+      if (version != null) {
+        elementList += 'v$version';
+      }
+    });
+
+    return await _getElements<T>(request + elementList);
+  }
+
+
+  /**
+   * A function for retrieving all [OSMWay]s from the server that contain a node with the given [id].
+   *
+   * Returns a [Future] with a lazy [Iterable] of [OSMWay]s.
+   */
+  Future<Iterable<OSMWay>> getWaysWithNode(int id) async {
+    return _getElements<OSMWay>('/node/$id/ways');
+  }
+
+
+  /**
+   * A function for retrieving all [OSMRelation]s from the server that contain a node with the given [id].
+   *
+   * Returns a [Future] with a lazy [Iterable] of [OSMRelation]s.
+   */
+  Future<Iterable<OSMRelation>> getRelationsWithNode(int id) async {
+    return _getElements<OSMRelation>('/node/$id/relations');
+  }
+
+
+  /**
+   * A function for retrieving all [OSMRelation]s from the server that contain a way with the given [id].
+   *
+   * Returns a [Future] with a lazy [Iterable] of [OSMRelation]s.
+   */
+  Future<Iterable<OSMRelation>> getRelationsWithWay(int id) async {
+    return _getElements<OSMRelation>('/way/$id/relations');
+  }
+
+
+  /**
+   * A function for retrieving all [OSMRelation]s from the server that contain a relation with the given [id].
+   *
+   * Returns a [Future] with a lazy [Iterable] of [OSMRelation]s.
+   */
+  Future<Iterable<OSMRelation>> getRelationsWithRelation(int id) async {
+    return _getElements<OSMRelation>('/relation/$id/relations');
+  }
+
+
+  /**
+   * A function for getting all versions of one [OSMNode] from the server by its [id].
+   *
+   * The elements are returned in ascending order by their version number.
+   * This means the oldest version is the first and the newest version the last element in the returned [Iterable].
+   * Returns a [Future] with a lazy [Iterable] of [OSMNode]s.
+   */
+  Future<Iterable<OSMNode>> getNodeHistory(int id) async {
+    return _getElements<OSMNode>('/node/$id/history');
+  }
+
+
+  /**
+   * A function for getting all versions of one [OSMWay] from the server by its [id].
+   *
+   * The elements are returned in ascending order by their version number.
+   * This means the oldest version is the first and the newest version the last element in the returned [Iterable].
+   * Returns a [Future] with a lazy [Iterable] of [OSMWay]s.
+   */
+  Future<Iterable<OSMWay>> getWayHistory(int id) async {
+    return _getElements<OSMWay>('/way/$id/history');
+  }
+
+
+  /**
+   * A function for getting all versions of one [OSMRelation] from the server by its [id].
+   *
+   * The elements are returned in ascending order by their version number.
+   * This means the oldest version is the first and the newest version the last element in the returned [Iterable].
+   * Returns a [Future] with a lazy [Iterable] of [OSMRelation]s.
+   */
+  Future<Iterable<OSMRelation>> getRelationHistory(int id) async {
+    return _getElements<OSMRelation>('/relation/$id/history');
+  }
+
+
+  /**
+   * A function for getting multiple [OSMElement]s from the server by a request url.
+   * The generic type must be set to [OSMNode], [OSMWay] or [OSMRelation]
+   *
+   * Returns a [Future] with a lazy [Iterable] of the typed [OSMElement]s.
+   */
+  Future<Iterable<T>> _getElements<T extends OSMElement>(String request) async {
+    assert(T != OSMElement);
+
+    late OSMElementType type;
+    switch (T) {
+      case OSMNode:
+        type = OSMElementType.node;
+      break;
+      case OSMWay:
+        type = OSMElementType.way;
+      break;
+      case OSMRelation:
+        type = OSMElementType.relation;
+      break;
+    }
+    // returns element xml
+    var response = await sendRequest(request);
+
+    var xmlDoc = XmlDocument.parse(response.data);
+    var xmlElements = xmlDoc.rootElement.findElements(type.toShortString());
+
+    return _lazyXMLtoOSMElements(xmlElements).cast<T>();
+  }
+
+
+  /**
+   * A factory function for converting an [XmlElement] to an [OSMElement].
+   */
+  OSMElement _xmlElementToOSMElement(XmlElement xmlElement) {
+    switch (xmlElement.name.toString()) {
+      case 'node':
+        return OSMNode.fromXMLElement(xmlElement);
+
+      case 'way':
+        return OSMWay.fromXMLElement(xmlElement);
+
+      case 'relation':
+        return OSMRelation.fromXMLElement(xmlElement);
+
+      default:
+        throw('TODO no osm element');
+    }
+  }
+
+
+  /**
+   * A generator/lazy iterable for converting [XmlElement]s to [OSMElement]s from a given type.
+   */
+  Iterable<OSMElement> _lazyXMLtoOSMElements(Iterable<XmlElement> xmlElements) sync* {
+    for (var xmlElement in xmlElements) {
+      yield _xmlElementToOSMElement(xmlElement);
+    }
+  }
+}
