@@ -121,9 +121,9 @@ class OSMElementAPI extends OSMAPI {
    * Optionally a specific version of the node can be requested by using the [version] parameter.
    * Returns the [OSMNode] as a [Future].
    */
-  Future<OSMNode> getNode(int id, [ int? version ]) async {
+  Future<OSMNode> getNode(int id, [ int? version ]) {
     var versionParameter = version == null ? '' : '/$version';
-    return await _getElement<OSMNode>('/node/$id$versionParameter');
+    return _getElement<OSMNode>('/node/$id$versionParameter');
   }
 
 
@@ -133,9 +133,9 @@ class OSMElementAPI extends OSMAPI {
    * Optionally a specific version of the way can be requested by using the [version] parameter.
    * Returns the [OSMWay] as a [Future].
    */
-  Future<OSMWay> getWay(int id, [ int? version ]) async {
+  Future<OSMWay> getWay(int id, [ int? version ]) {
     var versionParameter = version == null ? '' : '/$version';
-    return await _getElement<OSMWay>('/way/$id$versionParameter');
+    return _getElement<OSMWay>('/way/$id$versionParameter');
   }
 
 
@@ -145,9 +145,9 @@ class OSMElementAPI extends OSMAPI {
    * Optionally a specific version of the relation can be requested by using the [version] parameter.
    * Returns the [OSMRelation] as a [Future].
    */
-  Future<OSMRelation> getRelation(int id, [ int? version ]) async {
+  Future<OSMRelation> getRelation(int id, [ int? version ]) {
     var versionParameter = version == null ? '' : '/$version';
-    return await _getElement<OSMRelation>('/relation/$id$versionParameter');
+    return _getElement<OSMRelation>('/relation/$id$versionParameter');
   }
 
 
@@ -183,8 +183,8 @@ class OSMElementAPI extends OSMAPI {
    *
    * Returns a [Future] with a lazy [Iterable] of [OSMNode]s.
    */
-  Future<Iterable<OSMNode>> getNodes(List<int> ids) async {
-    return await _getElements<OSMNode>('/nodes/?nodes=${ids.join(',')}');
+  Future<Iterable<OSMNode>> getNodes(List<int> ids) {
+    return _getElements<OSMNode>('/nodes/?nodes=${ids.join(',')}');
   }
 
 
@@ -193,8 +193,8 @@ class OSMElementAPI extends OSMAPI {
    *
    * Returns a [Future] with a lazy [Iterable] of [OSMWay]s.
    */
-  Future<Iterable<OSMWay>> getWays(List<int> ids) async {
-    return await _getElements<OSMWay>('/ways/?ways=${ids.join(',')}');
+  Future<Iterable<OSMWay>> getWays(List<int> ids) {
+    return _getElements<OSMWay>('/ways/?ways=${ids.join(',')}');
   }
 
 
@@ -203,8 +203,8 @@ class OSMElementAPI extends OSMAPI {
    *
    * Returns a [Future] with a lazy [Iterable] of [OSMRelation]s.
    */
-  Future<Iterable<OSMRelation>> getRelations(List<int> ids) async {
-    return await _getElements<OSMRelation>('/relations/?relations=${ids.join(',')}');
+  Future<Iterable<OSMRelation>> getRelations(List<int> ids) {
+    return _getElements<OSMRelation>('/relations/?relations=${ids.join(',')}');
   }
 
 
@@ -237,8 +237,8 @@ class OSMElementAPI extends OSMAPI {
    * osmapi.getNodsWithVersion({ 34432: 3, 4554: 1, 32122: null, 43443: null });
    * ```
    */
-  Future<Iterable<OSMNode>> getNodesWithVersion(Map<int, int?> idVersionMap) async {
-    return await _getElementsWithVersion<OSMNode>('/nodes?nodes=', idVersionMap);
+  Future<Iterable<OSMNode>> getNodesWithVersion(Map<int, int?> idVersionMap) {
+    return _getElementsWithVersion<OSMNode>('/nodes?nodes=', idVersionMap);
   }
 
 
@@ -253,8 +253,8 @@ class OSMElementAPI extends OSMAPI {
    * osmapi.getWaysWithVersion({ 34432: 3, 4554: 1, 32122: null, 43443: null });
    * ```
    */
-  Future<Iterable<OSMWay>> getWaysWithVersion(Map<int, int?> idVersionMap) async {
-    return await _getElementsWithVersion<OSMWay>('/ways?ways=', idVersionMap);
+  Future<Iterable<OSMWay>> getWaysWithVersion(Map<int, int?> idVersionMap) {
+    return _getElementsWithVersion<OSMWay>('/ways?ways=', idVersionMap);
   }
 
 
@@ -269,8 +269,8 @@ class OSMElementAPI extends OSMAPI {
    * osmapi.getRelationsWithVersion({ 34432: 3, 4554: 1, 32122: null, 43443: null });
    * ```
    */
-  Future<Iterable<OSMRelation>> getRelationsWithVersion(Map<int, int?> idVersionMap) async {
-    return await _getElementsWithVersion<OSMRelation>('/relations?relations=', idVersionMap);
+  Future<Iterable<OSMRelation>> getRelationsWithVersion(Map<int, int?> idVersionMap) {
+    return _getElementsWithVersion<OSMRelation>('/relations?relations=', idVersionMap);
   }
 
 
@@ -281,7 +281,7 @@ class OSMElementAPI extends OSMAPI {
    * To get the latest version of an element set the version number to [null].
    * Returns a [Future] with a lazy [Iterable] of typed [OSMElement]s.
    */
-  Future<Iterable<T>> _getElementsWithVersion<T extends OSMElement>(String request, Map<int, int?> idVersionMap) async {
+  Future<Iterable<T>> _getElementsWithVersion<T extends OSMElement>(String request, Map<int, int?> idVersionMap) {
     var elementList = '';
 
     idVersionMap.forEach((id, version) {
@@ -291,7 +291,7 @@ class OSMElementAPI extends OSMAPI {
       }
     });
 
-    return await _getElements<T>(request + elementList);
+    return _getElements<T>(request + elementList);
   }
 
 
@@ -300,7 +300,7 @@ class OSMElementAPI extends OSMAPI {
    *
    * Returns a [Future] with a lazy [Iterable] of [OSMWay]s.
    */
-  Future<Iterable<OSMWay>> getWaysWithNode(int id) async {
+  Future<Iterable<OSMWay>> getWaysWithNode(int id) {
     return _getElements<OSMWay>('/node/$id/ways');
   }
 
@@ -310,7 +310,7 @@ class OSMElementAPI extends OSMAPI {
    *
    * Returns a [Future] with a lazy [Iterable] of [OSMRelation]s.
    */
-  Future<Iterable<OSMRelation>> getRelationsWithNode(int id) async {
+  Future<Iterable<OSMRelation>> getRelationsWithNode(int id) {
     return _getElements<OSMRelation>('/node/$id/relations');
   }
 
@@ -320,7 +320,7 @@ class OSMElementAPI extends OSMAPI {
    *
    * Returns a [Future] with a lazy [Iterable] of [OSMRelation]s.
    */
-  Future<Iterable<OSMRelation>> getRelationsWithWay(int id) async {
+  Future<Iterable<OSMRelation>> getRelationsWithWay(int id) {
     return _getElements<OSMRelation>('/way/$id/relations');
   }
 
@@ -330,7 +330,7 @@ class OSMElementAPI extends OSMAPI {
    *
    * Returns a [Future] with a lazy [Iterable] of [OSMRelation]s.
    */
-  Future<Iterable<OSMRelation>> getRelationsWithRelation(int id) async {
+  Future<Iterable<OSMRelation>> getRelationsWithRelation(int id) {
     return _getElements<OSMRelation>('/relation/$id/relations');
   }
 
@@ -342,7 +342,7 @@ class OSMElementAPI extends OSMAPI {
    * This means the oldest version is the first and the newest version the last element in the returned [Iterable].
    * Returns a [Future] with a lazy [Iterable] of [OSMNode]s.
    */
-  Future<Iterable<OSMNode>> getNodeHistory(int id) async {
+  Future<Iterable<OSMNode>> getNodeHistory(int id) {
     return _getElements<OSMNode>('/node/$id/history');
   }
 
@@ -354,7 +354,7 @@ class OSMElementAPI extends OSMAPI {
    * This means the oldest version is the first and the newest version the last element in the returned [Iterable].
    * Returns a [Future] with a lazy [Iterable] of [OSMWay]s.
    */
-  Future<Iterable<OSMWay>> getWayHistory(int id) async {
+  Future<Iterable<OSMWay>> getWayHistory(int id) {
     return _getElements<OSMWay>('/way/$id/history');
   }
 
@@ -366,7 +366,7 @@ class OSMElementAPI extends OSMAPI {
    * This means the oldest version is the first and the newest version the last element in the returned [Iterable].
    * Returns a [Future] with a lazy [Iterable] of [OSMRelation]s.
    */
-  Future<Iterable<OSMRelation>> getRelationHistory(int id) async {
+  Future<Iterable<OSMRelation>> getRelationHistory(int id) {
     return _getElements<OSMRelation>('/relation/$id/history');
   }
 
