@@ -52,10 +52,10 @@ jobs:
     # Create user account
     # derived from https://github.com/openstreetmap/openstreetmap-website/issues/3136
     - name: Create OSM user account
-      run: |
+      run: >
         docker-compose run --rm web bundle exec rails runner '
-        pass_crypt, pass_salt = PasswordHash.create("testpass")
-        admin = User.find_or_create_by(
+        pass_crypt, pass_salt = PasswordHash.create("testpass");
+        user = User.find_or_create_by(
         :email => "testuser@osm.org",
         :email_valid => true,
         :display_name => "testuser",
@@ -65,8 +65,8 @@ jobs:
         :data_public => true,
         :pass_crypt => pass_crypt,
         :pass_salt => pass_salt
-        )
-        admin.save!'
+        );
+        user.save!'
       working-directory: ./osm-website
 
     # dart OSM API source and setup
