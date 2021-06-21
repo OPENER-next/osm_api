@@ -17,10 +17,7 @@ jobs:
       with:
         repository: openstreetmap/openstreetmap-website
         path: osm-website
-        
-    - name: Show dirs
-      run: ls -R
-
+ 
     - name: Poke config
       run: |
         cp config/example.storage.yml config/storage.yml
@@ -70,6 +67,7 @@ jobs:
             :pass_salt => pass_salt
           )
           admin.save!'
+      working-directory: ./osm-website
 
     # dart OSM API source and setup
     - name: Checkout source
