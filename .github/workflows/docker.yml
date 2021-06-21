@@ -21,34 +21,36 @@ jobs:
     - name: Show dirs
       run: ls -R
 
-    - name: Go to osm-website directory
-      run: cd ./osm-website
-
     - name: Poke config
       run: |
         cp config/example.storage.yml config/storage.yml
         cp config/docker.database.yml config/database.yml
         touch config/settings.local.yml
+      working-directory: ./osm-website
 
     - name: Build Docker Image
       run: |
         docker-compose build
+      working-directory: ./osm-website
 
     - name: Start Docker-Compose
       run: |
         docker-compose up -d
         sleep 15 # let the DB warm up a little
+      working-directory: ./osm-website
 
     - name: Prepare Database
       run: |
         docker-compose run --rm web rake db:migrate
         docker-compose run web bundle exec rake i18n:js:export
         docker-compose run --rm web osmosis --rx docker/null-island.osm.xml --wd host=db database=openstreetmap user=openstreetmap password=openstreetmap validateSchemaVersion=no
+      working-directory: ./osm-website
 
     - name: Test Basic Website
       run: |
         curl -siL http://127.0.0.1:3000 | egrep '^HTTP/1.1 200 OK'
         curl -siL http://127.0.0.1:3000/api/0.6/node/1 | grep 'Null Island'
+      working-directory: ./osm-website
 
     # Create user account
     # derived from https://github.com/openstreetmap/openstreetmap-website/issues/3136
@@ -75,17 +77,17 @@ jobs:
       with:
         path: dart-osm-api
 
-    - name: Go to dart-osm-api directory
-      run: cd ./dart-osm-api
-
     - name: Install dart
       uses: dart-lang/setup-dart@v1
 
     - name: Install dependencies
       run: dart pub get
+      working-directory: ./dart-osm-api
 
     - name: Analyze project source
       run: dart analyze
+      working-directory: ./dart-osm-api
 
     - name: Run dart OSM API tests
       run: dart test
+      working-directory: ./dart-osm-api
