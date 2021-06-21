@@ -17,6 +17,9 @@ jobs:
       with:
         repository: openstreetmap/openstreetmap-website
         path: osm-website
+        
+    - name: Show dirs
+      run: ls -R
 
     - name: Go to osm-website directory
       run: cd $GITHUB_WORKSPACE/osm-website
