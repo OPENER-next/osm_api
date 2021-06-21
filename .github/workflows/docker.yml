@@ -22,7 +22,7 @@ jobs:
       run: ls -R
 
     - name: Go to osm-website directory
-      run: cd $GITHUB_WORKSPACE/osm-website
+      run: cd ./osm-website
 
     - name: Poke config
       run: |
@@ -76,7 +76,7 @@ jobs:
         path: dart-osm-api
 
     - name: Go to dart-osm-api directory
-      run: cd $GITHUB_WORKSPACE/dart-osm-api
+      run: cd ./dart-osm-api
 
     - name: Install dart
       uses: dart-lang/setup-dart@v1
