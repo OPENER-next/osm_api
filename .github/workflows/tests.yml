@@ -1,4 +1,4 @@
-name: Docker
+name: Tests
 on:
   push:
      branches: [ main ]
@@ -12,38 +12,38 @@ jobs:
 
     # OSM website setup
     # derived from https://github.com/openstreetmap/openstreetmap-website/blob/master/.github/workflows/docker.yml
-    - name: Checkout OSM Server
+    - name: Checkout OSM website source
       uses: actions/checkout@v2.3.4
       with:
         repository: openstreetmap/openstreetmap-website
         path: osm-website
  
-    - name: Poke config
+    - name: Poke OSM website config
       run: |
         cp config/example.storage.yml config/storage.yml
         cp config/docker.database.yml config/database.yml
         touch config/settings.local.yml
       working-directory: ./osm-website
 
-    - name: Build Docker Image
+    - name: Build OSM website Docker Image
       run: |
         docker-compose build
       working-directory: ./osm-website
 
-    - name: Start Docker-Compose
+    - name: Start OSM website Docker-Compose
       run: |
         docker-compose up -d
         sleep 15 # let the DB warm up a little
       working-directory: ./osm-website
 
-    - name: Prepare Database
+    - name: Prepare OSM website Database
       run: |
         docker-compose run --rm web rake db:migrate
         docker-compose run web bundle exec rake i18n:js:export
         docker-compose run --rm web osmosis --rx docker/null-island.osm.xml --wd host=db database=openstreetmap user=openstreetmap password=openstreetmap validateSchemaVersion=no
       working-directory: ./osm-website
 
-    - name: Test Basic Website
+    - name: Test basic OSM website
       run: |
         curl -siL http://127.0.0.1:3000 | egrep '^HTTP/1.1 200 OK'
         curl -siL http://127.0.0.1:3000/api/0.6/node/1 | grep 'Null Island'
@@ -51,14 +51,14 @@ jobs:
 
     # Create user account
     # derived from https://github.com/openstreetmap/openstreetmap-website/issues/3136
-    - name: Create OSM user account
+    - name: Create test OSM user account
       run: |
         docker-compose run --rm web bundle exec rails runner '
         pass_crypt, pass_salt = PasswordHash.create("testpass");
         user = User.find_or_create_by(
-        :email => "testuserX@osm.org",
+        :email => "testuser@osm.org",
         :email_valid => true,
-        :display_name => "testuserX",
+        :display_name => "testuser",
         :status => "confirmed",
         :terms_seen => true,
         :terms_agreed => Time.now.getutc,
@@ -71,7 +71,7 @@ jobs:
       working-directory: ./osm-website
 
     # dart OSM API source and setup
-    - name: Checkout source
+    - name: Checkout dart OSM API source
       uses: actions/checkout@v2.3.4
       with:
         path: dart-osm-api
@@ -79,7 +79,7 @@ jobs:
     - name: Install dart
       uses: dart-lang/setup-dart@v1
 
-    - name: Install dependencies
+    - name: Install dart OSM API dependencies
       run: dart pub get
       working-directory: ./dart-osm-api
 
@@ -88,5 +88,5 @@ jobs:
       working-directory: ./dart-osm-api
 
     - name: Run dart OSM API tests
-      run: dart test
+      run: dart test --chain-stack-traces
       working-directory: ./dart-osm-api
