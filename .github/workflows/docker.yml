@@ -56,9 +56,9 @@ jobs:
         docker-compose run --rm web bundle exec rails runner '
         pass_crypt, pass_salt = PasswordHash.create("testpass");
         user = User.find_or_create_by(
-        :email => "testuserX@osm.org",
+        :email => "testuser@osm.org",
         :email_valid => true,
-        :display_name => "testuserX",
+        :display_name => "testuser",
         :status => "confirmed",
         :terms_seen => true,
         :terms_agreed => Time.now.getutc,
