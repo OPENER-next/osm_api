@@ -20,7 +20,7 @@ void main() async {
     changeset = OSMChangeset();
     changeset.tags['created_by'] = 'Opener Next';
     changeset.tags['comment'] = 'Just adding some streetnames';
-    changesetId = await osmapi.createChangeset(osmapi, changeset);
+    changesetId = await osmapi.createChangeset(changeset);
 
     // create some elements
 

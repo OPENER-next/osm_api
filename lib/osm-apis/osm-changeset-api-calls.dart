@@ -8,8 +8,8 @@ import 'osm-api.dart';
  */
 mixin OSMChangesetAPICalls on OSMAPIBase {
 
-  Future<int> createChangeset(OSMAPI osmapi, OSMChangeset changeset) async {
-    var response = await osmapi.sendRequest(
+  Future<int> createChangeset(OSMChangeset changeset) async {
+    var response = await sendRequest(
       '/changeset/create',
       type: 'PUT',
       body: '''
@@ -24,15 +24,15 @@ mixin OSMChangesetAPICalls on OSMAPIBase {
   }
 
 
-  Future<String> getChangeset(OSMAPI osmapi, int id, [ bool includeDiscussion = true ]) async {
-    var response = await osmapi.sendRequest(
+  Future<String> getChangeset(int id, [ bool includeDiscussion = true ]) async {
+    var response = await sendRequest(
       '/changeset/$id?include_discussion=$includeDiscussion'
     );
     return response.data;
   }
 
 
-  Future<void> closeChangeset(OSMAPI osmapi, int id) async {
+  Future<void> closeChangeset(int id) async {
     var response = await sendRequest(
       '/changeset/$id/close',
       type: 'PUT'
