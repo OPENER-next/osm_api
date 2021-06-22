@@ -64,7 +64,8 @@ jobs:
         :terms_agreed => Time.now.getutc,
         :data_public => true,
         :pass_crypt => pass_crypt,
-        :pass_salt => pass_salt
+        :pass_salt => pass_salt,
+        :id => 8520387
         );
         user.save'
       working-directory: ./osm-website
