@@ -88,5 +88,5 @@ jobs:
       working-directory: ./dart-osm-api
 
     - name: Run dart OSM API tests
-      run: dart test
+      run: dart test --chain-stack-traces
       working-directory: ./dart-osm-api
