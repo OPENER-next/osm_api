@@ -1,19 +1,11 @@
 import 'package:osmapi/elements.dart';
-export 'package:osmapi/elements.dart';
-
-import 'osm-api.dart';
+import 'osm-api-base.dart';
 import 'package:xml/xml.dart';
 
 /**
- * A class for uploading, manipulating and retrieving OSM elements from and to the server.
+ * A mixin containing methods for uploading, manipulating and retrieving OSM elements from and to the server.
  */
-class OSMElementAPI extends OSMAPI {
-
-  OSMElementAPI({
-    String? baseUrl,
-    int? connectTimeout,
-    int? receiveTimeout,
-  }) : super(baseUrl: baseUrl, connectTimeout: connectTimeout, receiveTimeout: receiveTimeout);
+mixin OSMElementAPICalls on OSMAPIBase {
 
 
   /**
@@ -209,19 +201,15 @@ class OSMElementAPI extends OSMAPI {
 
 
   // TODO
-  Future<OSMWay> getCompleteWay(int id) async {
+  Future<OSMWay> getFullWay(int id) async {
+    var elements = await _getElements('/api/0.6/way/$id/full');
     throw(UnimplementedError);
   }
 
 
   // TODO
-  Future<OSMRelation> _getCompleteRelation(int id) async {
-    throw(UnimplementedError);
-  }
-
-
-  // TODO
-  Future<T> _getCompleteElement<T extends OSMElement>(String request) async {
+  Future<OSMRelation> _getFullRelation(int id) async {
+    var elements = _getElements('/api/0.6/relation/$id/full');
     throw(UnimplementedError);
   }
 

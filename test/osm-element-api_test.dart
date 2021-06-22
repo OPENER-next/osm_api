@@ -1,12 +1,11 @@
 import 'package:dio/dio.dart';
-import 'package:osmapi/osm-apis/osm-changeset-api.dart';
+import 'package:osmapi/osm-apis/osm-api.dart';
 import 'package:osmapi/osm-changesets/osm-changeset.dart';
 import 'package:test/test.dart';
-import 'package:osmapi/osm-apis/osm-element-api.dart';
 
 void main() async {
 
-  late OSMElementAPI osmapi;
+  late OSMAPI osmapi;
   late OSMChangeset changeset;
   late int changesetId;
   late List<OSMNode> nodes;
@@ -14,14 +13,14 @@ void main() async {
   late OSMRelation relation;
 
   setUpAll(() async {
-    osmapi = OSMElementAPI(
-    //  baseUrl: 'master.apis.dev.openstreetmap.org/api/0.6'
+    osmapi = OSMAPI(
+      baseUrl: 'http://127.0.0.1:3000/api/0.6'
     );
 
     changeset = OSMChangeset();
     changeset.tags['created_by'] = 'Opener Next';
     changeset.tags['comment'] = 'Just adding some streetnames';
-    changesetId = await OSMChangesetAPI.createChangeset(osmapi, changeset);
+    changesetId = await osmapi.createChangeset(osmapi, changeset);
 
     // create some elements
 
