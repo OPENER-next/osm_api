@@ -200,17 +200,27 @@ mixin OSMElementAPICalls on OSMAPIBase {
   }
 
 
-  // TODO
-  Future<OSMWay> getFullWay(int id) async {
-    var elements = await _getElements('/api/0.6/way/$id/full');
-    throw(UnimplementedError);
+  /**
+   * A function for getting a way with all its child nodes as an [OSMElementBundle] by ids.
+   *
+   * Returns a [Future] with a [OSMElementBundle]
+   */
+  Future<OSMElementBundle> getFullWay(int id) async {
+    var elements = await _getElements('/way/$id/full');
+    return OSMElementBundle(elements);
   }
 
 
-  // TODO
-  Future<OSMRelation> _getFullRelation(int id) async {
-    var elements = _getElements('/api/0.6/relation/$id/full');
-    throw(UnimplementedError);
+  /**
+   * A function for getting a relations with all its child elements as an [OSMElementBundle] by ids.
+   * The nodes of child ways will also be retrieved.
+   * Read more here: https://wiki.openstreetmap.org/wiki/API_v0.6#Full:_GET_.2Fapi.2F0.6.2F.5Bway.7Crelation.5D.2F.23id.2Ffull
+   *
+   * Returns a [Future] with a [OSMElementBundle]
+   */
+  Future<OSMElementBundle> getFullRelation(int id) async {
+    var elements = await _getElements('/relation/$id/full');
+    return OSMElementBundle(elements);
   }
 
 
@@ -361,30 +371,16 @@ mixin OSMElementAPICalls on OSMAPIBase {
 
   /**
    * A function for getting multiple [OSMElement]s from the server by a request url.
-   * The generic type must be set to [OSMNode], [OSMWay] or [OSMRelation]
    *
    * Returns a [Future] with a lazy [Iterable] of the typed [OSMElement]s.
    */
   Future<Iterable<T>> _getElements<T extends OSMElement>(String request) async {
-    assert(T != OSMElement);
-
-    late OSMElementType type;
-    switch (T) {
-      case OSMNode:
-        type = OSMElementType.node;
-      break;
-      case OSMWay:
-        type = OSMElementType.way;
-      break;
-      case OSMRelation:
-        type = OSMElementType.relation;
-      break;
-    }
     // returns element xml
     var response = await sendRequest(request);
 
     var xmlDoc = XmlDocument.parse(response.data);
-    var xmlElements = xmlDoc.rootElement.findElements(type.toShortString());
+    // TODO replace with childElements later
+    var xmlElements = xmlDoc.rootElement.children.whereType<XmlElement>();
 
     return _lazyXMLtoOSMElements(xmlElements).cast<T>();
   }

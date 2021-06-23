@@ -168,12 +168,28 @@ void main() async {
     expect(serverRelations, equals([relation]));
   });
 
+  // check get full way and relation
+
+  test('compare local way and child elements with getFullWay()', () async {
+    var elementBundle = await osmapi.getFullWay(ways[0].id);
+    expect(elementBundle.nodes, unorderedEquals({ nodes[0], nodes[1] }));
+    expect(elementBundle.ways, unorderedEquals({ ways[0] }));
+    expect(elementBundle.relations, isEmpty);
+  });
+
+  test('compare local relation and child elements with getFullRelation()', () async {
+    var elementBundle = await osmapi.getFullRelation(relation.id);
+    expect(elementBundle.nodes, unorderedEquals({ nodes[0], nodes[1], nodes[2], nodes[3] }));
+    expect(elementBundle.ways, unorderedEquals({ ways[0], ways[1] }));
+    expect(elementBundle.relations, unorderedEquals({ relation }));
+  });
+
   // check get ways by node
 
   test('check for correct return of getWaysWithNode()', () async {
     // nodes[1] should be present in all ways
     var serverWays = await osmapi.getWaysWithNode(nodes[1].id);
-    expect(serverWays, equals(ways));
+    expect(serverWays, unorderedEquals(ways));
   });
 
   // check get relations by element
