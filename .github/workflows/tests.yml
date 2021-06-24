@@ -90,3 +90,8 @@ jobs:
     - name: Run dart OSM API tests
       run: dart test --chain-stack-traces
       working-directory: ./dart-osm-api
+      continue-on-error: true
+      
+    - name: Check Docker OSM Logs
+      run: docker-compose logs -f web
+      working-directory: ./osm-website
