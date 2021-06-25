@@ -6,8 +6,8 @@ import 'package:dio/dio.dart';
  */
 abstract class OSMAPIBase {
 
-  String username = 'hrc40979';
-  String password = 'hrc40979@cuoly.com';
+  String username = 'testuser';
+  String password = 'testpass';
 
   final _dio = Dio();
 
