@@ -370,6 +370,18 @@ mixin OSMElementAPICalls on OSMAPIBase {
 
 
   /**
+   * A function for getting all [OSMElement]s in a given bounding box.
+   *
+   * More details here: https://wiki.openstreetmap.org/wiki/API_v0.6#Retrieving_map_data_by_bounding_box:_GET_.2Fapi.2F0.6.2Fmap
+   * Returns a [Future] with an [OSMElementBundle]
+   */
+  Future<OSMElementBundle> getElementsByBoundingBox(double left, double bottom, double right, double top) async {
+    var elements = await _getElements<OSMElement>('/map?bbox=$left,$bottom,$right,$top');
+    return OSMElementBundle(elements);
+  }
+
+
+  /**
    * A function for getting multiple [OSMElement]s from the server by a request url.
    *
    * Returns a [Future] with a lazy [Iterable] of the typed [OSMElement]s.
@@ -387,31 +399,26 @@ mixin OSMElementAPICalls on OSMAPIBase {
 
 
   /**
-   * A factory function for converting an [XmlElement] to an [OSMElement].
-   */
-  OSMElement _xmlElementToOSMElement(XmlElement xmlElement) {
-    switch (xmlElement.name.toString()) {
-      case 'node':
-        return OSMNode.fromXMLElement(xmlElement);
-
-      case 'way':
-        return OSMWay.fromXMLElement(xmlElement);
-
-      case 'relation':
-        return OSMRelation.fromXMLElement(xmlElement);
-
-      default:
-        throw('TODO no osm element');
-    }
-  }
-
-
-  /**
    * A generator/lazy iterable for converting [XmlElement]s to [OSMElement]s from a given type.
    */
   Iterable<OSMElement> _lazyXMLtoOSMElements(Iterable<XmlElement> xmlElements) sync* {
     for (var xmlElement in xmlElements) {
-      yield _xmlElementToOSMElement(xmlElement);
+      switch (xmlElement.name.toString()) {
+        case 'node':
+          yield OSMNode.fromXMLElement(xmlElement);
+        break;
+
+        case 'way':
+          yield OSMWay.fromXMLElement(xmlElement);
+        break;
+
+        case 'relation':
+          yield OSMRelation.fromXMLElement(xmlElement);
+        break;
+
+        // skip/ignore invalid elements
+        default: continue;
+      }
     }
   }
 }

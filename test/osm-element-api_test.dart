@@ -184,6 +184,20 @@ void main() async {
     expect(elementBundle.relations, unorderedEquals({ relation }));
   });
 
+  // check get by bbox
+
+  test('compare local elements and elements from BBox', () async {
+    // try to get the first node by bouding box
+    // this will also return every way element and relation that the node belongs to
+    // ways will also contain their nodes
+    var elementBundle = await osmapi.getElementsByBoundingBox(19.999, 9.999, 20.001, 10.001);
+    // use contains instead of equals to prevent local test from failing, because they might return additional elements
+    // e.g. elements from previous/older test runs
+    expect(elementBundle.nodes, containsAll({ nodes[0], nodes[1], nodes[2], nodes[3] }));
+    expect(elementBundle.ways, containsAll({ ways[0], ways[1] }));
+    expect(elementBundle.relations, containsAll({ relation }));
+  });
+
   // check get ways by node
 
   test('check for correct return of getWaysWithNode()', () async {
