@@ -1,20 +1,26 @@
-import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:osmapi/authentication/auth.dart';
 
 /**
  * A base class to setup a connection and send request to an OSM API server.
  */
 abstract class OSMAPIBase {
-
-  String username = 'testuser';
-  String password = 'testpass';
-
   final _dio = Dio();
+
+ /**
+   * User authentication either via [BasicAuth] or [OAuth]
+   *
+   * If no authentication is given certain API calls will fail.
+   * For exampe you won't be able to make any changes to data on the server.
+   */
+  Auth? authentication;
+
 
   OSMAPIBase({
     String? baseUrl,
     int? connectTimeout,
     int? receiveTimeout,
+    this.authentication
   }) {
     this.baseUrl = baseUrl ?? 'http://127.0.0.1:3000/api/0.6';
     this.connectTimeout = connectTimeout ?? 5000;
@@ -22,8 +28,7 @@ abstract class OSMAPIBase {
 
     _dio.options.responseType = ResponseType.plain;
     _dio.options.headers = {
-      'content-Type': 'text/xml',
-      'authorization': 'Basic ' + base64Encode(utf8.encode('$username:$password'))
+      'Content-Type': 'text/xml'
     };
   }
 
@@ -79,11 +84,23 @@ abstract class OSMAPIBase {
    * An optional message body can be specified via [body]. The content type of the body needs to be `text/xml`.
    */
   Future<Response> sendRequest (String path, { String type = 'GET', String? body }) {
+    Map<String, String>? headers;
+
+    if (authentication != null) {
+      headers = <String, String>{
+        'Authorization': authentication!.getAuthorizationHeader(
+          _dio.options.baseUrl + path,
+          type
+        )
+      };
+    }
+
     return _dio.request(
       path,
       data: body,
       options: Options(
-        method: type
+        method: type,
+        headers: headers
       ),
     );
   }

@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:osmapi/authentication/basic-auth.dart';
 import 'package:osmapi/osm-apis/osm-api.dart';
 import 'package:osmapi/osm-changesets/osm-changeset.dart';
 import 'package:test/test.dart';
 
 void main() async {
-
   late OSMAPI osmapi;
   late OSMChangeset changeset;
   late int changesetId;
@@ -14,7 +14,11 @@ void main() async {
 
   setUpAll(() async {
     osmapi = OSMAPI(
-      baseUrl: 'http://127.0.0.1:3000/api/0.6'
+      baseUrl: 'http://127.0.0.1:3000/api/0.6',
+      authentication: BasicAuth(
+        username: 'testuser',
+        password: 'testpass'
+      )
     );
 
     changeset = OSMChangeset();
