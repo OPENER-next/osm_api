@@ -5,8 +5,8 @@ on:
   pull_request:
      branches: [ main ]
 jobs:
-  test:
-    name: Docker
+  osm-api-tests:
+    name: OSM API Tests
     runs-on: ubuntu-latest
     steps:
 
