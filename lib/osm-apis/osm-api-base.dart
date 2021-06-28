@@ -82,8 +82,9 @@ abstract class OSMAPIBase {
    *
    * A HTTP request method can be specified via [type] which defaults to `GET`.
    * An optional message body can be specified via [body]. The content type of the body needs to be `text/xml`.
+   * Additional headers can be applied via the [headers] parameter.
    */
-  Future<Response> sendRequest (String path, { String type = 'GET', String? body, Map<String, String>?headers }) {
+  Future<Response> sendRequest(String path, { String type = 'GET', String? body, Map<String, String>?headers }) {
     var additioalHeaders = <String, String>{};
 
     if (authentication != null) {
