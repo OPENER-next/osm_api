@@ -83,16 +83,18 @@ abstract class OSMAPIBase {
    * A HTTP request method can be specified via [type] which defaults to `GET`.
    * An optional message body can be specified via [body]. The content type of the body needs to be `text/xml`.
    */
-  Future<Response> sendRequest (String path, { String type = 'GET', String? body }) {
-    Map<String, String>? headers;
+  Future<Response> sendRequest (String path, { String type = 'GET', String? body, Map<String, String>?headers }) {
+    var additioalHeaders = <String, String>{};
 
     if (authentication != null) {
-      headers = <String, String>{
-        'Authorization': authentication!.getAuthorizationHeader(
-          _dio.options.baseUrl + path,
-          type
-        )
-      };
+      additioalHeaders['Authorization'] = authentication!.getAuthorizationHeader(
+        _dio.options.baseUrl + path,
+        type
+      );
+    }
+
+    if (headers != null) {
+      additioalHeaders.addAll(headers);
     }
 
     return _dio.request(
@@ -100,7 +102,7 @@ abstract class OSMAPIBase {
       data: body,
       options: Options(
         method: type,
-        headers: headers
+        headers: additioalHeaders
       ),
     );
   }

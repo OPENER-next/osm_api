@@ -1,6 +1,6 @@
+import 'dart:convert';
 import 'package:osmapi/elements.dart';
 import 'osm-api-base.dart';
-import 'package:xml/xml.dart';
 
 /**
  * A mixin containing methods for uploading, manipulating and retrieving OSM elements from and to the server.
@@ -152,20 +152,25 @@ mixin OSMElementAPICalls on OSMAPIBase {
   Future<T> _getElement<T extends OSMElement>(String request) async {
     assert(T != OSMElement);
 
-    // returns element xml
-    var response = await sendRequest(request);
+    // returns element as json
+    var response = await sendRequest(request, headers: const { 'Accept': 'application/json' });
+    // parse json
+    var jsonData = json.decode(response.data);
+    // get single element
+    var jsonObject = jsonData['elements'][0];
 
     switch (T) {
       case OSMNode:
-        return OSMNode.fromXMLString(response.data) as T;
+        return OSMNode.fromJSONObject(jsonObject) as T;
 
       case OSMWay:
-        return OSMWay.fromXMLString(response.data) as T;
+        return OSMWay.fromJSONObject(jsonObject) as T;
 
       case OSMRelation:
-        return OSMRelation.fromXMLString(response.data) as T;
+        return OSMRelation.fromJSONObject(jsonObject) as T;
+
       default:
-        throw('TODO ERROR');
+        throw('Got unsupported OSMElement type.');
     }
   }
 
@@ -387,33 +392,33 @@ mixin OSMElementAPICalls on OSMAPIBase {
    * Returns a [Future] with a lazy [Iterable] of the typed [OSMElement]s.
    */
   Future<Iterable<T>> _getElements<T extends OSMElement>(String request) async {
-    // returns element xml
-    var response = await sendRequest(request);
+    // returns element as json
+    var response = await sendRequest(request, headers: const { 'Accept': 'application/json' });
+    // parse json
+    var jsonData = json.decode(response.data);
+    // get all elements
+    var jsonObjects = jsonData['elements'].cast<Map<String, dynamic>>();
 
-    var xmlDoc = XmlDocument.parse(response.data);
-    // TODO replace with childElements later
-    var xmlElements = xmlDoc.rootElement.children.whereType<XmlElement>();
-
-    return _lazyXMLtoOSMElements(xmlElements).cast<T>();
+    return _lazyJSONtoOSMElements(jsonObjects).cast<T>();
   }
 
 
   /**
-   * A generator/lazy iterable for converting [XmlElement]s to [OSMElement]s from a given type.
+   * A generator/lazy iterable for converting JSON Objects to [OSMElement]s from a given type.
    */
-  Iterable<OSMElement> _lazyXMLtoOSMElements(Iterable<XmlElement> xmlElements) sync* {
-    for (var xmlElement in xmlElements) {
-      switch (xmlElement.name.toString()) {
+  Iterable<OSMElement> _lazyJSONtoOSMElements(Iterable<Map<String, dynamic>> objects) sync* {
+    for (var jsonObj in objects) {
+      switch (jsonObj['type']) {
         case 'node':
-          yield OSMNode.fromXMLElement(xmlElement);
+          yield OSMNode.fromJSONObject(jsonObj);
         break;
 
         case 'way':
-          yield OSMWay.fromXMLElement(xmlElement);
+          yield OSMWay.fromJSONObject(jsonObj);
         break;
 
         case 'relation':
-          yield OSMRelation.fromXMLElement(xmlElement);
+          yield OSMRelation.fromJSONObject(jsonObj);
         break;
 
         // skip/ignore invalid elements
