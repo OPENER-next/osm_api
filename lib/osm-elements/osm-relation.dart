@@ -3,8 +3,18 @@ import 'osm-element-type.dart';
 import 'osm-member.dart';
 import 'osm-element.dart';
 
+/**
+ * A container class for the relation OSM element.
+ */
 class OSMRelation extends OSMElement {
+
+  /**
+   * A list of all [OSMMembers] that this relation contains.
+   *
+   * A relation should at least contain one member.
+   */
   List <OSMMember> members;
+
 
   OSMRelation(this.members, {
     Map<String, String>? tags,
@@ -14,6 +24,9 @@ class OSMRelation extends OSMElement {
        super(id: id, version: version, tags: tags);
 
 
+  /**
+   * A factory method for constructing an [OSMRelation] from a JSON object.
+   */
   static OSMRelation fromJSONObject(obj) {
     var members = <OSMMember>[];
     for (var memberObj in obj['members']) {

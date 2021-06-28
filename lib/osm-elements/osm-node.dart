@@ -1,9 +1,21 @@
 import 'osm-element-type.dart';
 import 'osm-element.dart';
 
+/**
+ * A container class for the node OSM element.
+ */
 class OSMNode extends OSMElement {
+
+  /**
+   * The latitude of this node.
+   */
+
   late double lat;
+  /**
+   * The longitude of this node.
+   */
   late double lon;
+
 
   OSMNode(this.lat, this.lon, {
     Map<String, String>? tags,
@@ -12,6 +24,9 @@ class OSMNode extends OSMElement {
   }) : super(id: id, version: version, tags: tags);
 
 
+  /**
+   * A factory method for constructing an [OSMNode] from a JSON object.
+   */
   static OSMNode fromJSONObject(obj) {
     return OSMNode(
       obj['lat'],

@@ -2,8 +2,18 @@ import 'package:collection/collection.dart';
 import 'osm-element-type.dart';
 import 'osm-element.dart';
 
+/**
+ * A container class for the way OSM element.
+ */
 class OSMWay extends OSMElement {
+
+  /**
+   * A list of all node ids ([OSMNode.id]) that this way contains.
+   *
+   * A way should at least contain two nodes.
+   */
   List<int> nodeIds;
+
 
   OSMWay(this.nodeIds, {
     Map<String, String>? tags,
@@ -13,6 +23,9 @@ class OSMWay extends OSMElement {
        super(id: id, version: version, tags: tags);
 
 
+  /**
+   * A factory method for constructing an [OSMWay] from a JSON object.
+   */
   static OSMWay fromJSONObject(obj) {
     return OSMWay(
       obj['nodes']?.cast<int>(),
