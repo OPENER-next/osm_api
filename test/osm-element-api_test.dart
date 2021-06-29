@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:osmapi/authentication/basic-auth.dart';
+import 'package:osmapi/commons/bounding-box.dart';
 import 'package:osmapi/osm-apis/osm-api.dart';
 import 'package:osmapi/osm-changesets/osm-changeset.dart';
 import 'package:test/test.dart';
@@ -194,7 +195,9 @@ void main() async {
     // try to get the first node by bouding box
     // this will also return every way element and relation that the node belongs to
     // ways will also contain their nodes
-    var elementBundle = await osmapi.getElementsByBoundingBox(19.999, 9.999, 20.001, 10.001);
+    var elementBundle = await osmapi.getElementsByBoundingBox(
+      BoundingBox(19.999, 9.999, 20.001, 10.001)
+    );
     // use contains instead of equals to prevent local test from failing, because they might return additional elements
     // e.g. elements from previous/older test runs
     expect(elementBundle.nodes, containsAll({ nodes[0], nodes[1], nodes[2], nodes[3] }));

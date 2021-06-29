@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:osmapi/commons/bounding-box.dart';
 import 'package:osmapi/elements.dart';
 import 'osm-api-base.dart';
 
@@ -380,8 +381,8 @@ mixin OSMElementAPICalls on OSMAPIBase {
    * More details here: https://wiki.openstreetmap.org/wiki/API_v0.6#Retrieving_map_data_by_bounding_box:_GET_.2Fapi.2F0.6.2Fmap
    * Returns a [Future] with an [OSMElementBundle]
    */
-  Future<OSMElementBundle> getElementsByBoundingBox(double left, double bottom, double right, double top) async {
-    var elements = await _getElements<OSMElement>('/map?bbox=$left,$bottom,$right,$top');
+  Future<OSMElementBundle> getElementsByBoundingBox(BoundingBox bbox) async {
+    var elements = await _getElements<OSMElement>('/map?bbox=${bbox.toList().join(',')}');
     return OSMElementBundle(elements);
   }
 
