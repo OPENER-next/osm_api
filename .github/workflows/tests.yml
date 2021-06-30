@@ -26,17 +26,14 @@ jobs:
       working-directory: ./osm-website
 
     # cache docker build
-    - uses: satackey/action-docker-layer-caching@v0.0.11
+    - name: Get cached Docker build
+      uses: satackey/action-docker-layer-caching@v0.0.11
       continue-on-error: true
 
     - name: Build OSM website Docker Image
       run: |
         docker-compose build
       working-directory: ./osm-website
-      
-    # cache docker compose
-    - uses: satackey/action-docker-layer-caching@v0.0.11
-      continue-on-error: true      
 
     - name: Start OSM website Docker-Compose
       run: |
