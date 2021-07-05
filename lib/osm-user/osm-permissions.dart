@@ -36,7 +36,7 @@ class OSMPermissions {
     return OSMPermissions(
       xmlDoc.findAllElements('permission').expand((element) {
         var name = element.getAttribute('name');
-        return name != null ? [name] : <String>[];
+        return name != null ? [name] : const Iterable<String>.empty();
       }).toSet()
     );
   }
