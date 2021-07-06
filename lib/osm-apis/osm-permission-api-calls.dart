@@ -13,7 +13,7 @@ mixin OSMPermissionAPICalls on OSMAPIBase {
    * This returns an [OSMPermissions] object.
    */
   Future<OSMPermissions> getPermissions() async {
-    var response = await sendRequest('/permissions');
+    final response = await sendRequest('/permissions');
     return OSMPermissions.fromXMLString(response.data);
   }
 }

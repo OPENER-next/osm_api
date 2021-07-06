@@ -17,14 +17,14 @@ mixin OSMElementAPICalls on OSMAPIBase {
    */
   Future<T> createElement<T extends OSMElement>(T element, int changeset) async {
     var additionalAttributes = '';
-    var type = element.type.toShortString();
+    final type = element.type.toShortString();
 
     if (element is OSMNode) {
       additionalAttributes += 'lat="${element.lat}" lon="${element.lon}"';
     }
 
     // returns element id
-    var response = await sendRequest(
+    final response = await sendRequest(
       '/$type/create',
       type: 'PUT',
       body:
@@ -52,14 +52,14 @@ mixin OSMElementAPICalls on OSMAPIBase {
    */
   Future<T> updateElement<T extends OSMElement>(T element, int changeset) async {
     var additionalAttributes = '';
-    var type = element.type.toShortString();
+    final type = element.type.toShortString();
 
     if (element is OSMNode) {
       additionalAttributes += 'lat="${element.lat}" lon="${element.lon}"';
     }
 
     // returns new version number
-    var response = await sendRequest(
+    final response = await sendRequest(
       '/$type/${element.id}',
       type: 'PUT',
       body:
@@ -85,14 +85,14 @@ mixin OSMElementAPICalls on OSMAPIBase {
    */
   Future<T> deleteElement<T extends OSMElement>(T element, int changeset) async {
     var additionalAttributes = '';
-    var type = element.type.toShortString();
+    final type = element.type.toShortString();
 
     if (element is OSMNode) {
       additionalAttributes += 'lat="${element.lat}" lon="${element.lon}"';
     }
 
     // returns new version number
-    var response = await sendRequest(
+    final response = await sendRequest(
       '/$type/${element.id}',
       type: 'DELETE',
       body:
@@ -115,7 +115,7 @@ mixin OSMElementAPICalls on OSMAPIBase {
    * Returns the [OSMNode] as a [Future].
    */
   Future<OSMNode> getNode(int id, [ int? version ]) {
-    var versionParameter = version == null ? '' : '/$version';
+    final versionParameter = version == null ? '' : '/$version';
     return _getElement<OSMNode>('/node/$id$versionParameter');
   }
 
@@ -127,7 +127,7 @@ mixin OSMElementAPICalls on OSMAPIBase {
    * Returns the [OSMWay] as a [Future].
    */
   Future<OSMWay> getWay(int id, [ int? version ]) {
-    var versionParameter = version == null ? '' : '/$version';
+    final versionParameter = version == null ? '' : '/$version';
     return _getElement<OSMWay>('/way/$id$versionParameter');
   }
 
@@ -139,7 +139,7 @@ mixin OSMElementAPICalls on OSMAPIBase {
    * Returns the [OSMRelation] as a [Future].
    */
   Future<OSMRelation> getRelation(int id, [ int? version ]) {
-    var versionParameter = version == null ? '' : '/$version';
+    final versionParameter = version == null ? '' : '/$version';
     return _getElement<OSMRelation>('/relation/$id$versionParameter');
   }
 
@@ -154,11 +154,11 @@ mixin OSMElementAPICalls on OSMAPIBase {
     assert(T != OSMElement);
 
     // returns element as json
-    var response = await sendRequest(request, headers: const { 'Accept': 'application/json' });
+    final response = await sendRequest(request, headers: const { 'Accept': 'application/json' });
     // parse json
-    var jsonData = json.decode(response.data);
+    final jsonData = json.decode(response.data);
     // get single element
-    var jsonObject = jsonData['elements'][0];
+    final jsonObject = jsonData['elements'][0];
 
     switch (T) {
       case OSMNode:
@@ -212,7 +212,7 @@ mixin OSMElementAPICalls on OSMAPIBase {
    * Returns a [Future] with a [OSMElementBundle]
    */
   Future<OSMElementBundle> getFullWay(int id) async {
-    var elements = await _getElements('/way/$id/full');
+    final elements = await _getElements('/way/$id/full');
     return OSMElementBundle(elements);
   }
 
@@ -225,7 +225,7 @@ mixin OSMElementAPICalls on OSMAPIBase {
    * Returns a [Future] with a [OSMElementBundle]
    */
   Future<OSMElementBundle> getFullRelation(int id) async {
-    var elements = await _getElements('/relation/$id/full');
+    final elements = await _getElements('/relation/$id/full');
     return OSMElementBundle(elements);
   }
 
@@ -382,7 +382,7 @@ mixin OSMElementAPICalls on OSMAPIBase {
    * Returns a [Future] with an [OSMElementBundle]
    */
   Future<OSMElementBundle> getElementsByBoundingBox(BoundingBox bbox) async {
-    var elements = await _getElements<OSMElement>('/map?bbox=${bbox.toList().join(',')}');
+    final elements = await _getElements<OSMElement>('/map?bbox=${bbox.toList().join(',')}');
     return OSMElementBundle(elements);
   }
 
@@ -394,11 +394,11 @@ mixin OSMElementAPICalls on OSMAPIBase {
    */
   Future<Iterable<T>> _getElements<T extends OSMElement>(String request) async {
     // returns element as json
-    var response = await sendRequest(request, headers: const { 'Accept': 'application/json' });
+    final response = await sendRequest(request, headers: const { 'Accept': 'application/json' });
     // parse json
-    var jsonData = json.decode(response.data);
+    final jsonData = json.decode(response.data);
     // get all elements
-    var jsonObjects = jsonData['elements'].cast<Map<String, dynamic>>();
+    final jsonObjects = jsonData['elements'].cast<Map<String, dynamic>>();
 
     return _lazyJSONtoOSMElements(jsonObjects).cast<T>();
   }
@@ -408,7 +408,7 @@ mixin OSMElementAPICalls on OSMAPIBase {
    * A generator/lazy iterable for converting JSON Objects to [OSMElement]s from a given type.
    */
   Iterable<OSMElement> _lazyJSONtoOSMElements(Iterable<Map<String, dynamic>> objects) sync* {
-    for (var jsonObj in objects) {
+    for (final jsonObj in objects) {
       switch (jsonObj['type']) {
         case 'node':
           yield OSMNode.fromJSONObject(jsonObj);
