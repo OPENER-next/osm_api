@@ -2,12 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:osmapi/authentication/basic-auth.dart';
 import 'package:osmapi/commons/bounding-box.dart';
 import 'package:osmapi/osm-apis/osm-api.dart';
-import 'package:osmapi/osm-changesets/osm-changeset.dart';
 import 'package:test/test.dart';
 
 void main() async {
   late OSMAPI osmapi;
-  late OSMChangeset changeset;
   late int changesetId;
   late List<OSMNode> nodes;
   late List<OSMWay> ways;
@@ -22,10 +20,10 @@ void main() async {
       )
     );
 
-    changeset = OSMChangeset();
-    changeset.tags['created_by'] = 'Opener Next';
-    changeset.tags['comment'] = 'Just adding some streetnames';
-    changesetId = await osmapi.createChangeset(changeset);
+    changesetId = await osmapi.createChangeset({
+      'created_by': 'Opener Next',
+      'comment': 'Just adding some streetnames'
+    });
 
     // create some elements
 
