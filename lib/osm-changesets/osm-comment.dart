@@ -25,9 +25,7 @@ class OSMComment {
 
 
   @override
-  String toString() {
-    return '$runtimeType - date: $date; user: $user; text: $text';
-  }
+  String toString() => '$runtimeType - date: $date; user: $user; text: $text';
 
 
   @override

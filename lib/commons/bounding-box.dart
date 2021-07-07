@@ -28,9 +28,7 @@ class BoundingBox {
 
 
   @override
-  String toString() {
-    return '$runtimeType: min Longitude: $minLongitude, min Latitude: $minLatitude, max Longitude: $maxLongitude, max Latitude: $maxLatitude';
-  }
+  String toString() => '$runtimeType: min Longitude: $minLongitude, min Latitude: $minLatitude, max Longitude: $maxLongitude, max Latitude: $maxLatitude';
 
 
   @override

@@ -45,9 +45,7 @@ class OSMNode extends OSMElement {
 
 
   @override
-  String toString() {
-    return '$runtimeType - lat: $lat; lon: $lon; id: $id; version: $version; tags: $tags';
-  }
+  String toString() => '$runtimeType - lat: $lat; lon: $lon; id: $id; version: $version; tags: $tags';
 
 
   @override

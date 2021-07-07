@@ -51,9 +51,7 @@ class OSMWay extends OSMElement {
 
 
   @override
-  String toString() {
-    return '$runtimeType - nodes: $nodeIds; id: $id; version: $version; tags: $tags';
-  }
+  String toString() => '$runtimeType - nodes: $nodeIds; id: $id; version: $version; tags: $tags';
 
 
   @override

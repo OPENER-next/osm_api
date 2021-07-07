@@ -58,9 +58,7 @@ class OSMRelation extends OSMElement {
 
 
   @override
-  String toString() {
-    return '$runtimeType - members: $members; id: $id; version: $version; tags: $tags';
-  }
+  String toString() => '$runtimeType - members: $members; id: $id; version: $version; tags: $tags';
 
 
   @override

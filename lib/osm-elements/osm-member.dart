@@ -42,9 +42,7 @@ class OSMMember {
 
 
   @override
-  String toString() {
-    return '$runtimeType - ref: $ref; type: $type; role: $role';
-  }
+  String toString() => '$runtimeType - ref: $ref; type: $type; role: $role';
 
 
   @override

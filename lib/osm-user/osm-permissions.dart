@@ -55,9 +55,7 @@ class OSMPermissions {
 
 
   @override
-  String toString() {
-    return '$runtimeType - permissions: $_permissions';
-  }
+  String toString() => '$runtimeType - permissions: $_permissions';
 
 
   @override

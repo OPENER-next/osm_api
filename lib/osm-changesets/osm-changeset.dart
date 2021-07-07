@@ -102,9 +102,7 @@ class OSMChangeset {
 
 
   @override
-  String toString() {
-    return '$runtimeType - id: $id; tags: $tags; discussion: $discussion';
-  }
+  String toString() => '$runtimeType - id: $id; tags: $tags; discussion: $discussion';
 
 
   @override

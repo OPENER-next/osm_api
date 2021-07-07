@@ -20,9 +20,7 @@ class OSMUser {
 
 
   @override
-  String toString() {
-    return '$runtimeType - id: $id; name: $name;';
-  }
+  String toString() => '$runtimeType - id: $id; name: $name;';
 
 
   @override
