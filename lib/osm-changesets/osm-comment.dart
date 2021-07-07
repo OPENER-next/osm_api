@@ -1,3 +1,5 @@
+import 'package:osmapi/osm-user/osm-user.dart';
+
 /**
  * An immutable container class for an OSM comment.
  */
@@ -9,14 +11,9 @@ class OSMComment {
   final DateTime date;
 
   /**
-   * The unique identifier of the user who posted this comment.
+   * The user who posted the comment.
    */
-  final int uid;
-
-  /**
-   * The unique user name (also known as display name) of the user who posted this comment.
-   */
-  final String userName;
+  final OSMUser user;
 
   /**
    * The text content of the comment.
@@ -24,20 +21,19 @@ class OSMComment {
   final String text;
 
 
-  OSMComment(this.date, this.uid, this.userName, this.text);
+  OSMComment(this.date, this.user, this.text);
 
 
   @override
   String toString() {
-    return '$runtimeType - date: $date; uid: $uid; userName: $userName; text: $text';
+    return '$runtimeType - date: $date; user: $user; text: $text';
   }
 
 
   @override
   int get hashCode =>
     date.hashCode ^
-    uid.hashCode ^
-    userName.hashCode ^
+    user.hashCode ^
     text.hashCode;
 
 
@@ -47,7 +43,6 @@ class OSMComment {
     o is OSMComment &&
     runtimeType == o.runtimeType &&
     date == o.date &&
-    uid == o.uid &&
-    userName == o.userName &&
+    user == o.user &&
     text == o.text;
 }

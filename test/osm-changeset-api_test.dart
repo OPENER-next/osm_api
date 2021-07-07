@@ -44,7 +44,7 @@ void main() async {
     var changeset = await osmapi.getChangeset(changesetId, true);
 
     expect(changeset.discussion?.first.text, equals('my comment'));
-    expect(changeset.discussion?.first.userName, equals('testuser'));
+    expect(changeset.discussion?.first.user.name, equals('testuser'));
   });
 
 

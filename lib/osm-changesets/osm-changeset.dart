@@ -1,3 +1,4 @@
+import '/osm-user/osm-user.dart';
 import 'osm-comment.dart';
 import 'package:xml/xml.dart';
 import 'package:collection/collection.dart';
@@ -89,8 +90,7 @@ class OSMChangeset {
         if (date != null && uid != null && userName != null && textElement != null) {
           comments!.add(OSMComment(
             DateTime.parse(date),
-            int.parse(uid),
-            userName,
+            OSMUser(int.parse(uid), userName),
             textElement.text
           ));
         }
