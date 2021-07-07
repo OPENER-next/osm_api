@@ -20,7 +20,7 @@ mixin OSMChangesetAPICalls on OSMAPIBase {
    * A function for getting an [OSMChangeset] from the server by its id.
    *
    * By default no discussions are included. These can be retrieved by setting the [includeDiscussion] parameter to true.
-   * Returns the [OSMChangeset] as a [Future].
+   * Returns the [OSMChangeset] wrapped in a [Future] which resolves when the operation has been completed.
    */
   Future<OSMChangeset> getChangeset(int id, [ bool includeDiscussion = false ]) async {
     var additionalParameters = '';
@@ -39,7 +39,7 @@ mixin OSMChangesetAPICalls on OSMAPIBase {
   /**
    * A function for opening a changeset on the server.
    *
-   * Returns the id of the created changeset as a [Future].
+   * Returns the id of the created changeset wrapped in a [Future] which resolves when the operation has been completed.
    * If not present, this function will add the `created_by` tag to the changeset with the value defined in [OSMChangesetAPICalls.CREATED_BY].
    */
   Future<int> createChangeset(Map<String, String> tags) async {
@@ -62,7 +62,7 @@ mixin OSMChangesetAPICalls on OSMAPIBase {
    *
    * This will overwrite all existing tags on the changeset.
    * Closed changesets cannot be updated.
-   * Returns the [OSMChangeset] as a [Future].
+   * Returns the [OSMChangeset] wrapped in a [Future] which resolves when the operation has been completed.
    */
   Future<OSMChangeset> updateChangeset(int changesetId, Map<String, String> tags) async {
     final response = await sendRequest(

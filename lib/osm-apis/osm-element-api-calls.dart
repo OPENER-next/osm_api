@@ -13,7 +13,7 @@ mixin OSMElementAPICalls on OSMAPIBase {
    * A function for uploading an [OSMElement] to the server.
    *
    * This updates the [OSMElement.id] and [OSMElement.version] of the given [OSMElement].
-   * Returns the updated [OSMElement] as a [Future].
+   * Returns the updated [OSMElement] wrapped in a [Future] which resolves when the operation has been completed.
    */
   Future<T> createElement<T extends OSMElement>(T element, int changeset) async {
     var additionalAttributes = '';
@@ -48,7 +48,7 @@ mixin OSMElementAPICalls on OSMAPIBase {
    * A function for updating an [OSMElement] on the server.
    *
    * This updates the [OSMElement.version] of the given [OSMElement].
-   * Returns the updated [OSMElement] as a [Future].
+   * Returns the updated [OSMElement] wrapped in a [Future] which resolves when the operation has been completed.
    */
   Future<T> updateElement<T extends OSMElement>(T element, int changeset) async {
     var additionalAttributes = '';
@@ -81,7 +81,7 @@ mixin OSMElementAPICalls on OSMAPIBase {
    * A function for deleting an [OSMElement] from the server.
    *
    * This updates the [OSMElement.version] of the given [OSMElement].
-   * Returns the updated [OSMElement] as a [Future].
+   * Returns the updated [OSMElement] wrapped in a [Future] which resolves when the operation has been completed.
    */
   Future<T> deleteElement<T extends OSMElement>(T element, int changeset) async {
     var additionalAttributes = '';
@@ -112,7 +112,7 @@ mixin OSMElementAPICalls on OSMAPIBase {
    * A function for getting an [OSMNode] from the server by its id.
    *
    * Optionally a specific version of the node can be requested by using the [version] parameter.
-   * Returns the [OSMNode] as a [Future].
+   * Returns the [OSMNode] wrapped in a [Future] which resolves when the operation has been completed.
    */
   Future<OSMNode> getNode(int id, [ int? version ]) {
     final versionParameter = version == null ? '' : '/$version';
@@ -124,7 +124,7 @@ mixin OSMElementAPICalls on OSMAPIBase {
    * A function for getting an [OSMWay] from the server by its id.
    *
    * Optionally a specific version of the way can be requested by using the [version] parameter.
-   * Returns the [OSMWay] as a [Future].
+   * Returns the [OSMWay] wrapped in a [Future] which resolves when the operation has been completed.
    */
   Future<OSMWay> getWay(int id, [ int? version ]) {
     final versionParameter = version == null ? '' : '/$version';
@@ -136,7 +136,7 @@ mixin OSMElementAPICalls on OSMAPIBase {
    * A function for getting an [OSMRelation] from the server by its id.
    *
    * Optionally a specific version of the relation can be requested by using the [version] parameter.
-   * Returns the [OSMRelation] as a [Future].
+   * Returns the [OSMRelation] wrapped in a [Future] which resolves when the operation has been completed.
    */
   Future<OSMRelation> getRelation(int id, [ int? version ]) {
     final versionParameter = version == null ? '' : '/$version';
@@ -148,7 +148,7 @@ mixin OSMElementAPICalls on OSMAPIBase {
    * A function for getting an [OSMElement] from the server by its type and a request url.
    * The generic type must be set to [OSMNode], [OSMWay] or [OSMRelation]
    *
-   * Returns the typed [OSMElement] as a [Future].
+   * Returns the typed [OSMElement] wrapped in a [Future] which resolves when the operation has been completed.
    */
   Future<T> _getElement<T extends OSMElement>(String request) async {
     assert(T != OSMElement);
