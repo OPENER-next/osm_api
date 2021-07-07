@@ -10,11 +10,11 @@ class OSMNode extends OSMElement {
    * The latitude of this node.
    */
 
-  late double lat;
+  double lat;
   /**
    * The longitude of this node.
    */
-  late double lon;
+  double lon;
 
 
   OSMNode(this.lat, this.lon, {
