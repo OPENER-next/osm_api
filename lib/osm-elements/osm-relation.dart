@@ -27,7 +27,7 @@ class OSMRelation extends OSMElement {
   /**
    * A factory method for constructing an [OSMRelation] from a JSON object.
    */
-  static OSMRelation fromJSONObject(obj) {
+  static OSMRelation fromJSONObject(Map<String, dynamic> obj) {
     var members = <OSMMember>[];
     for (var memberObj in obj['members']) {
       var typeEnum = OSMElementType.values.firstWhere((e) => e.toShortString() == memberObj['type']);
@@ -52,9 +52,7 @@ class OSMRelation extends OSMElement {
 
 
   @override
-  OSMElementType get type {
-    return OSMElementType.relation;
-  }
+  OSMElementType get type => OSMElementType.relation;
 
 
   @override

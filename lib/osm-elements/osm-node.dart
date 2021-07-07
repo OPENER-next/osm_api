@@ -27,21 +27,17 @@ class OSMNode extends OSMElement {
   /**
    * A factory method for constructing an [OSMNode] from a JSON object.
    */
-  static OSMNode fromJSONObject(obj) {
-    return OSMNode(
-      obj['lat'],
-      obj['lon'],
-      id: obj['id'],
-      version: obj['version'],
-      tags: obj['tags']?.cast<String, String>()
-    );
-  }
+  static OSMNode fromJSONObject(Map<String, dynamic> obj) => OSMNode(
+    obj['lat'],
+    obj['lon'],
+    id: obj['id'],
+    version: obj['version'],
+    tags: obj['tags']?.cast<String, String>()
+  );
 
 
   @override
-  OSMElementType get type {
-    return OSMElementType.node;
-  }
+  OSMElementType get type => OSMElementType.node;
 
 
   @override

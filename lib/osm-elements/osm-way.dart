@@ -26,14 +26,12 @@ class OSMWay extends OSMElement {
   /**
    * A factory method for constructing an [OSMWay] from a JSON object.
    */
-  static OSMWay fromJSONObject(obj) {
-    return OSMWay(
-      obj['nodes']?.cast<int>(),
-      id: obj['id'],
-      version: obj['version'],
-      tags: obj['tags']?.cast<String, String>()
-    );
-  }
+  static OSMWay fromJSONObject(Map<String, dynamic> obj) => OSMWay(
+    obj['nodes']?.cast<int>(),
+    id: obj['id'],
+    version: obj['version'],
+    tags: obj['tags']?.cast<String, String>()
+  );
 
 
   @override
@@ -45,9 +43,7 @@ class OSMWay extends OSMElement {
 
 
   @override
-  OSMElementType get type {
-    return OSMElementType.way;
-  }
+  OSMElementType get type => OSMElementType.way;
 
 
   @override
