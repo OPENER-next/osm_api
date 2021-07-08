@@ -69,6 +69,7 @@ jobs:
         :terms_seen => true,
         :terms_agreed => Time.now.getutc,
         :data_public => true,
+        :languages => ["en-US"],
         :pass_crypt => pass_crypt,
         :pass_salt => pass_salt
         );
