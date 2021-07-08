@@ -158,7 +158,7 @@ mixin OSMElementAPICalls on OSMAPIBase {
     // parse json
     final jsonData = json.decode(response.data);
     // get single element
-    final jsonObject = jsonData['elements'][0];
+    final jsonObject = jsonData['elements'][0].cast<String, dynamic>();
 
     switch (T) {
       case OSMNode:
@@ -181,7 +181,7 @@ mixin OSMElementAPICalls on OSMAPIBase {
    *
    * Returns a [Future] with a lazy [Iterable] of [OSMNode]s.
    */
-  Future<Iterable<OSMNode>> getNodes(List<int> ids) {
+  Future<Iterable<OSMNode>> getNodes(Iterable<int> ids) {
     return _getElements<OSMNode>('/nodes/?nodes=${ids.join(',')}');
   }
 
@@ -191,7 +191,7 @@ mixin OSMElementAPICalls on OSMAPIBase {
    *
    * Returns a [Future] with a lazy [Iterable] of [OSMWay]s.
    */
-  Future<Iterable<OSMWay>> getWays(List<int> ids) {
+  Future<Iterable<OSMWay>> getWays(Iterable<int> ids) {
     return _getElements<OSMWay>('/ways/?ways=${ids.join(',')}');
   }
 
@@ -201,7 +201,7 @@ mixin OSMElementAPICalls on OSMAPIBase {
    *
    * Returns a [Future] with a lazy [Iterable] of [OSMRelation]s.
    */
-  Future<Iterable<OSMRelation>> getRelations(List<int> ids) {
+  Future<Iterable<OSMRelation>> getRelations(Iterable<int> ids) {
     return _getElements<OSMRelation>('/relations/?relations=${ids.join(',')}');
   }
 
