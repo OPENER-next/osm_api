@@ -1,5 +1,5 @@
 import 'package:osmapi/commons/bounding-box.dart';
-import 'package:osmapi/osm-changesets/osm-changeset.dart';
+import 'package:osmapi/osm-changeset/osm-changeset.dart';
 import 'package:xml/xml.dart';
 import 'osm-api-base.dart';
 
