@@ -8,41 +8,41 @@ class OSMUserPrivateDetails extends OSMUserDetails {
   /**
    * Whether the user considers his/her contributions as public domain or not.
    */
-  bool contributionsArePublicDomain;
+  final bool contributionsArePublicDomain;
 
   /**
    * The zoom level of the user's home location.
    *
    * This is null if the user didn't set a zoom level.
    */
-	int? homeZoom;
+	final int? homeZoom;
 
   /**
    * The coordinates given in latitude and longitude of the user's home location.
    *
    * This is null if the user didn't set a home location.
    */
-	double? homeLat, homeLon;
+	final double? homeLat, homeLon;
 
   /**
    * A list of user preferred languages represented by language codes like "en-US".
    */
-	List<String> preferredLanguages;
+	final List<String> preferredLanguages;
 
   /**
    * The total number of received messages.
    */
-	int reiceivedMessageCount;
+	final int reiceivedMessageCount;
 
   /**
    * The number of unread messages.
    */
-	int unreadMessagesCount;
+	final int unreadMessagesCount;
 
   /**
    * The number of sent messages by the user.
    */
-	int sentMessagesCount;
+	final int sentMessagesCount;
 
 
   OSMUserPrivateDetails({
@@ -99,7 +99,7 @@ class OSMUserPrivateDetails extends OSMUserDetails {
     homeZoom: obj['home']?['zoom'],
     homeLat: obj['home']?['lat'],
     homeLon: obj['home']?['lon'],
-    preferredLanguages: obj['languages'].cast<String>(),
+    preferredLanguages: obj['languages']?.cast<String>() ?? List.empty(),
     reiceivedMessageCount: obj['messages']['received']['count'],
     unreadMessagesCount: obj['messages']['received']['unread'],
     sentMessagesCount: obj['messages']['sent']['count']
