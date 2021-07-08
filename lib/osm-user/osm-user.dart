@@ -4,7 +4,6 @@
  */
 class OSMUser {
 
-
   /**
    * The unique identifier of the user.
    */
@@ -20,7 +19,7 @@ class OSMUser {
 
 
   @override
-  String toString() => '$runtimeType - id: $id; name: $name;';
+  String toString() => '$runtimeType - id: $id; name: $name';
 
 
   @override
