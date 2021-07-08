@@ -45,10 +45,10 @@ Dart bindings for the OpenStreetMap API
 - [ ] List
 
 ### Methods for user data
-- [ ] Details of a user
-- [ ] Details of multiple users
-- [ ] Details of the logged-in user
-- [ ] Preferences of the logged-in user
+- [x] Details of a user
+- [x] Details of multiple users
+- [x] Details of the logged-in user
+- [x] Preferences of the logged-in user
 
 ### Map Notes API
 - [ ] Retrieving notes data by bounding box
