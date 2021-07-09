@@ -182,26 +182,28 @@ class OSMUnknownException extends OSMAPIException {
 /**
  * Map dio response errors to cutsom OSM API exceptions
  */
-void handleDioErrors(DioError error) {
+Future<Exception> handleDioErrors(DioError error) {
   if (error.type == DioErrorType.response && error.response?.statusCode != null) {
+    
     var response = error.response;
     var message = response?.data ?? response?.statusMessage;
 
     switch (response!.statusCode) {
-			case 400: throw OSMBadRequestException(message);
-      case 401: throw OSMUnauthorizedException(message);
-      case 403: throw OSMForbiddenException(message);
-      case 404: throw OSMNotFoundException(message);
-      case 405: throw OSMMethodNotAllowedException(message);
-      case 406: throw OSMNotAcceptableException(message);
-      case 409: throw OSMConflictException(message);
-      case 410: throw OSMGoneException(message);
-      case 412: throw OSMPreconditionFailedException(message);
-      case 413: throw OSMPayloadTooLargeException(message);
-      case 414: throw OSMRequestURITooLargeException(message);
-      case 509: throw OSMBandwidthLimitExceededException(message);
+			case 400: return Future.error(OSMBadRequestException(message));
+      case 401: return Future.error(OSMUnauthorizedException(message));
+      case 403: return Future.error(OSMForbiddenException(message));
+      case 404: return Future.error(OSMNotFoundException(message));
+      case 405: return Future.error(OSMMethodNotAllowedException(message));
+      case 406: return Future.error(OSMNotAcceptableException(message));
+      case 409: return Future.error(OSMConflictException(message));
+      case 410: return Future.error(OSMGoneException(message));
+      case 412: return Future.error(OSMPreconditionFailedException(message));
+      case 413: return Future.error(OSMPayloadTooLargeException(message));
+      case 414: return Future.error(OSMRequestURITooLargeException(message));
+      case 509: return Future.error(OSMBandwidthLimitExceededException(message));
 
-			default: OSMUnknownException(response.statusCode!, message);
+			default: return Future.error(OSMUnknownException(response.statusCode!, message));
 		}
   }
+  return Future.error(error);
 }

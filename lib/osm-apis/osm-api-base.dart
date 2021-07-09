@@ -104,19 +104,17 @@ abstract class OSMAPIBase {
     }
 
     if (ignoreStatusCodes != null) {
-      options.validateStatus = (int? status) => ignoreStatusCodes.contains(status);
+      options.validateStatus = (int? status) {
+        return status != null && ((status >= 200 && status < 300) || ignoreStatusCodes.contains(status));
+      };
     }
 
-    try {
-      return _dio.request(
-        path,
-        data: body,
-        options: options
-      );
-    }
-    on DioError catch (e) {
+    return _dio.request(
+      path,
+      data: body,
+      options: options
+    ).catchError((e) {
       handleDioErrors(e);
-			rethrow;
-		}
+    });
   }
 }
