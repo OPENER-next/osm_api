@@ -51,7 +51,7 @@ void main() async {
   });
 
 
-  test('compare single local node and getNode()', () async {
+  test('make some authenticated requests.', () async {
     print(await osmapi.sendRequest('/user/details.json'));
 
     print(await osmapi.sendRequest('/way/2.json'));
