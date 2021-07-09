@@ -15,7 +15,13 @@ abstract class OSMAPIException implements Exception {
   OSMAPIException(this.errorCode, this.description, String? response) : this.response = response ?? '';
 
   @override
-  String toString() => '$errorCode - $description | Response: $response';
+  String toString() {
+    var string = '$errorCode - $description';
+    if (response.isNotEmpty) {
+      string + ' Response: "$response"';
+    }
+    return string;
+  }
 }
 
 
@@ -182,9 +188,8 @@ class OSMUnknownException extends OSMAPIException {
 /**
  * Map dio response errors to cutsom OSM API exceptions
  */
-Future<Exception> handleDioErrors(DioError error) {
+Future<Response<dynamic>> handleDioErrors(DioError error, StackTrace stackTrace) {
   if (error.type == DioErrorType.response && error.response?.statusCode != null) {
-    
     var response = error.response;
     var message = response?.data ?? response?.statusMessage;
 

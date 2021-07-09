@@ -113,8 +113,6 @@ abstract class OSMAPIBase {
       path,
       data: body,
       options: options
-    ).catchError((e) {
-      handleDioErrors(e);
-    });
+    ).onError<DioError>(handleDioErrors);
   }
 }

@@ -141,7 +141,7 @@ mixin OSMUserAPICalls on OSMAPIBase {
       // ignore Not Found error which is thrown if the preference does not exist
       ignoreStatusCodes: [404]
     );
-    return response.data;
+    return response.statusCode == 404 ? null : response.data;
   }
 
 
