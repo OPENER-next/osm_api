@@ -107,10 +107,16 @@ abstract class OSMAPIBase {
       options.validateStatus = (int? status) => ignoreStatusCodes.contains(status);
     }
 
+    try {
       return _dio.request(
         path,
         data: body,
         options: options
       );
     }
+    on DioError catch (e) {
+      handleDioErrors(e);
+			rethrow;
+		}
+  }
 }

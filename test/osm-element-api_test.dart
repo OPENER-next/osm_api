@@ -1,6 +1,6 @@
-import 'package:dio/dio.dart';
 import 'package:osmapi/authentication/basic-auth.dart';
 import 'package:osmapi/commons/bounding-box.dart';
+import 'package:osmapi/commons/osm-exceptions.dart';
 import 'package:osmapi/osm-apis/osm-api.dart';
 import 'package:test/test.dart';
 
@@ -267,9 +267,9 @@ void main() async {
     try {
       await osmapi.getNode(nodes[0].id);
       fail('Exception for deleted element not thrown');
-    } on DioError catch (e) {
-      expect(e.type, DioErrorType.response);
-      expect(e.error, 'Http status error [410]');
+    } on OSMAPIException catch (e) {
+      expect(e.errorCode, equals(410));
+      expect(e,  isA<OSMGoneException>());
     }
   });
 }
