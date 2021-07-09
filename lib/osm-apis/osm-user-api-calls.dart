@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'package:dio/dio.dart';
-
 import '/osm-user/osm-user-private-details.dart';
 import '/osm-user/osm-user-details.dart';
 import '/osm-user/osm-permissions.dart';
@@ -138,16 +136,12 @@ mixin OSMUserAPICalls on OSMAPIBase {
    * This returns a [String] wrapped in a [Future] which resolves when the operation has been completed.
    */
   Future<String?> getPreference(String preference) async {
-    try {
-			final response = await sendRequest('/user/preferences/${Uri.encodeComponent(preference)}');
-      return response.data;
-		}
-		on DioError catch(e) {
-      if (e.type == DioErrorType.response && e.response?.statusCode == 404) {
-        return null;
-      }
-      rethrow;
-		}
+    final response = await sendRequest(
+      '/user/preferences/${Uri.encodeComponent(preference)}',
+      // ignore Not Found error which is thrown if the preference does not exist
+      ignoreStatusCodes: [404]
+    );
+    return response.data;
   }
 
 
@@ -172,18 +166,11 @@ mixin OSMUserAPICalls on OSMAPIBase {
    * This returns an empty [Future] which resolves when the operation has been completed.
    */
   Future<void> deletePreference(String preference) async {
-    try {
-      await sendRequest(
-        '/user/preferences/${Uri.encodeComponent(preference)}',
-        type: 'DELETE'
-      );
-		}
-		on DioError catch(e) {
-      // ignore not found error
-      if (e.type == DioErrorType.response && e.response?.statusCode == 404) {
-        return;
-      }
-      rethrow;
-		}
+    await sendRequest(
+      '/user/preferences/${Uri.encodeComponent(preference)}',
+      type: 'DELETE',
+      // ignore Not Found error which is thrown if the preference does not exist
+      ignoreStatusCodes: [404]
+    );
   }
 }

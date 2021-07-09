@@ -198,7 +198,9 @@ mixin OSMChangesetAPICalls on OSMAPIBase {
   Future<void> subscribeToChangeset(int id) async {
     await sendRequest(
       '/changeset/$id/subscribe',
-      type: 'POST'
+      type: 'POST',
+      // ignore Conflict error which is thrown if the user is already subscribed to the specified changeset
+      ignoreStatusCodes: [409]
     );
   }
 
@@ -211,7 +213,9 @@ mixin OSMChangesetAPICalls on OSMAPIBase {
   Future<void> unsubscribeFromChangeset(int id) async {
     await sendRequest(
       '/changeset/$id/unsubscribe',
-      type: 'POST'
+      type: 'POST',
+      // ignore Not Found error which is thrown if the user is not subscribed to the specified changeset
+      ignoreStatusCodes: [404]
     );
   }
 }

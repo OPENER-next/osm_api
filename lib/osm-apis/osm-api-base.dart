@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:osmapi/authentication/auth.dart';
+import 'package:osmapi/commons/osm-exceptions.dart';
 
 /**
  * A base class to setup a connection and send request to an OSM API server.
@@ -83,28 +84,33 @@ abstract class OSMAPIBase {
    * A HTTP request method can be specified via [type] which defaults to `GET`.
    * An optional message body can be specified via [body]. The content type of the body needs to be `text/xml`.
    * Additional headers can be applied via the [headers] parameter.
+   * A list of status codes that shall not throw an exception can be provided via [ignoreStatusCodes].
    */
-  Future<Response> sendRequest(String path, { String type = 'GET', String? body, Map<String, String>?headers }) {
-    var additioalHeaders = <String, String>{};
+  Future<Response> sendRequest(String path, { String type = 'GET', String? body, Map<String, String>?headers, List<int>? ignoreStatusCodes }) {
+    var options = Options(
+      method: type,
+      headers: <String, String>{}
+    );
 
     if (authentication != null) {
-      additioalHeaders['Authorization'] = authentication!.getAuthorizationHeader(
+      options.headers!['Authorization'] = authentication!.getAuthorizationHeader(
         _dio.options.baseUrl + path,
         type
       );
     }
 
     if (headers != null) {
-      additioalHeaders.addAll(headers);
+      options.headers!.addAll(headers);
     }
 
-    return _dio.request(
-      path,
-      data: body,
-      options: Options(
-        method: type,
-        headers: additioalHeaders
-      ),
-    );
-  }
+    if (ignoreStatusCodes != null) {
+      options.validateStatus = (int? status) => ignoreStatusCodes.contains(status);
+    }
+
+      return _dio.request(
+        path,
+        data: body,
+        options: options
+      );
+    }
 }
