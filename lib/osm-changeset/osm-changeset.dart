@@ -1,7 +1,8 @@
-import '/osm-user/osm-user.dart';
-import 'osm-comment.dart';
 import 'package:xml/xml.dart';
 import 'package:collection/collection.dart';
+import '/commons/bounding-box.dart';
+import '/osm-user/osm-user.dart';
+import 'osm-comment.dart';
 
 // temporary workaround untill xml library is updated
 extension TempGetChildElements on XmlNode {
@@ -31,16 +32,68 @@ class OSMChangeset {
   final Map<String, String> tags;
 
   /**
+   * The date and time the changeset was created.
+   */
+  final DateTime createdAt;
+
+  /**
+   * The date and time the changeset was closed.
+   * This will be null if the changeset is still open.
+   */
+  final DateTime? closedAt;
+
+  /**
+   * The user who created this changeset.
+   */
+  final OSMUser user;
+
+  /**
+   * The bounding box containing all the changes of this changeset.
+   * If the changeset doesn't have any changes yet in other words [changesCount] is [0] this property will be null.
+   */
+  final BoundingBox? bbox;
+
+  /**
+   * The number of changes this changeset contains.
+   */
+  final int changesCount;
+
+  /**
+   * The number of comments in this changeset.
+   */
+  final int commentsCount;
+
+  /**
    * An optional [List] of [OSMComment]s containing the discussion of this changeset.
    *
    * The [discussion] property is null if the discussion wasn't requested from the server, otherwise it's a [List] of zero ore more items.
    */
   final List<OSMComment>? discussion;
 
+  /**
+   * A short version for checking whether this chageset is still open.
+   */
+  bool get isOpen {
+    return closedAt == null;
+  }
+
+  /**
+   * A short version for checking whether this chageset has been closed.
+   */
+  bool get isClosed {
+    return closedAt != null;
+  }
+
 
   OSMChangeset({
     required this.id,
     required this.tags,
+    required this.createdAt,
+    this.closedAt,
+    required this.user,
+    this.bbox,
+    required this.changesCount,
+    required this.commentsCount,
     this.discussion
   });
 
@@ -59,13 +112,59 @@ class OSMChangeset {
    * A factory method for constructing an [OSMChangeset] object from an [XmlElement].
    */
   static OSMChangeset fromXMLElement(XmlElement changesetElement) {
-     // get and parse id to integer
-    var idValue = changesetElement.getAttribute('id');
-    var id = idValue != null ? int.tryParse(idValue) : null;
 
-    if (id == null) throw('TODO ERROR cannot parse changeset id from element');
-
+    late int id;
     var tags = <String, String>{};
+    late DateTime createdAt;
+    DateTime? closedAt;
+    late OSMUser user;
+    late int changesCount;
+    late int commentsCount;
+    BoundingBox? bbox;
+    List<OSMComment>? comments;
+
+    // try parsing the xml attributes
+    try {
+      var idValue = changesetElement.getAttribute('id');
+      id = int.parse(idValue!);
+
+      var createdAtValue = changesetElement.getAttribute('created_at');
+      createdAt = DateTime.parse(createdAtValue!);
+
+      var closedAtValue = changesetElement.getAttribute('closed_at');
+      if (closedAtValue != null) {
+        closedAt = DateTime.parse(closedAtValue);
+      }
+
+      var userName = changesetElement.getAttribute('user')!;
+      var uidValue = changesetElement.getAttribute('uid');
+      var uid = int.parse(uidValue!);
+      user = OSMUser(uid, userName);
+
+      var changesCountValue = changesetElement.getAttribute('changes_count');
+      changesCount = int.parse(changesCountValue!);
+
+      var commentsCountValue = changesetElement.getAttribute('comments_count');
+      commentsCount = int.parse(commentsCountValue!);
+
+      var minLatValue = changesetElement.getAttribute('min_lat');
+      var maxLatValue = changesetElement.getAttribute('max_lat');
+      var minLonValue = changesetElement.getAttribute('min_lon');
+      var maxLonValue = changesetElement.getAttribute('max_lon');
+
+      if (minLatValue != null && maxLatValue != null && minLonValue != null && maxLonValue != null) {
+        bbox = BoundingBox(
+          double.parse(minLonValue),
+          double.parse(minLatValue),
+          double.parse(maxLonValue),
+          double.parse(maxLatValue)
+        );
+      }
+    }
+    catch (e) {
+      throw('Could not parse the given changeset XML string.');
+    }
+
     changesetElement.findElements('tag').forEach((tag) {
       var k = tag.getAttribute('k');
       var v = tag.getAttribute('v');
@@ -75,9 +174,7 @@ class OSMChangeset {
       }
     });
 
-    List<OSMComment>? comments;
     var discussionElement = changesetElement.getElement('discussion');
-
     if (discussionElement != null) {
       comments = [];
 
@@ -97,18 +194,43 @@ class OSMChangeset {
       });
     }
 
-    return OSMChangeset(id: id, tags: tags, discussion: comments);
+    return OSMChangeset(
+      id: id,
+      tags: tags,
+      createdAt: createdAt,
+      closedAt: closedAt,
+      user: user,
+      changesCount: changesCount,
+      commentsCount: commentsCount,
+      bbox: bbox,
+      discussion: comments
+    );
   }
 
 
   @override
-  String toString() => '$runtimeType - id: $id; tags: $tags; discussion: $discussion';
+  String toString() =>
+    '$runtimeType - id: $id; '
+    'tags: $tags; '
+    'createdAt: $createdAt; '
+    'closedAt: $closedAt; '
+    'user: $user; '
+    'bbox: $bbox; '
+    'changesCount: $changesCount; '
+    'commentsCount: $commentsCount; '
+    'discussion: $discussion';
 
 
   @override
   int get hashCode =>
     id.hashCode ^
     tags.hashCode ^
+    createdAt.hashCode ^
+    closedAt.hashCode ^
+    user.hashCode ^
+    bbox.hashCode ^
+    changesCount.hashCode ^
+    commentsCount.hashCode ^
     discussion.hashCode;
 
 
@@ -119,5 +241,11 @@ class OSMChangeset {
     runtimeType == o.runtimeType &&
     id == o.id &&
     MapEquality().equals(tags, o.tags) &&
+    createdAt == o.createdAt &&
+    closedAt == o.closedAt &&
+    user == o.user &&
+    bbox == o.bbox &&
+    changesCount == o.changesCount &&
+    commentsCount == o.commentsCount &&
     ListEquality().equals(discussion, o.discussion);
 }

@@ -22,11 +22,25 @@ void main() async {
       'created_by': 'Opener Next',
       'comment': 'Just adding some streetnames'
     };
+
     var changesetId = await osmapi.createChangeset(tags);
+
+    // add example node so changeset will generate a bbox
+    var node = await osmapi.createElement(OSMNode(1, 1), changesetId);
 
     var changeset = await osmapi.getChangeset(changesetId);
 
-    expect(tags, equals(changeset.tags));
+    expect(changeset.id, greaterThan(0));
+    expect(changeset.tags, equals(tags));
+    expect(changeset.createdAt, isA<DateTime>());
+    expect(changeset.closedAt, isNull);
+    expect(changeset.user.name, 'testuser');
+    expect(changeset.changesCount, equals(1));
+    expect(changeset.commentsCount, isZero);
+    expect(changeset.bbox?.contains(node.lat, node.lon), isTrue);
+    expect(changeset.isOpen, isTrue);
+    expect(changeset.isClosed, isFalse);
+    expect(changeset.discussion, isNull);
   });
 
 
@@ -45,6 +59,10 @@ void main() async {
 
     expect(changeset.discussion?.first.text, equals('my comment'));
     expect(changeset.discussion?.first.user.name, equals('testuser'));
+    expect(changeset.closedAt, isA<DateTime>());
+    expect(changeset.commentsCount, equals(1));
+    expect(changeset.isOpen, isFalse);
+    expect(changeset.isClosed, isTrue);
   });
 
 
