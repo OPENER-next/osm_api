@@ -27,6 +27,14 @@ class BoundingBox {
   }
 
 
+  /**
+   * A helper function to check whether a given point is inside this bounding box.
+   */
+  bool contains(double latitude, double longitude) {
+    return latitude >= minLatitude && latitude <= maxLatitude && longitude >= minLongitude && longitude <= maxLongitude;
+  }
+
+
   @override
   String toString() => '$runtimeType: min Longitude: $minLongitude, min Latitude: $minLatitude, max Longitude: $maxLongitude, max Latitude: $maxLatitude';
 
