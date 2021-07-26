@@ -1,8 +1,8 @@
 import 'dart:core';
-import 'osm-element.dart';
-import 'osm-node.dart';
-import 'osm-way.dart';
-import 'osm-relation.dart';
+import '/src/osm-elements/osm-element.dart';
+import '/src/osm-elements/osm-node.dart';
+import '/src/osm-elements/osm-way.dart';
+import '/src/osm-elements/osm-relation.dart';
 
 // helper function for null safety
 // https://github.com/dart-lang/sdk/issues/42947

@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
-
-import 'osm-element-type.dart';
+import '/src/osm-elements/osm-element-type.dart';
 
 /**
  * A base class for the three basic OSM elements [OSMNode], [OSMWay] and [OSMRelation].

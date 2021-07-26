@@ -1,5 +1,5 @@
-import 'auth.dart';
 import 'dart:convert';
+import '/src/authentication/auth.dart';
 
 /**
  * A class which retains user login credentials and provides a method to generate the HTTP [Authorization] header.

@@ -1,6 +1,5 @@
-import 'package:osmapi/osm-elements/osm-element.dart';
-
-import 'osm-element-type.dart';
+import '/src/osm-elements/osm-element.dart';
+import '/src/osm-elements/osm-element-type.dart';
 
 /**
  * A container class for the member OSM element.

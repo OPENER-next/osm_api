@@ -1,7 +1,5 @@
 
-import 'package:osmapi/authentication/basic-auth.dart';
-import 'package:osmapi/commons/bounding-box.dart';
-import 'package:osmapi/osm-apis/osm-api.dart';
+import 'package:osmapi/osm-api.dart';
 import 'package:test/test.dart';
 
 void main() async {

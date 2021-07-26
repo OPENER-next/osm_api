@@ -1,5 +1,5 @@
-import 'osm-element-type.dart';
-import 'osm-element.dart';
+import '/src/osm-elements/osm-element-type.dart';
+import '/src/osm-elements/osm-element.dart';
 
 /**
  * A container class for the node OSM element.

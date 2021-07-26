@@ -1,8 +1,8 @@
 import 'package:xml/xml.dart';
 import 'package:collection/collection.dart';
-import '/commons/bounding-box.dart';
-import '/osm-user/osm-user.dart';
-import 'osm-comment.dart';
+import '/src/commons/bounding-box.dart';
+import '/src/osm-user/osm-user.dart';
+import '/src/osm-changeset/osm-comment.dart';
 
 // temporary workaround untill xml library is updated
 extension TempGetChildElements on XmlNode {

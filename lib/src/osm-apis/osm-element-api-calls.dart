@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:osmapi/commons/bounding-box.dart';
-import 'package:osmapi/elements.dart';
-import 'osm-api-base.dart';
+import '/src/commons/bounding-box.dart';
+import '../osm-elements/osm-elements.dart';
+import '/src/osm-apis/osm-api-base.dart';
 
 /**
  * A mixin containing methods for uploading, manipulating and retrieving OSM elements from and to the server.

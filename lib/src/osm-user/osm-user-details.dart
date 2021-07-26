@@ -1,4 +1,4 @@
-import 'package:osmapi/osm-user/osm-user.dart';
+import '/src/osm-user/osm-user.dart';
 
 /**
  * An immutable container class for OSM user details.

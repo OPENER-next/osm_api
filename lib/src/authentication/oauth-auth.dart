@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
-import 'auth.dart';
+import '/src/authentication/auth.dart';
 
 /**
  * A class which retains OAuth 1.0a credentials and provides a method to generate the HTTP [Authorization] header.

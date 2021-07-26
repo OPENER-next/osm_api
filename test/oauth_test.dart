@@ -2,8 +2,7 @@
 
 import 'dart:io';
 import 'package:oauth1/oauth1.dart';
-import 'package:osmapi/authentication/oauth-auth.dart';
-import 'package:osmapi/osm-apis/osm-api.dart';
+import 'package:osmapi/osm-api.dart';
 import 'package:test/test.dart';
 
 void main() async {
