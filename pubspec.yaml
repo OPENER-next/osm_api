@@ -12,5 +12,5 @@ dev_dependencies:
   oauth1: ^2.0.0
 
 dependencies:
-  xml: ^5.1.2
+  xml: ^5.2.0
   dio: ^4.0.0

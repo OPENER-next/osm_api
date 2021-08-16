@@ -4,12 +4,6 @@ import '/src/commons/bounding-box.dart';
 import '/src/osm-user/osm-user.dart';
 import '/src/osm-changeset/osm-comment.dart';
 
-// temporary workaround untill xml library is updated
-extension TempGetChildElements on XmlNode {
-  Iterable<XmlElement> get childElements {
-    return children.whereType<XmlElement>();
-  }
-}
 
 /**
  * A container class for an OSM changeset.
