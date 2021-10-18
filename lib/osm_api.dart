@@ -1,15 +1,15 @@
 import '/src/authentication/auth.dart';
-import '/src/osm-apis/osm-user-api-calls.dart';
-import '/src/osm-apis/osm-changeset-api-calls.dart';
-import '/src/osm-apis/osm-element-api-calls.dart';
-import '/src/osm-apis/osm-api-base.dart';
+import '/src/osm_apis/osm_user_api_calls.dart';
+import '/src/osm_apis/osm_changeset_api_calls.dart';
+import '/src/osm_apis/osm_element_api_calls.dart';
+import '/src/osm_apis/osm_api_base.dart';
 
-export '/src/authentication/basic-auth.dart';
-export '/src/authentication/oauth-auth.dart';
-export '/src/commons/bounding-box.dart';
-export '/src/commons/osm-exceptions.dart';
-export '/src/osm-user/osm-permissions.dart';
-export '/src/osm-elements/osm-elements.dart';
+export '/src/authentication/basic_auth.dart';
+export '/src/authentication/oauth_auth.dart';
+export '/src/commons/bounding_box.dart';
+export '/src/commons/osm_exceptions.dart';
+export '/src/osm_user/osm_permissions.dart';
+export '/src/osm_elements/osm_elements.dart';
 
 /**
  * A super class that contains all API calls for sending requests to an OSM API server.

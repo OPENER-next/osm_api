@@ -1,4 +1,4 @@
-name: osmapi
+name: osm_api
 description: Dart bindings for the OpenStreetMap API .
 version: 0.0.1
 

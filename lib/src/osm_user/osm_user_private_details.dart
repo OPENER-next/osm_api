@@ -1,4 +1,4 @@
-import '/src/osm-user/osm-user-details.dart';
+import '/src/osm_user/osm_user_details.dart';
 
 /**
  * An immutable container class for OSM user details including private information like location.

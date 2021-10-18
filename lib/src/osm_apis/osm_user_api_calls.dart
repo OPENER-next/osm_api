@@ -1,8 +1,8 @@
 import 'dart:convert';
-import '/src/osm-user/osm-user-private-details.dart';
-import '/src/osm-user/osm-user-details.dart';
-import '/src/osm-user/osm-permissions.dart';
-import '/src/osm-apis/osm-api-base.dart';
+import '/src/osm_user/osm_user_private_details.dart';
+import '/src/osm_user/osm_user_details.dart';
+import '/src/osm_user/osm_permissions.dart';
+import '/src/osm_apis/osm_api_base.dart';
 
 /**
  * A mixin containing methods for handling OSM user and permissions calls.

@@ -1,5 +1,4 @@
-
-import 'package:osmapi/osm-api.dart';
+import 'package:osm_api/osm_api.dart';
 import 'package:test/test.dart';
 
 void main() async {

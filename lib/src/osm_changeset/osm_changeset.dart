@@ -1,8 +1,8 @@
 import 'package:xml/xml.dart';
 import 'package:collection/collection.dart';
-import '/src/commons/bounding-box.dart';
-import '/src/osm-user/osm-user.dart';
-import '/src/osm-changeset/osm-comment.dart';
+import '/src/commons/bounding_box.dart';
+import '/src/osm_user/osm_user.dart';
+import '/src/osm_changeset/osm_comment.dart';
 
 
 /**

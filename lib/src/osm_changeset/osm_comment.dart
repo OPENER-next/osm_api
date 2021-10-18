@@ -1,4 +1,4 @@
-import '/src/osm-user/osm-user.dart';
+import '/src/osm_user/osm_user.dart';
 
 /**
  * An immutable container class for an OSM comment.

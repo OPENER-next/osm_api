@@ -1,7 +1,7 @@
 import 'package:xml/xml.dart';
-import '/src/commons/bounding-box.dart';
-import '/src/osm-changeset/osm-changeset.dart';
-import '/src/osm-apis/osm-api-base.dart';
+import '/src/commons/bounding_box.dart';
+import '/src/osm_changeset/osm_changeset.dart';
+import '/src/osm_apis/osm_api_base.dart';
 
 /**
  * A mixin containing methods for handling OSM changesets.

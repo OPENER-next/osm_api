@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
-import '/src/osm-elements/osm-element-type.dart';
-import '/src/osm-elements/osm-member.dart';
-import '/src/osm-elements/osm-element.dart';
+import '/src/osm_elements/osm_element_type.dart';
+import '/src/osm_elements/osm_member.dart';
+import '/src/osm_elements/osm_element.dart';
 
 /**
  * A container class for the relation OSM element.

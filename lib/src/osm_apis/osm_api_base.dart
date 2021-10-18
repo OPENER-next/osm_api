@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import '/src/authentication/auth.dart';
-import '/src/commons/osm-exceptions.dart';
+import '/src/commons/osm_exceptions.dart';
 
 /**
  * A base class to setup a connection and send request to an OSM API server.
