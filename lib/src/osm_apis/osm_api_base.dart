@@ -115,4 +115,13 @@ abstract class OSMAPIBase {
       options: options
     ).onError<DioError>(handleDioErrors);
   }
+
+
+  /**
+   * A method to shutdown the current api client.
+   * This closes any open connections.
+   */
+  void dispose() {
+    _dio.close(force: true);
+  }
 }
