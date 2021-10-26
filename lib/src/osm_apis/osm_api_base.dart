@@ -12,7 +12,7 @@ abstract class OSMAPIBase {
    * User authentication either via [BasicAuth] or [OAuth]
    *
    * If no authentication is given certain API calls will fail.
-   * For exampe you won't be able to make any changes to data on the server.
+   * For example you won't be able to make any changes to data on the server.
    */
   Auth? authentication;
 
