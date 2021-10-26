@@ -16,11 +16,22 @@ extension IterableExtension<E> on Iterable<E> {
  */
 class OSMElementBundle {
 
-  var nodes =  <OSMNode>{};
+  final nodes =  <OSMNode>{};
 
-  var ways = <OSMWay>{};
+  final ways = <OSMWay>{};
 
-  var relations = <OSMRelation>{};
+  final relations = <OSMRelation>{};
+
+
+  /**
+   * Returns an iterable of all [OSMElement]s in this bundle.
+   * This can be used to easily iterate over [nodes], [ways] and [relations] in one loop.
+   */
+  Iterable<OSMElement> get elements sync* {
+    yield* nodes;
+    yield* ways;
+    yield* relations;
+  }
 
 
   /**
