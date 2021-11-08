@@ -39,7 +39,7 @@ abstract class OSMElement {
     int? id,
     int? version
   }) :
-  this.tags = tags ?? const <String, String>{},
+  this.tags = tags ?? <String, String>{},
   this.id = id ?? 0,
   this.version = version ?? 0;
 
