@@ -13,7 +13,7 @@ class OSMRelation extends OSMElement {
    *
    * A relation should at least contain one member.
    */
-  List <OSMMember> members;
+  final List <OSMMember> members;
 
 
   OSMRelation(this.members, {

@@ -12,7 +12,7 @@ class OSMWay extends OSMElement {
    *
    * A way should at least contain two nodes.
    */
-  List<int> nodeIds;
+  final List<int> nodeIds;
 
 
   OSMWay(this.nodeIds, {

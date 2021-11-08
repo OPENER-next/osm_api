@@ -11,7 +11,7 @@ abstract class OSMElement {
    *
    * Each OSM Tag contains and represents one key value pair.
    */
-  Map<String, String> tags;
+  final Map<String, String> tags;
 
   /**
    * The unique identifier of this element.
