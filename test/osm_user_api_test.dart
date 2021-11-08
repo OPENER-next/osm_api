@@ -90,7 +90,7 @@ void main() async {
     expect(userDetails.homeZoom, isNull);
     expect(userDetails.contributionsArePublicDomain, isFalse);
     expect(userDetails.preferredLanguages, contains('en-US'));
-    expect(userDetails.reiceivedMessageCount, isZero);
+    expect(userDetails.receivedMessageCount, isZero);
     expect(userDetails.sentMessagesCount, isZero);
     expect(userDetails.unreadMessagesCount, isZero);
     expect(userDetails.changesetsCount, greaterThanOrEqualTo(0));

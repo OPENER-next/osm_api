@@ -53,7 +53,10 @@ class OSMWay extends OSMElement {
   @override
   int get hashCode =>
     super.hashCode ^
-    nodeIds.hashCode;
+    // do not use nodeIds.hashCode since the hasCodes may differ even if the values are equal.
+    // see https://api.flutter.dev/flutter/dart-core/Object/hashCode.html
+    // "The default hash code implemented by Object represents only the identity of the object,"
+    Object.hashAll(nodeIds);
 
 
   @override

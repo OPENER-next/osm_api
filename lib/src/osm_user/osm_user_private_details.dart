@@ -32,7 +32,7 @@ class OSMUserPrivateDetails extends OSMUserDetails {
   /**
    * The total number of received messages.
    */
-	final int reiceivedMessageCount;
+	final int receivedMessageCount;
 
   /**
    * The number of unread messages.
@@ -62,7 +62,7 @@ class OSMUserPrivateDetails extends OSMUserDetails {
     this.homeLat,
     this.homeLon,
     required this.preferredLanguages,
-    required this.reiceivedMessageCount,
+    required this.receivedMessageCount,
     required this.unreadMessagesCount,
     required this.sentMessagesCount
   }) : super(
@@ -100,14 +100,14 @@ class OSMUserPrivateDetails extends OSMUserDetails {
     homeLat: obj['home']?['lat'],
     homeLon: obj['home']?['lon'],
     preferredLanguages: obj['languages']?.cast<String>() ?? List.empty(),
-    reiceivedMessageCount: obj['messages']['received']['count'],
+    receivedMessageCount: obj['messages']['received']['count'],
     unreadMessagesCount: obj['messages']['received']['unread'],
     sentMessagesCount: obj['messages']['sent']['count']
   );
 
 
   @override
-  String toString() => '${super.toString()}; contributionsArePublicDomain: $contributionsArePublicDomain; homeZoom: $homeZoom; homeLat: $homeLat; homeLon: $homeLon; preferredLanguages: $preferredLanguages; reiceivedMessageCount: $reiceivedMessageCount; unreadMessagesCount: $unreadMessagesCount; sentMessagesCount: $sentMessagesCount';
+  String toString() => '${super.toString()}; contributionsArePublicDomain: $contributionsArePublicDomain; homeZoom: $homeZoom; homeLat: $homeLat; homeLon: $homeLon; preferredLanguages: $preferredLanguages; reiceivedMessageCount: $receivedMessageCount; unreadMessagesCount: $unreadMessagesCount; sentMessagesCount: $sentMessagesCount';
 
 
   @override
@@ -117,8 +117,11 @@ class OSMUserPrivateDetails extends OSMUserDetails {
     homeZoom.hashCode ^
     homeLat.hashCode ^
     homeLon.hashCode ^
-    preferredLanguages.hashCode ^
-    reiceivedMessageCount.hashCode ^
+    // do not use preferredLanguages.hashCode since the hasCodes may differ even if the values are equal.
+    // see https://api.flutter.dev/flutter/dart-core/Object/hashCode.html
+    // "The default hash code implemented by Object represents only the identity of the object,"
+    Object.hashAll(preferredLanguages) ^
+    receivedMessageCount.hashCode ^
     unreadMessagesCount.hashCode ^
     sentMessagesCount.hashCode;
 
@@ -134,7 +137,7 @@ class OSMUserPrivateDetails extends OSMUserDetails {
     homeLat == o.homeLat &&
     homeLon == o.homeLon &&
     preferredLanguages == o.preferredLanguages &&
-    reiceivedMessageCount == o.reiceivedMessageCount &&
+    receivedMessageCount == o.receivedMessageCount &&
     unreadMessagesCount == o.unreadMessagesCount &&
     sentMessagesCount == o.sentMessagesCount;
 }

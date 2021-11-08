@@ -39,7 +39,7 @@ abstract class OSMElement {
     int? id,
     int? version
   }) :
-  this.tags = tags ?? <String, String>{},
+  this.tags = tags ?? const <String, String>{},
   this.id = id ?? 0,
   this.version = version ?? 0;
 
@@ -68,7 +68,11 @@ abstract class OSMElement {
   int get hashCode =>
     id.hashCode ^
     version.hashCode ^
-    tags.hashCode;
+    // do not use nodeIds.hashCode since the hasCodes may differ even if the values are equal.
+    // see https://api.flutter.dev/flutter/dart-core/Object/hashCode.html
+    // "The default hash code implemented by Object represents only the identity of the object,"
+    Object.hashAll(tags.keys) ^
+    Object.hashAll(tags.values);
 
 
   /**

@@ -60,7 +60,10 @@ class OSMPermissions {
 
   @override
   int get hashCode =>
-    _permissions.hashCode;
+    // do not use _permissions.hashCode since the hasCodes may differ even if the values are equal.
+    // see https://api.flutter.dev/flutter/dart-core/Object/hashCode.html
+    // "The default hash code implemented by Object represents only the identity of the object,"
+    Object.hashAll(_permissions);
 
 
   /**

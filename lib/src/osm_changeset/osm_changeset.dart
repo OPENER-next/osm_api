@@ -218,14 +218,18 @@ class OSMChangeset {
   @override
   int get hashCode =>
     id.hashCode ^
-    tags.hashCode ^
     createdAt.hashCode ^
     closedAt.hashCode ^
     user.hashCode ^
     bbox.hashCode ^
     changesCount.hashCode ^
     commentsCount.hashCode ^
-    discussion.hashCode;
+    // do not use COLLECTION.hashCode since the hasCodes may differ even if the values are equal.
+    // see https://api.flutter.dev/flutter/dart-core/Object/hashCode.html
+    // "The default hash code implemented by Object represents only the identity of the object,"
+    Object.hashAll(tags.keys) ^
+    Object.hashAll(tags.values) ^
+    (discussion != null ? Object.hashAll(discussion!) : discussion.hashCode);
 
 
   @override
@@ -234,12 +238,12 @@ class OSMChangeset {
     o is OSMChangeset &&
     runtimeType == o.runtimeType &&
     id == o.id &&
-    MapEquality().equals(tags, o.tags) &&
     createdAt == o.createdAt &&
     closedAt == o.closedAt &&
     user == o.user &&
     bbox == o.bbox &&
     changesCount == o.changesCount &&
     commentsCount == o.commentsCount &&
+    MapEquality().equals(tags, o.tags) &&
     ListEquality().equals(discussion, o.discussion);
 }

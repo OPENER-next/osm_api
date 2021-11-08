@@ -62,7 +62,10 @@ class OSMRelation extends OSMElement {
   @override
   int get hashCode =>
     super.hashCode ^
-    members.hashCode;
+    // do not use members.hashCode since the hasCodes may differ even if the values are equal.
+    // see https://api.flutter.dev/flutter/dart-core/Object/hashCode.html
+    // "The default hash code implemented by Object represents only the identity of the object,"
+    Object.hashAll(members);
 
 
   @override
