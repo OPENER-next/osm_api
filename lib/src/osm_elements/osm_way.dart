@@ -46,6 +46,12 @@ class OSMWay extends OSMElement {
   OSMElementType get type => OSMElementType.way;
 
 
+  /// Returns true if the way is closed (in other words the first point equals the last point),
+  /// but only if the way is at least composed of 3 nodes.
+
+  bool get isClosed => nodeIds.length > 2 && nodeIds.first == nodeIds.last;
+
+
   @override
   String toString() => '$runtimeType - nodes: $nodeIds; id: $id; version: $version; tags: $tags';
 
