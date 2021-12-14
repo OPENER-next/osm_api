@@ -57,7 +57,7 @@ class OSMElementBundle {
   /**
    * A function to get all [OSMNode]s from the current [OSMElementBundle] that are contained in the given [OSMWay].
    */
-  Iterable<OSMNode> getNodesFromWay(way) sync* {
+  Iterable<OSMNode> getNodesFromWay(OSMWay way) sync* {
     for (var nodeId in way.nodeIds) {
       // skip nodes that do not have a valid id yet
       if (nodeId == 0) continue;
@@ -73,7 +73,7 @@ class OSMElementBundle {
   /**
    * A function to get all [OSMNode]s from the current [OSMElementBundle] that are contained in the given [OSMRelation].
    */
-  Iterable<OSMNode> getNodesFromRelation(relation) {
+  Iterable<OSMNode> getNodesFromRelation(OSMRelation relation) {
     return _getElementFromRelation(nodes, relation);
   }
 
@@ -81,7 +81,7 @@ class OSMElementBundle {
   /**
    * A function to get all [OSMWay]s from the current [OSMElementBundle] that are contained in the given [OSMRelation].
    */
-  Iterable<OSMWay> getWaysFromRelation(relation) {
+  Iterable<OSMWay> getWaysFromRelation(OSMRelation relation) {
     return _getElementFromRelation(ways, relation);
   }
 
@@ -89,7 +89,7 @@ class OSMElementBundle {
   /**
    * A function to get all [OSMRelation]s from the current [OSMElementBundle] that are contained in the given [OSMRelation].
    */
-  Iterable<OSMRelation> getRelationsFromRelation(relation) {
+  Iterable<OSMRelation> getRelationsFromRelation(OSMRelation relation) {
     return _getElementFromRelation<OSMRelation>(relations, relation);
   }
 
