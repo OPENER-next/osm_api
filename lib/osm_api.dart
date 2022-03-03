@@ -28,10 +28,12 @@ class OSMAPI extends OSMAPIBase with OSMUserAPICalls, OSMElementAPICalls, OSMCha
     int? connectTimeout,
     int? receiveTimeout,
     Auth? authentication,
+    String? userAgent,
   }) : super(
     baseUrl: baseUrl,
     connectTimeout: connectTimeout,
     receiveTimeout: receiveTimeout,
-    authentication: authentication
+    authentication: authentication,
+    userAgent: userAgent,
   );
 }

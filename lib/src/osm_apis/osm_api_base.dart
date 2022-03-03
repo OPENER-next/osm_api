@@ -21,7 +21,8 @@ abstract class OSMAPIBase {
     String? baseUrl,
     int? connectTimeout,
     int? receiveTimeout,
-    this.authentication
+    this.authentication,
+    String? userAgent
   }) {
     this.baseUrl = baseUrl ?? 'http://127.0.0.1:3000/api/0.6';
     this.connectTimeout = connectTimeout ?? 5000;
@@ -31,6 +32,8 @@ abstract class OSMAPIBase {
     _dio.options.headers = {
       'Content-Type': 'text/xml'
     };
+    // set user agent after initial headers/map is set
+    this.userAgent = userAgent;
   }
 
 
@@ -45,7 +48,7 @@ abstract class OSMAPIBase {
   String get baseUrl {
     return _dio.options.baseUrl;
   }
-  set baseUrl (String value) {
+  set baseUrl(String value) {
     _dio.options.baseUrl = value;
   }
 
@@ -58,7 +61,7 @@ abstract class OSMAPIBase {
   int get connectTimeout {
     return _dio.options.connectTimeout;
   }
-  set connectTimeout (int value) {
+  set connectTimeout(int value) {
     _dio.options.connectTimeout = value;
   }
 
@@ -71,8 +74,26 @@ abstract class OSMAPIBase {
   int get receiveTimeout {
     return _dio.options.receiveTimeout;
   }
-  set receiveTimeout (int value) {
+  set receiveTimeout(int value) {
     _dio.options.receiveTimeout = value;
+  }
+
+
+  /**
+   * Custom User-Agent header string.
+   *
+   * Defaults to no User-Agent header field
+   */
+  String? get userAgent {
+    return _dio.options.headers['User-Agent'];
+  }
+  set userAgent(String? userAgent) {
+    if (userAgent != null) {
+      _dio.options.headers['User-Agent'] = userAgent;
+    }
+    else {
+      _dio.options.headers.remove('User-Agent');
+    }
   }
 
 
