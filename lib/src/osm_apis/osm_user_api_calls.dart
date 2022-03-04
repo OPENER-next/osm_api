@@ -78,7 +78,7 @@ mixin OSMUserAPICalls on OSMAPIBase {
   Iterable<OSMUserDetails> _lazyJSONtoOSMUserDetails(Iterable<Map<String, dynamic>> objects) sync* {
     for (final jsonObj in objects) {
       // get single user object
-      var userObj = jsonObj['user'].cast<String, dynamic>();
+      final userObj = jsonObj['user'].cast<String, dynamic>();
       yield OSMUserDetails.fromJSONObject(userObj);
     }
   }
@@ -108,7 +108,7 @@ mixin OSMUserAPICalls on OSMAPIBase {
    * This returns an empty [Future] which resolves when the operation has been completed.
    */
   Future<void> setAllPreferences(Map<String, dynamic> preferences) async {
-    var sanitizer = const HtmlEscape(HtmlEscapeMode.attribute);
+    final sanitizer = const HtmlEscape(HtmlEscapeMode.attribute);
     var xmlPreferencesString = '';
     preferences.forEach((key, value) {
       key = sanitizer.convert(key);

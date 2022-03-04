@@ -13,7 +13,7 @@ class OSMRelation extends OSMElement {
    *
    * A relation should at least contain one member.
    */
-  final List <OSMMember> members;
+  final List<OSMMember> members;
 
 
   OSMRelation(this.members, {
@@ -27,7 +27,7 @@ class OSMRelation extends OSMElement {
   /**
    * A factory method for constructing an [OSMRelation] from a JSON object.
    */
-  static OSMRelation fromJSONObject(Map<String, dynamic> obj) {
+  factory OSMRelation.fromJSONObject(Map<String, dynamic> obj) {
     var members = <OSMMember>[];
     for (var memberObj in obj['members']) {
       var typeEnum = OSMElementType.values.firstWhere((e) => e.toShortString() == memberObj['type']);

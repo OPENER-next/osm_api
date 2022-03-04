@@ -151,8 +151,6 @@ mixin OSMElementAPICalls on OSMAPIBase {
    * Returns the typed [OSMElement] wrapped in a [Future] which resolves when the operation has been completed.
    */
   Future<T> _getElement<T extends OSMElement>(String request) async {
-    assert(T != OSMElement);
-
     // returns element as json
     final response = await sendRequest(request, headers: const { 'Accept': 'application/json' });
     // parse json

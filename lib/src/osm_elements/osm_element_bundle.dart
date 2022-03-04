@@ -58,7 +58,7 @@ class OSMElementBundle {
    * A function to get all [OSMNode]s from the current [OSMElementBundle] that are contained in the given [OSMWay].
    */
   Iterable<OSMNode> getNodesFromWay(OSMWay way) sync* {
-    for (var nodeId in way.nodeIds) {
+    for (final nodeId in way.nodeIds) {
       // skip nodes that do not have a valid id yet
       if (nodeId == 0) continue;
 
@@ -96,7 +96,7 @@ class OSMElementBundle {
 
 
   Iterable<T> _getElementFromRelation<T extends OSMElement>(elementList, relation) sync* {
-    for (var member in relation.members) {
+    for (final member in relation.members) {
       // skip elements that do not have a valid id yet
       if (member.ref == 0) continue;
 

@@ -83,7 +83,7 @@ class OSMUserPrivateDetails extends OSMUserDetails {
   /**
    * A factory method for constructing an [OSMUserPrivateDetails] object from a JSON object.
    */
-  static OSMUserPrivateDetails fromJSONObject(Map<String, dynamic> obj) => OSMUserPrivateDetails(
+  factory OSMUserPrivateDetails.fromJSONObject(Map<String, dynamic> obj) => OSMUserPrivateDetails(
     uid: obj['id'],
     userName: obj['display_name'],
     createdAt: DateTime.parse(obj['account_created']),

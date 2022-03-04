@@ -31,7 +31,7 @@ class OSMPermissions {
   /**
    * A factory method for constructing an [OSMPermissions] object from an XML [String].
    */
-  static OSMPermissions fromXMLString(xmlString) {
+  factory OSMPermissions.fromXMLString(xmlString) {
     var xmlDoc = XmlDocument.parse(xmlString);
     return OSMPermissions(
       xmlDoc.findAllElements('permission').expand((element) {

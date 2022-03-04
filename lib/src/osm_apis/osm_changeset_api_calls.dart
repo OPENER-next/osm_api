@@ -167,7 +167,7 @@ mixin OSMChangesetAPICalls on OSMAPIBase {
    * A generator/lazy iterable for converting XML elements to [OSMChangeset]s.
    */
   Iterable<OSMChangeset> _lazyXMLtoOSMChangesets(Iterable<XmlElement> elements) sync* {
-    for (var element in elements) {
+    for (final element in elements) {
       if (element.name.toString() == 'changeset') {
         yield OSMChangeset.fromXMLElement(element);
       }

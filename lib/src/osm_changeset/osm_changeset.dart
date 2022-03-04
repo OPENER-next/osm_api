@@ -6,7 +6,7 @@ import '/src/osm_changeset/osm_comment.dart';
 
 
 /**
- * A container class for an OSM changeset.
+ * An immutable container class for an OSM changeset.
  */
 class OSMChangeset {
 
@@ -67,16 +67,13 @@ class OSMChangeset {
   /**
    * A short version for checking whether this chageset is still open.
    */
-  bool get isOpen {
-    return closedAt == null;
-  }
+  bool get isOpen => closedAt == null;
+
 
   /**
    * A short version for checking whether this chageset has been closed.
    */
-  bool get isClosed {
-    return closedAt != null;
-  }
+  bool get isClosed => closedAt != null;
 
 
   OSMChangeset({
@@ -95,56 +92,55 @@ class OSMChangeset {
   /**
    * A factory method for constructing an [OSMChangeset] from an XML [String].
    */
-  static OSMChangeset fromXMLString(String xmlString) {
-    var xmlDoc = XmlDocument.parse(xmlString);
-    var changesetElement = xmlDoc.findAllElements('changeset').first;
-    return fromXMLElement(changesetElement);
+  factory OSMChangeset.fromXMLString(String xmlString) {
+    final xmlDoc = XmlDocument.parse(xmlString);
+    final changesetElement = xmlDoc.findAllElements('changeset').first;
+    return OSMChangeset.fromXMLElement(changesetElement);
   }
 
 
   /**
    * A factory method for constructing an [OSMChangeset] object from an [XmlElement].
    */
-  static OSMChangeset fromXMLElement(XmlElement changesetElement) {
-
-    late int id;
-    var tags = <String, String>{};
-    late DateTime createdAt;
+  factory OSMChangeset.fromXMLElement(XmlElement changesetElement) {
+    final int id;
+    final tags = <String, String>{};
+    final DateTime createdAt;
     DateTime? closedAt;
-    late OSMUser user;
-    late int changesCount;
-    late int commentsCount;
+    final OSMUser user;
+    final int changesCount;
+    final int commentsCount;
     BoundingBox? bbox;
     List<OSMComment>? comments;
 
     // try parsing the xml attributes
     try {
-      var idValue = changesetElement.getAttribute('id');
+      final idValue = changesetElement.getAttribute('id');
       id = int.parse(idValue!);
 
-      var createdAtValue = changesetElement.getAttribute('created_at');
+      final createdAtValue = changesetElement.getAttribute('created_at');
       createdAt = DateTime.parse(createdAtValue!);
 
-      var closedAtValue = changesetElement.getAttribute('closed_at');
+      final closedAtValue = changesetElement.getAttribute('closed_at');
       if (closedAtValue != null) {
         closedAt = DateTime.parse(closedAtValue);
       }
 
-      var userName = changesetElement.getAttribute('user')!;
-      var uidValue = changesetElement.getAttribute('uid');
-      var uid = int.parse(uidValue!);
+      final userName = changesetElement.getAttribute('user')!;
+      final uidValue = changesetElement.getAttribute('uid');
+      final uid = int.parse(uidValue!);
       user = OSMUser(uid, userName);
 
-      var changesCountValue = changesetElement.getAttribute('changes_count');
+      final changesCountValue = changesetElement.getAttribute('changes_count');
       changesCount = int.parse(changesCountValue!);
 
-      var commentsCountValue = changesetElement.getAttribute('comments_count');
+      final commentsCountValue = changesetElement.getAttribute('comments_count');
       commentsCount = int.parse(commentsCountValue!);
 
-      var minLatValue = changesetElement.getAttribute('min_lat');
-      var maxLatValue = changesetElement.getAttribute('max_lat');
-      var minLonValue = changesetElement.getAttribute('min_lon');
-      var maxLonValue = changesetElement.getAttribute('max_lon');
+      final minLatValue = changesetElement.getAttribute('min_lat');
+      final maxLatValue = changesetElement.getAttribute('max_lat');
+      final minLonValue = changesetElement.getAttribute('min_lon');
+      final maxLonValue = changesetElement.getAttribute('max_lon');
 
       if (minLatValue != null && maxLatValue != null && minLonValue != null && maxLonValue != null) {
         bbox = BoundingBox(
@@ -160,23 +156,23 @@ class OSMChangeset {
     }
 
     changesetElement.findElements('tag').forEach((tag) {
-      var k = tag.getAttribute('k');
-      var v = tag.getAttribute('v');
+      final k = tag.getAttribute('k');
+      final v = tag.getAttribute('v');
 
       if (k != null && v != null) {
         tags[k] = v;
       }
     });
 
-    var discussionElement = changesetElement.getElement('discussion');
+    final discussionElement = changesetElement.getElement('discussion');
     if (discussionElement != null) {
       comments = [];
 
       discussionElement.childElements.forEach((comment) {
-        var date = comment.getAttribute('date');
-        var uid = comment.getAttribute('uid');
-        var userName = comment.getAttribute('user');
-        var textElement = comment.getElement('text');
+        final date = comment.getAttribute('date');
+        final uid = comment.getAttribute('uid');
+        final userName = comment.getAttribute('user');
+        final textElement = comment.getElement('text');
 
         if (date != null && uid != null && userName != null && textElement != null) {
           comments!.add(OSMComment(
