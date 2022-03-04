@@ -44,10 +44,30 @@ class OSMRelation extends OSMElement {
 
 
   @override
-  String bodyToXML() {
-    var xmlString = super.bodyToXML();
-    members.forEach((member) => xmlString += member.toXML());
-    return xmlString;
+  StringBuffer bodyToXML([ StringBuffer? buffer ]) {
+    final stringBuffer = super.bodyToXML(buffer);
+    members.forEach((member) => member.toXML(stringBuffer));
+    return stringBuffer;
+  }
+
+
+  @override
+  StringBuffer toXML({
+    StringBuffer? buffer,
+    int? changesetId
+  }) {
+    final stringBuffer = buffer ?? StringBuffer()
+    ..write('<relation')
+    ..write(' id="')..write(id)..write('"')
+    ..write(' version="')..write(version)..write('"');
+    if (changesetId != null) {
+      stringBuffer..write(' changeset="')..write(changesetId)..write('"');
+    }
+    stringBuffer.writeln('>');
+    bodyToXML(stringBuffer)
+    .writeln('</relation>');
+
+    return stringBuffer;
   }
 
 

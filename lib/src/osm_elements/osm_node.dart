@@ -41,6 +41,28 @@ class OSMNode extends OSMElement {
 
 
   @override
+  StringBuffer toXML({
+    StringBuffer? buffer,
+    int? changesetId
+  }) {
+    final stringBuffer = buffer ?? StringBuffer()
+    ..write('<node')
+    ..write(' id="')..write(id)..write('"')
+    ..write(' version="')..write(version)..write('"')
+    ..write(' lat="')..write(lat)..write('"')
+    ..write(' lon="')..write(lon)..write('"');
+    if (changesetId != null) {
+      stringBuffer..write(' changeset="')..write(changesetId)..write('"');
+    }
+    stringBuffer.writeln('>');
+    bodyToXML(stringBuffer)
+    .writeln('</node>');
+
+    return stringBuffer;
+  }
+
+
+  @override
   String toString() => '$runtimeType - lat: $lat; lon: $lon; id: $id; version: $version; tags: $tags';
 
 

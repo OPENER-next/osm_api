@@ -35,10 +35,35 @@ class OSMWay extends OSMElement {
 
 
   @override
-  String bodyToXML() {
-    var xmlString = super.bodyToXML();
-    nodeIds.forEach((nodeId) => xmlString += '<nd ref="$nodeId"/>');
-    return xmlString;
+  StringBuffer bodyToXML([ StringBuffer? buffer ]) {
+    final stringBuffer = super.bodyToXML(buffer);
+    nodeIds.forEach((nodeId) {
+      stringBuffer
+      ..write('<nd')
+      ..write(' ref="')..write(nodeId)..write('"')
+      ..writeln('/>');
+    });
+    return stringBuffer;
+  }
+
+
+  @override
+  StringBuffer toXML({
+    StringBuffer? buffer,
+    int? changesetId
+  }) {
+    final stringBuffer = buffer ?? StringBuffer()
+    ..write('<way')
+    ..write(' id="')..write(id)..write('"')
+    ..write(' version="')..write(version)..write('"');
+    if (changesetId != null) {
+      stringBuffer..write(' changeset="')..write(changesetId)..write('"');
+    }
+    stringBuffer.writeln('>');
+    bodyToXML(stringBuffer)
+    .writeln('</way>');
+
+    return stringBuffer;
   }
 
 

@@ -53,14 +53,34 @@ abstract class OSMElement {
 
 
   /**
-   * A function to construct the XML body [String] of this element.
+   * A function to construct the XML [StringBuffer] of this element.
+   *
+   * This will serialize the entire element to XML.
+   * Optionally an already existing [StringBuffer] can be passed to write the changes to.
+   * The `changeset` XML attribute can be set via the [changesetId] parameter.
+   */
+  StringBuffer toXML({
+    StringBuffer? buffer,
+    int? changesetId
+  });
+
+
+  /**
+   * A function to construct the XML body [StringBuffer] of this element.
    *
    * This will serialize tags and child elements of this element to XML.
+   * Optionally an already existing [StringBuffer] can be passed to write the changes to.
    */
-  String bodyToXML() {
-    var xmlString = '';
-    tags.forEach((key, value) => xmlString +='<tag k="$key" v="$value"/>');
-    return xmlString;
+  StringBuffer bodyToXML([ StringBuffer? buffer ]) {
+    final stringBuffer = buffer ?? StringBuffer();
+    tags.forEach((key, value) {
+      stringBuffer
+      ..write('<tag')
+      ..write(' k="')..write(key)..write('"')
+      ..write(' v="')..write(value)..write('"')
+      ..writeln('/>');
+    });
+    return stringBuffer;
   }
 
 

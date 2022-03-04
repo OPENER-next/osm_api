@@ -35,8 +35,13 @@ class OSMMember {
   /**
    * A function to serialize the element to an XML [String].
    */
-  String toXML() {
-    return '<member type="${type.toShortString()}" role="$role" ref="$ref"/>';
+  StringBuffer toXML([ StringBuffer? buffer ]) {
+    return buffer ?? StringBuffer()
+      ..write('<member')
+      ..write(' type="')..write(type.toShortString())..write('"')
+      ..write(' role="')..write(role)..write('"')
+      ..write(' ref="')..write(ref)..write('"')
+      ..writeln('/>');
   }
 
 

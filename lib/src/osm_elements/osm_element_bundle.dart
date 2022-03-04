@@ -24,21 +24,12 @@ class OSMElementBundle {
 
 
   /**
-   * Returns an iterable of all [OSMElement]s in this bundle.
-   * This can be used to easily iterate over [nodes], [ways] and [relations] in one loop.
-   */
-  Iterable<OSMElement> get elements sync* {
-    yield* nodes;
-    yield* ways;
-    yield* relations;
-  }
-
-
-  /**
    * This takes an iterable of [OSMElement]s and puts each element in its dedicated [nodes], [ways] or [relations] list.
    */
-  OSMElementBundle(Iterable<OSMElement> elements) {
-    for (var element in elements) {
+  OSMElementBundle([
+    Iterable<OSMElement> elements = const Iterable.empty()
+  ]) {
+    for (final element in elements) {
       switch (element.runtimeType) {
         case OSMNode:
           nodes.add(element as OSMNode);
@@ -51,6 +42,17 @@ class OSMElementBundle {
         break;
       }
     }
+  }
+
+
+  /**
+   * Returns an iterable of all [OSMElement]s in this bundle.
+   * This can be used to easily iterate over [nodes], [ways] and [relations] in one loop.
+   */
+  Iterable<OSMElement> get elements sync* {
+    yield* nodes;
+    yield* ways;
+    yield* relations;
   }
 
 
