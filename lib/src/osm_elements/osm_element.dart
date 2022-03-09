@@ -57,12 +57,33 @@ abstract class OSMElement {
    *
    * This will serialize the entire element to XML.
    * Optionally an already existing [StringBuffer] can be passed to write the changes to.
-   * The `changeset` XML attribute can be set via the [changesetId] parameter.
+   * Additional XML attributes can be set via the [additionalAttributes] parameter.
+   * For example the `changeset` attribute can be set by passing `{'changeset': 1}`.
    */
   StringBuffer toXML({
     StringBuffer? buffer,
-    int? changesetId
-  });
+    Map<String, dynamic> additionalAttributes = const {}
+  }) {
+    final attributes = {
+      'id': id,
+      'version': version,
+      ...additionalAttributes
+    };
+
+    final elementName = type.toShortString();
+    final stringBuffer = buffer ?? StringBuffer()
+    ..write('<')..write(elementName);
+    for (final attributeEntry in attributes.entries) {
+      stringBuffer
+      ..write(' ')..write(attributeEntry.key)
+      ..write('="')..write(attributeEntry.value.toString())..write('"');
+    }
+    stringBuffer.writeln('>');
+    bodyToXML(stringBuffer)
+    ..write('</')..write(elementName)..write('>');
+
+    return stringBuffer;
+  }
 
 
   /**

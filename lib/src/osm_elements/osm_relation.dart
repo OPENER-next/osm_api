@@ -104,26 +104,6 @@ class OSMRelation extends OSMElement {
 
 
   @override
-  StringBuffer toXML({
-    StringBuffer? buffer,
-    int? changesetId
-  }) {
-    final stringBuffer = buffer ?? StringBuffer()
-    ..write('<relation')
-    ..write(' id="')..write(id)..write('"')
-    ..write(' version="')..write(version)..write('"');
-    if (changesetId != null) {
-      stringBuffer..write(' changeset="')..write(changesetId)..write('"');
-    }
-    stringBuffer.writeln('>');
-    bodyToXML(stringBuffer)
-    .writeln('</relation>');
-
-    return stringBuffer;
-  }
-
-
-  @override
   OSMElementType get type => OSMElementType.relation;
 
 

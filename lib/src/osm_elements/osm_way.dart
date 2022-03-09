@@ -101,26 +101,6 @@ class OSMWay extends OSMElement {
 
 
   @override
-  StringBuffer toXML({
-    StringBuffer? buffer,
-    int? changesetId
-  }) {
-    final stringBuffer = buffer ?? StringBuffer()
-    ..write('<way')
-    ..write(' id="')..write(id)..write('"')
-    ..write(' version="')..write(version)..write('"');
-    if (changesetId != null) {
-      stringBuffer..write(' changeset="')..write(changesetId)..write('"');
-    }
-    stringBuffer.writeln('>');
-    bodyToXML(stringBuffer)
-    .writeln('</way>');
-
-    return stringBuffer;
-  }
-
-
-  @override
   OSMElementType get type => OSMElementType.way;
 
 
