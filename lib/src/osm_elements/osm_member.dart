@@ -1,3 +1,5 @@
+import 'package:xml/xml.dart';
+
 import '/src/osm_elements/osm_element.dart';
 import '/src/osm_elements/osm_element_type.dart';
 
@@ -33,15 +35,45 @@ class OSMMember {
 
 
   /**
+   * A factory method for constructing an [OSMMember] from a XML [XmlElement].
+   */
+  factory OSMMember.fromXMLElement(XmlElement memberElement) {
+    final int ref;
+    final OSMElementType type;
+    final String? role;
+
+    // try parsing the necessary xml attributes
+    try {
+      ref = int.parse(
+        memberElement.getAttribute('ref')!
+      );
+      type = osmElementTypeFromString(
+        memberElement.getAttribute('type')!
+      );
+    }
+    catch (e) {
+      throw('Could not parse the given member XML string.');
+    }
+
+    role = memberElement.getAttribute('role');
+
+    return OSMMember(type, ref, role);
+  }
+
+
+  /**
    * A function to serialize the element to an XML [String].
    */
   StringBuffer toXML([ StringBuffer? buffer ]) {
-    return buffer ?? StringBuffer()
-      ..write('<member')
-      ..write(' type="')..write(type.toShortString())..write('"')
-      ..write(' role="')..write(role)..write('"')
-      ..write(' ref="')..write(ref)..write('"')
-      ..writeln('/>');
+    buffer ??= StringBuffer();
+    buffer
+    ..write('<member')
+    ..write(' type="')..write(type.toShortString())..write('"')
+    ..write(' ref="')..write(ref)..write('"');
+    if (role.isNotEmpty) {
+      buffer..write(' role="')..write(role)..write('"');
+    }
+    return buffer..writeln('/>');
   }
 
 

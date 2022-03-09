@@ -1,3 +1,5 @@
+import 'package:xml/xml.dart';
+
 import '/src/osm_elements/osm_element_type.dart';
 import '/src/osm_elements/osm_element.dart';
 
@@ -34,6 +36,61 @@ class OSMNode extends OSMElement {
     version: obj['version'],
     tags: obj['tags']?.cast<String, String>()
   );
+
+
+  /**
+   * A factory method for constructing an [OSMNode] from a XML [String].
+   */
+  factory OSMNode.fromXMLString(String xmlString) {
+    final xmlDoc = XmlDocument.parse(xmlString);
+    final nodeElement = xmlDoc.findAllElements(OSMElementType.node.toShortString()).first;
+    return OSMNode.fromXMLElement(nodeElement);
+  }
+
+
+  /**
+   * A factory method for constructing an [OSMNode] from a XML [XmlElement].
+   */
+  factory OSMNode.fromXMLElement(XmlElement nodeElement) {
+    final double lat, lon;
+    final int? id, version;
+    final tags = <String, String>{};
+
+    // try parsing the necessary xml attributes
+    try {
+      lat = double.parse(
+        nodeElement.getAttribute('lat')!
+      );
+      lon = double.parse(
+        nodeElement.getAttribute('lon')!
+      );
+    }
+    catch (e) {
+      throw('Could not parse the given node XML string.');
+    }
+
+    id = int.tryParse(
+      nodeElement.getAttribute('id') ?? ''
+    );
+    version = int.tryParse(
+      nodeElement.getAttribute('version') ?? ''
+    );
+
+    nodeElement.findElements('tag').forEach((tag) {
+      final key = tag.getAttribute('k');
+      final value = tag.getAttribute('v');
+      if (key != null && value != null) {
+        tags[key] = value;
+      }
+    });
+
+    return OSMNode(
+      lat, lon,
+      id: id,
+      version: version,
+      tags: tags
+    );
+  }
 
 
   @override

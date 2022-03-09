@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:xml/xml.dart';
 import '/src/osm_elements/osm_element_type.dart';
 import '/src/osm_elements/osm_member.dart';
 import '/src/osm_elements/osm_element.dart';
@@ -39,6 +40,57 @@ class OSMRelation extends OSMElement {
       id: obj['id'],
       version: obj['version'],
       tags: obj['tags']?.cast<String, String>()
+    );
+  }
+
+
+  /**
+   * A factory method for constructing an [OSMRelation] from a XML [String].
+   */
+  factory OSMRelation.fromXMLString(String xmlString) {
+    final xmlDoc = XmlDocument.parse(xmlString);
+    final relationElement = xmlDoc.findAllElements(OSMElementType.relation.toShortString()).first;
+    return OSMRelation.fromXMLElement(relationElement);
+  }
+
+
+  /**
+   * A factory method for constructing an [OSMRelation] from a XML [XmlElement].
+   */
+  factory OSMRelation.fromXMLElement(XmlElement relationElement) {
+    final List<OSMMember> members;
+    final int? id, version;
+    final tags = <String, String>{};
+
+    try {
+      members = relationElement.findElements('member').map(
+        (member) => OSMMember.fromXMLElement(member)
+      ).toList();
+    }
+    catch (e) {
+      throw('Could not parse the given relation XML string.');
+    }
+
+    id = int.tryParse(
+      relationElement.getAttribute('id') ?? ''
+    );
+    version = int.tryParse(
+      relationElement.getAttribute('version') ?? ''
+    );
+
+    relationElement.findElements('tag').forEach((tag) {
+      final key = tag.getAttribute('k');
+      final value = tag.getAttribute('v');
+      if (key != null && value != null) {
+        tags[key] = value;
+      }
+    });
+
+    return OSMRelation(
+      members,
+      id: id,
+      version: version,
+      tags: tags
     );
   }
 

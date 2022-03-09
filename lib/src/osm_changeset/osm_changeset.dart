@@ -156,11 +156,10 @@ class OSMChangeset {
     }
 
     changesetElement.findElements('tag').forEach((tag) {
-      final k = tag.getAttribute('k');
-      final v = tag.getAttribute('v');
-
-      if (k != null && v != null) {
-        tags[k] = v;
+      final key = tag.getAttribute('k');
+      final value = tag.getAttribute('v');
+      if (key != null && value != null) {
+        tags[key] = value;
       }
     });
 

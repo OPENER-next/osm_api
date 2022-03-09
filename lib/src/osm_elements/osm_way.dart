@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:xml/xml.dart';
 import '/src/osm_elements/osm_element_type.dart';
 import '/src/osm_elements/osm_element.dart';
 
@@ -32,6 +33,58 @@ class OSMWay extends OSMElement {
     version: obj['version'],
     tags: obj['tags']?.cast<String, String>()
   );
+
+
+  /**
+   * A factory method for constructing an [OSMWay] from a XML [String].
+   */
+  factory OSMWay.fromXMLString(String xmlString) {
+    final xmlDoc = XmlDocument.parse(xmlString);
+    final wayElement = xmlDoc.findAllElements(OSMElementType.way.toShortString()).first;
+    return OSMWay.fromXMLElement(wayElement);
+  }
+
+
+  /**
+   * A factory method for constructing an [OSMWay] from a XML [XmlElement].
+   */
+  factory OSMWay.fromXMLElement(XmlElement wayElement) {
+    final nodeIds = <int>[];
+    final int? id, version;
+    final tags = <String, String>{};
+
+    wayElement.findElements('nd').forEach((node) {
+      final ref = int.tryParse(
+        node.getAttribute('ref') ?? ''
+      );
+
+      if (ref != null) {
+        nodeIds.add(ref);
+      }
+    });
+
+    id = int.tryParse(
+      wayElement.getAttribute('id') ?? ''
+    );
+    version = int.tryParse(
+      wayElement.getAttribute('version') ?? ''
+    );
+
+    wayElement.findElements('tag').forEach((tag) {
+      final key = tag.getAttribute('k');
+      final value = tag.getAttribute('v');
+      if (key != null && value != null) {
+        tags[key] = value;
+      }
+    });
+
+    return OSMWay(
+      nodeIds,
+      id: id,
+      version: version,
+      tags: tags
+    );
+  }
 
 
   @override

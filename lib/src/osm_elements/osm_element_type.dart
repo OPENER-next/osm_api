@@ -14,3 +14,22 @@ extension ParseToString on OSMElementType {
     return this.toString().split('.').last;
   }
 }
+
+
+/**
+ * A function that tries to convert a given [String] to a [OSMElementType].
+ */
+OSMElementType osmElementTypeFromString(String value) {
+  switch (value.trim()) {
+    case 'node':
+    return OSMElementType.node;
+
+    case 'way':
+    return OSMElementType.way;
+
+    case 'relation':
+    return OSMElementType.relation;
+
+    default: throw("Given string cannot be converted to OSMElementType");
+  }
+}
