@@ -65,15 +65,12 @@ class OSMMember {
    * A function to serialize the element to an XML [String].
    */
   StringBuffer toXML([ StringBuffer? buffer ]) {
-    buffer ??= StringBuffer();
-    buffer
-    ..write('<member')
-    ..write(' type="')..write(type.toShortString())..write('"')
-    ..write(' ref="')..write(ref)..write('"');
-    if (role.isNotEmpty) {
-      buffer..write(' role="')..write(role)..write('"');
-    }
-    return buffer..writeln('/>');
+    return buffer ?? StringBuffer()
+      ..write('<member')
+      ..write(' type="')..write(type.toShortString())..write('"')
+      ..write(' ref="')..write(ref)..write('"')
+      ..write(' role="')..write(role)..write('"')
+      ..writeln('/>');
   }
 
 
