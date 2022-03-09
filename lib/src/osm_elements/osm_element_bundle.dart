@@ -56,6 +56,12 @@ class OSMElementBundle {
   }
 
 
+  bool get isEmpty => nodes.isEmpty && ways.isEmpty && relations.isEmpty;
+
+
+  bool get isNotEmpty => !isEmpty;
+
+
   /**
    * A function to get all [OSMNode]s from the current [OSMElementBundle] that are contained in the given [OSMWay].
    */
