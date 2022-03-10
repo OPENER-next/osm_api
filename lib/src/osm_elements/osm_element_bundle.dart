@@ -4,11 +4,6 @@ import '/src/osm_elements/osm_node.dart';
 import '/src/osm_elements/osm_way.dart';
 import '/src/osm_elements/osm_relation.dart';
 
-// helper function for null safety
-// https://github.com/dart-lang/sdk/issues/42947
-extension IterableExtension<E> on Iterable<E> {
-  E? findFirst(bool Function(E) test) {}
-}
 
 /**
  * A container class for multiple OSM elements of different types.
@@ -70,9 +65,11 @@ class OSMElementBundle {
       // skip nodes that do not have a valid id yet
       if (nodeId == 0) continue;
 
-      var node = nodes.findFirst((node) => node.id == nodeId);
-      if (node != null) {
-        yield node;
+      try {
+        yield nodes.firstWhere((node) => node.id == nodeId);
+      }
+      on StateError {
+        continue;
       }
     }
   }
@@ -103,14 +100,16 @@ class OSMElementBundle {
 
 
 
-  Iterable<T> _getElementFromRelation<T extends OSMElement>(elementList, relation) sync* {
+  Iterable<T> _getElementFromRelation<T extends OSMElement>(Iterable<T> elements, OSMRelation relation) sync* {
     for (final member in relation.members) {
       // skip elements that do not have a valid id yet
       if (member.ref == 0) continue;
 
-      T? element = elementList.findFirst((element) => element.id == member.ref);
-      if (element != null) {
-        yield element;
+      try {
+        yield elements.firstWhere((element) => element.id == member.ref);
+      }
+      on StateError {
+        continue;
       }
     }
   }
