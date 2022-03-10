@@ -112,10 +112,10 @@ void main() async {
     var query06 = await osmapi.queryChangesets(changesets: [changesetId01, changesetId02]);
 
     expect(query01, containsAll([changeset01, changeset02]));
-    expect(query02.first, changeset02);
-    expect(query03, equals([changeset01]));
-    expect(query04.first, changeset01);
-    expect(query05, equals([changeset01]));
+    expect(query02.first, equals(changeset02));
+    expect(query03, contains(changeset01));
+    expect(query04.first, equals(changeset01));
+    expect(query05, contains(changeset01));
     expect(query06, equals([changeset02, changeset01]));
   });
 
