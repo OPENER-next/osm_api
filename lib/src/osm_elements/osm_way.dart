@@ -83,14 +83,14 @@ class OSMWay extends OSMElement {
 
   @override
   StringBuffer bodyToXML([ StringBuffer? buffer ]) {
-    final stringBuffer = super.bodyToXML(buffer);
+    final stringBuffer = buffer ?? StringBuffer();
     nodeIds.forEach((nodeId) {
       stringBuffer
       ..write('<nd')
       ..write(' ref="')..write(nodeId)..write('"')
       ..writeln('/>');
     });
-    return stringBuffer;
+    return super.bodyToXML(stringBuffer);
   }
 
 

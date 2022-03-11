@@ -91,9 +91,9 @@ class OSMRelation extends OSMElement {
 
   @override
   StringBuffer bodyToXML([ StringBuffer? buffer ]) {
-    final stringBuffer = super.bodyToXML(buffer);
+    final stringBuffer = buffer ?? StringBuffer();
     members.forEach((member) => member.toXML(stringBuffer));
-    return stringBuffer;
+    return super.bodyToXML(buffer);
   }
 
 
