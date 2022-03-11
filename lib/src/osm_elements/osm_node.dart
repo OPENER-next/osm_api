@@ -105,8 +105,8 @@ class OSMNode extends OSMElement {
     return super.toXML(
       buffer: buffer,
       additionalAttributes: {
-        'lat': lat,
-        'lon': lon,
+        'lat': lat.toStringAsFixed(7),
+        'lon': lon.toStringAsFixed(7),
         ...additionalAttributes
       }
     );
