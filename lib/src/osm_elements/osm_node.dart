@@ -100,7 +100,8 @@ class OSMNode extends OSMElement {
   @override
   StringBuffer toXML({
     StringBuffer? buffer,
-    Map<String, dynamic> additionalAttributes = const {}
+    Map<String, dynamic> additionalAttributes = const {},
+    bool includeBody = true,
   }) {
     return super.toXML(
       buffer: buffer,
@@ -108,7 +109,8 @@ class OSMNode extends OSMElement {
         'lat': lat.toStringAsFixed(7),
         'lon': lon.toStringAsFixed(7),
         ...additionalAttributes
-      }
+      },
+      includeBody: includeBody
     );
   }
 

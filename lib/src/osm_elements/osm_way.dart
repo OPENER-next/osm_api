@@ -11,7 +11,7 @@ class OSMWay extends OSMElement {
   /**
    * A list of all node ids ([OSMNode.id]) that this way contains.
    *
-   * A way should at least contain two nodes.
+   * Normally a way contains at least two nodes.
    */
   final List<int> nodeIds;
 
@@ -20,8 +20,7 @@ class OSMWay extends OSMElement {
     Map<String, String>? tags,
     int? id,
     int? version
-  }) : assert (nodeIds.length >= 2),
-       super(id: id, version: version, tags: tags);
+  }) : super(id: id, version: version, tags: tags);
 
 
   /**
@@ -49,19 +48,14 @@ class OSMWay extends OSMElement {
    * A factory method for constructing an [OSMWay] from a XML [XmlElement].
    */
   factory OSMWay.fromXMLElement(XmlElement wayElement) {
-    final nodeIds = <int>[];
+    final List<int> nodeIds;
     final int? id, version;
     final tags = <String, String>{};
 
-    wayElement.findElements('nd').forEach((node) {
-      final ref = int.tryParse(
-        node.getAttribute('ref') ?? ''
-      );
-
-      if (ref != null) {
-        nodeIds.add(ref);
-      }
-    });
+    nodeIds = wayElement.findElements('nd')
+      .map((node) => int.tryParse(node.getAttribute('ref') ?? ''))
+      .whereType<int>()
+      .toList();
 
     id = int.tryParse(
       wayElement.getAttribute('id') ?? ''

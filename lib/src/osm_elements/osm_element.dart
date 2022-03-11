@@ -62,15 +62,17 @@ abstract class OSMElement {
    */
   StringBuffer toXML({
     StringBuffer? buffer,
-    Map<String, dynamic> additionalAttributes = const {}
+    Map<String, dynamic> additionalAttributes = const {},
+    bool includeBody = true
   }) {
     final attributes = {
-      'id': id,
-      'version': version,
+      if (id != 0) 'id': id,
+      if (version != 0) 'version': version,
       ...additionalAttributes
     };
 
     final elementName = type.toShortString();
+
     final stringBuffer = buffer ?? StringBuffer()
     ..write('<')..write(elementName);
     for (final attributeEntry in attributes.entries) {
@@ -79,8 +81,10 @@ abstract class OSMElement {
       ..write('="')..write(attributeEntry.value.toString())..write('"');
     }
     stringBuffer.writeln('>');
-    bodyToXML(stringBuffer)
-    ..write('</')..write(elementName)..write('>');
+    if (includeBody) {
+      bodyToXML(stringBuffer);
+    }
+    stringBuffer..write('</')..write(elementName)..writeln('>');
 
     return stringBuffer;
   }

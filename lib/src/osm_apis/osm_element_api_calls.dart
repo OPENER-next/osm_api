@@ -16,23 +16,21 @@ mixin OSMElementAPICalls on OSMAPIBase {
    * Returns the updated [OSMElement] wrapped in a [Future] which resolves when the operation has been completed.
    */
   Future<T> createElement<T extends OSMElement>(T element, int changeset) async {
-    var additionalAttributes = '';
     final type = element.type.toShortString();
 
-    if (element is OSMNode) {
-      additionalAttributes += 'lat="${element.lat}" lon="${element.lon}"';
-    }
+    final stringBuffer = StringBuffer()
+      ..write('<osm>');
+      element.toXML(
+        buffer: stringBuffer,
+        additionalAttributes: {'changeset': changeset}
+      )
+      .write('</osm>');
 
     // returns element id
     final response = await sendRequest(
       '/$type/create',
       type: 'PUT',
-      body:
-        '<osm>'
-          '<$type changeset="$changeset" $additionalAttributes>'
-            '${element.bodyToXML()}'
-          '</$type>'
-        '</osm>'
+      body: stringBuffer.toString()
     );
 
     // set server assigned id
@@ -51,23 +49,21 @@ mixin OSMElementAPICalls on OSMAPIBase {
    * Returns the updated [OSMElement] wrapped in a [Future] which resolves when the operation has been completed.
    */
   Future<T> updateElement<T extends OSMElement>(T element, int changeset) async {
-    var additionalAttributes = '';
     final type = element.type.toShortString();
 
-    if (element is OSMNode) {
-      additionalAttributes += 'lat="${element.lat}" lon="${element.lon}"';
-    }
+    final stringBuffer = StringBuffer()
+      ..write('<osm>');
+      element.toXML(
+        buffer: stringBuffer,
+        additionalAttributes: {'changeset': changeset}
+      )
+      .write('</osm>');
 
     // returns new version number
     final response = await sendRequest(
       '/$type/${element.id}',
       type: 'PUT',
-      body:
-        '<osm>'
-          '<$type changeset="$changeset" version="${element.version}" id="${element.id}" $additionalAttributes>'
-            '${element.bodyToXML()}'
-          '</$type>'
-        '</osm>'
+      body: stringBuffer.toString()
     );
 
     // set new server assigned version
@@ -84,21 +80,22 @@ mixin OSMElementAPICalls on OSMAPIBase {
    * Returns the updated [OSMElement] wrapped in a [Future] which resolves when the operation has been completed.
    */
   Future<T> deleteElement<T extends OSMElement>(T element, int changeset) async {
-    var additionalAttributes = '';
     final type = element.type.toShortString();
 
-    if (element is OSMNode) {
-      additionalAttributes += 'lat="${element.lat}" lon="${element.lon}"';
-    }
+    final stringBuffer = StringBuffer()
+      ..write('<osm>');
+      element.toXML(
+        buffer: stringBuffer,
+        additionalAttributes: {'changeset': changeset},
+        includeBody: false
+      )
+      .write('</osm>');
 
     // returns new version number
     final response = await sendRequest(
       '/$type/${element.id}',
       type: 'DELETE',
-      body:
-        '<osm>'
-          '<$type changeset="$changeset" version="${element.version}" id="${element.id}" $additionalAttributes/>'
-        '</osm>'
+      body: stringBuffer.toString()
     );
 
     // set new server assigned version

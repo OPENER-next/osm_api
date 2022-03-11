@@ -12,7 +12,7 @@ class OSMRelation extends OSMElement {
   /**
    * A list of all [OSMMembers] that this relation contains.
    *
-   * A relation should at least contain one member.
+   * Normally a relation contains at least one member.
    */
   final List<OSMMember> members;
 
@@ -21,8 +21,7 @@ class OSMRelation extends OSMElement {
     Map<String, String>? tags,
     int? id,
     int? version
-  }) : assert(members.isNotEmpty),
-       super(id: id, version: version, tags: tags);
+  }) : super(id: id, version: version, tags: tags);
 
 
   /**
@@ -62,14 +61,9 @@ class OSMRelation extends OSMElement {
     final int? id, version;
     final tags = <String, String>{};
 
-    try {
-      members = relationElement.findElements('member').map(
-        (member) => OSMMember.fromXMLElement(member)
-      ).toList();
-    }
-    catch (e) {
-      throw('Could not parse the given relation XML string.');
-    }
+    members = relationElement.findElements('member')
+      .map((member) => OSMMember.fromXMLElement(member))
+      .toList();
 
     id = int.tryParse(
       relationElement.getAttribute('id') ?? ''
