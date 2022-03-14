@@ -80,11 +80,14 @@ abstract class OSMElement {
       ..write(' ')..write(attributeEntry.key)
       ..write('="')..write(attributeEntry.value.toString())..write('"');
     }
-    stringBuffer.writeln('>');
-    if (includeBody) {
-      bodyToXML(stringBuffer);
+    if (!includeBody || tags.isEmpty) {
+      stringBuffer.writeln('/>');
     }
-    stringBuffer..write('</')..write(elementName)..writeln('>');
+    else {
+      stringBuffer.writeln('>');
+      bodyToXML(stringBuffer);
+      stringBuffer..write('</')..write(elementName)..writeln('>');
+    }
 
     return stringBuffer;
   }
