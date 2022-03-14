@@ -65,7 +65,6 @@ jobs:
         :email => "testuser@osm.org",
         :email_valid => true,
         :display_name => "testuser",
-        :status => "confirmed",
         :terms_seen => true,
         :terms_agreed => Time.now.getutc,
         :data_public => true,
@@ -73,7 +72,8 @@ jobs:
         :pass_crypt => pass_crypt,
         :pass_salt => pass_salt
         );
-        user.save'
+        user.save
+        user.activate!'
       working-directory: ./osm-website
 
     # dart OSM API source and setup
