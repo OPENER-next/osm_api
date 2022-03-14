@@ -40,6 +40,10 @@ class OSMNode extends OSMElement {
 
   /**
    * A factory method for constructing an [OSMNode] from a XML [String].
+   *
+   * Parsing an OsmChange from OSM will not include the lat/lon attributes,
+   * for this very tiny exception instead of making [lat] and [lon] nullable we set them to [double.nan].
+   * Find an example OsmChange here: https://www.openstreetmap.org/api/0.6/changeset/118455458/download
    */
   factory OSMNode.fromXMLString(String xmlString) {
     final xmlDoc = XmlDocument.parse(xmlString);
@@ -50,24 +54,22 @@ class OSMNode extends OSMElement {
 
   /**
    * A factory method for constructing an [OSMNode] from a XML [XmlElement].
+   *
+   * Parsing an OsmChange from OSM will not include the lat/lon attributes,
+   * for this very tiny exception instead of making [lat] and [lon] nullable we set them to [double.nan].
+   * Find an example OsmChange here: https://www.openstreetmap.org/api/0.6/changeset/118455458/download
    */
   factory OSMNode.fromXMLElement(XmlElement nodeElement) {
     final double lat, lon;
     final int? id, version;
     final tags = <String, String>{};
 
-    // try parsing the necessary xml attributes
-    try {
-      lat = double.parse(
-        nodeElement.getAttribute('lat')!
-      );
-      lon = double.parse(
-        nodeElement.getAttribute('lon')!
-      );
-    }
-    catch (e) {
-      throw('Could not parse the given node XML string.');
-    }
+    lat = double.tryParse(
+      nodeElement.getAttribute('lat') ?? 'NaN'
+    ) ?? double.nan;
+    lon = double.tryParse(
+      nodeElement.getAttribute('lon') ?? 'NaN'
+    ) ?? double.nan;
 
     id = int.tryParse(
       nodeElement.getAttribute('id') ?? ''
@@ -101,13 +103,13 @@ class OSMNode extends OSMElement {
   StringBuffer toXML({
     StringBuffer? buffer,
     Map<String, dynamic> additionalAttributes = const {},
-    bool includeBody = true,
+    bool includeBody = true
   }) {
     return super.toXML(
       buffer: buffer,
       additionalAttributes: {
-        'lat': lat.toStringAsFixed(7),
-        'lon': lon.toStringAsFixed(7),
+        if (lat.isFinite) 'lat': lat.toStringAsFixed(7),
+        if (lon.isFinite) 'lon': lon.toStringAsFixed(7),
         ...additionalAttributes
       },
       includeBody: includeBody
