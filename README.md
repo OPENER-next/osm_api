@@ -14,7 +14,7 @@ Dart bindings for the OpenStreetMap API
 - [x] Read
 - [x] Update
 - [x] Close
-- [ ] Download
+- [x] Download
 - [x] Query
 - [ ] Diff upload
 - [x] Comment

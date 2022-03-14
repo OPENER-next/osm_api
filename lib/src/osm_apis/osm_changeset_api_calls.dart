@@ -1,4 +1,5 @@
 import 'package:xml/xml.dart';
+import '/src/osm_change.dart';
 import '/src/commons/bounding_box.dart';
 import '/src/osm_changeset/osm_changeset.dart';
 import '/src/osm_apis/osm_api_base.dart';
@@ -172,6 +173,19 @@ mixin OSMChangesetAPICalls on OSMAPIBase {
         yield OSMChangeset.fromXMLElement(element);
       }
     }
+  }
+
+
+  /**
+   * A function for retrieving the actual changes of a changeset by its id.
+   * This will return an [OSMChange], more details can be found here: https://wiki.openstreetmap.org/wiki/OsmChange
+   */
+  Future<OSMChange> getChangesetChanges(int id) async {
+    final response = await sendRequest(
+      '/changeset/$id/download'
+    );
+
+    return OSMChange.fromXMLString(response.data);
   }
 
 
