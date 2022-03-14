@@ -53,6 +53,13 @@ abstract class OSMElement {
 
 
   /**
+   * Whether this element has any children like tags.
+   * For ways this additionally includes node references while relations include members.
+   */
+  bool get hasBody => tags.isNotEmpty;
+
+
+  /**
    * A function to construct the XML [StringBuffer] of this element.
    *
    * This will serialize the entire element to XML.
@@ -80,7 +87,7 @@ abstract class OSMElement {
       ..write(' ')..write(attributeEntry.key)
       ..write('="')..write(attributeEntry.value.toString())..write('"');
     }
-    if (!includeBody || tags.isEmpty) {
+    if (!includeBody || !hasBody) {
       stringBuffer.writeln('/>');
     }
     else {

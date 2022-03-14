@@ -102,6 +102,10 @@ class OSMRelation extends OSMElement {
 
 
   @override
+  bool get hasBody => super.hasBody || members.isNotEmpty;
+
+
+  @override
   String toString() => '$runtimeType - members: $members; id: $id; version: $version; tags: $tags';
 
 
