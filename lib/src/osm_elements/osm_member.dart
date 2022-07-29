@@ -78,6 +78,19 @@ class OSMMember {
   String toString() => '$runtimeType - ref: $ref; type: $type; role: $role';
 
 
+  OSMMember copyWith({
+    int? ref,
+    OSMElementType? type,
+    String? role,
+  }) {
+    return OSMMember(
+      type ?? this.type,
+      ref ?? this.ref,
+      role ?? this.role,
+    );
+  }
+
+
   @override
   int get hashCode =>
     ref.hashCode ^

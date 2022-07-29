@@ -119,6 +119,13 @@ abstract class OSMElement {
   }
 
 
+  OSMElement copyWith({
+    Map<String, String>? tags,
+    int? id,
+    int? version
+  });
+
+
   @override
   int get hashCode =>
     id.hashCode ^

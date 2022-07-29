@@ -113,6 +113,21 @@ class OSMWay extends OSMElement {
 
 
   @override
+  OSMWay copyWith({
+    List<int>? nodeIds,
+    Map<String, String>? tags,
+    int? id,
+    int? version
+  }) {
+    return OSMWay(nodeIds ?? List.of(this.nodeIds),
+      tags: tags ?? Map.of(this.tags),
+      id: id ?? this.id,
+      version: version ?? this.version
+    );
+  }
+
+
+  @override
   int get hashCode =>
     super.hashCode ^
     // do not use nodeIds.hashCode since the hasCodes may differ even if the values are equal.

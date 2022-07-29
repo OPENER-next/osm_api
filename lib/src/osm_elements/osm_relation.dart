@@ -110,6 +110,21 @@ class OSMRelation extends OSMElement {
 
 
   @override
+  OSMRelation copyWith({
+    List<OSMMember>? members,
+    Map<String, String>? tags,
+    int? id,
+    int? version
+  }) {
+    return OSMRelation(members ?? List.of(this.members.map((m) => m.copyWith())),
+      tags: tags ?? Map.of(this.tags),
+      id: id ?? this.id,
+      version: version ?? this.version
+    );
+  }
+
+
+  @override
   int get hashCode =>
     super.hashCode ^
     // do not use members.hashCode since the hasCodes may differ even if the values are equal.

@@ -122,6 +122,22 @@ class OSMNode extends OSMElement {
 
 
   @override
+  OSMNode copyWith({
+    double? lat,
+    double? lon,
+    Map<String, String>? tags,
+    int? id,
+    int? version
+  }) {
+    return OSMNode(lat ?? this.lat, lon ?? this.lon,
+      tags: tags ?? Map.of(this.tags),
+      id: id ?? this.id,
+      version: version ?? this.version
+    );
+  }
+
+
+  @override
   int get hashCode =>
     super.hashCode ^
     lat.hashCode ^
