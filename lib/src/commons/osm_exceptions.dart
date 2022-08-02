@@ -1,3 +1,4 @@
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 
@@ -181,12 +182,12 @@ class OSMBandwidthLimitExceededException extends OSMAPIException {
  */
 class OSMUnknownException extends OSMAPIException {
   OSMUnknownException(int errorCode, String? response) :
-  super(errorCode, 'Unkown OSM API Exception', response);
+  super(errorCode, 'Unknown OSM API Exception', response);
 }
 
 
 /**
- * Map dio response errors to cutsom OSM API exceptions
+ * Map dio response errors to custom OSM API exceptions
  */
 Future<Response<dynamic>> handleDioErrors(DioError error, StackTrace stackTrace) {
   if (error.type == DioErrorType.response && error.response?.statusCode != null) {
@@ -209,6 +210,9 @@ Future<Response<dynamic>> handleDioErrors(DioError error, StackTrace stackTrace)
 
 			default: return Future.error(OSMUnknownException(response.statusCode!, message));
 		}
+  }
+  else if (error.type == DioErrorType.other && error.message.contains('SocketException')) {
+    return Future.error(SocketException(error.message));
   }
   return Future.error(error);
 }
