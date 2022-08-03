@@ -17,9 +17,9 @@ abstract class OSMAPIException implements Exception {
 
   @override
   String toString() {
-    var string = '$errorCode - $description';
+    final string = '$errorCode - $description';
     if (response.isNotEmpty) {
-      string + ' Response: "$response"';
+      '$string Response: "$response"';
     }
     return string;
   }
@@ -60,7 +60,7 @@ class OSMUnauthorizedException extends OSMAPIException {
  * 403 - Forbidden
  * 
  * This exception may occur when:
- * - login was successfull but the user is blocked
+ * - login was successful but the user is blocked
  * - the version of the element is not available (due to redaction)
  */
 class OSMForbiddenException extends OSMAPIException {
@@ -177,8 +177,18 @@ class OSMBandwidthLimitExceededException extends OSMAPIException {
 
 
 /**
+ * Connection Exception
+ * This exception occurs when the OSM server isn't reachable, because the host lookup failed, e.g. because there is no internet connection.
+ */
+class OSMConnectionException extends OSMAPIException {
+  OSMConnectionException(String? response) :
+  super(0, 'Connection to the OSM server is not possible.', response);
+}
+
+
+/**
  * Unknown Exception
- * An unknown http response eception.
+ * An unknown http response exception.
  */
 class OSMUnknownException extends OSMAPIException {
   OSMUnknownException(int errorCode, String? response) :
@@ -190,12 +200,14 @@ class OSMUnknownException extends OSMAPIException {
  * Map dio response errors to custom OSM API exceptions
  */
 Future<Response<dynamic>> handleDioErrors(DioError error, StackTrace stackTrace) {
+
+  final response = error.response;
+  final message = response?.data ?? response?.statusMessage ?? error.message;
+
   if (error.type == DioErrorType.response && error.response?.statusCode != null) {
-    var response = error.response;
-    var message = response?.data ?? response?.statusMessage;
 
     switch (response!.statusCode) {
-			case 400: return Future.error(OSMBadRequestException(message));
+      case 400: return Future.error(OSMBadRequestException(message));
       case 401: return Future.error(OSMUnauthorizedException(message));
       case 403: return Future.error(OSMForbiddenException(message));
       case 404: return Future.error(OSMNotFoundException(message));
@@ -208,11 +220,11 @@ Future<Response<dynamic>> handleDioErrors(DioError error, StackTrace stackTrace)
       case 414: return Future.error(OSMRequestURITooLargeException(message));
       case 509: return Future.error(OSMBandwidthLimitExceededException(message));
 
-			default: return Future.error(OSMUnknownException(response.statusCode!, message));
+      default: return Future.error(OSMUnknownException(response.statusCode!, message));
 		}
   }
-  else if (error.type == DioErrorType.other && error.message.contains('SocketException')) {
-    return Future.error(SocketException(error.message));
+  else if (error.type == DioErrorType.other && error.error is SocketException) {
+    return Future.error(OSMConnectionException(message));
   }
   return Future.error(error);
 }
