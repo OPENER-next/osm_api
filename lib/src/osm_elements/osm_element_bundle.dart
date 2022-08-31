@@ -69,7 +69,7 @@ class OSMElementBundle {
         yield nodes.firstWhere((node) => node.id == nodeId);
       }
       on StateError {
-        continue;
+        throw StateError('OSM node id $nodeId of $way not found in $OSMElementBundle.');
       }
     }
   }
@@ -109,7 +109,7 @@ class OSMElementBundle {
         yield elements.firstWhere((element) => element.id == member.ref);
       }
       on StateError {
-        continue;
+        throw StateError('$member of $relation not found in $OSMElementBundle.');
       }
     }
   }
