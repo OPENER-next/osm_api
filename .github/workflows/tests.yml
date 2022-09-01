@@ -17,7 +17,7 @@ jobs:
       with:
         repository: openstreetmap/openstreetmap-website
         path: osm-website
- 
+
     - name: Poke OSM website config
       run: |
         cp config/example.storage.yml config/storage.yml
@@ -43,8 +43,8 @@ jobs:
 
     - name: Prepare OSM website Database
       run: |
-        docker-compose run --rm web rake db:migrate
-        docker-compose run web bundle exec rake i18n:js:export
+        docker-compose run --rm web bundle exec rails db:migrate
+        docker-compose run --rm web bundle exec rails i18n:js:export
       # The command below populates the db with some test data
       # However this somehow doesn't update the unique key counter, wherefore the creation of new elements will fail due to a duplicate key value violation
       # docker-compose run --rm web osmosis --rx docker/null-island.osm.xml --wd host=db database=openstreetmap user=openstreetmap password=openstreetmap validateSchemaVersion=no
@@ -96,7 +96,7 @@ jobs:
     - name: Run dart OSM API tests
       run: dart test --chain-stack-traces
       working-directory: ./dart-osm-api
-      
+
     - name: Check OSM website logs
       if: failure()
       run: docker-compose logs -f web
