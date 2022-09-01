@@ -78,7 +78,7 @@ abstract class OSMElement {
       ...additionalAttributes
     };
 
-    final elementName = type.toShortString();
+    final elementName = type.name;
 
     final stringBuffer = buffer ?? StringBuffer()
     ..write('<')..write(elementName);

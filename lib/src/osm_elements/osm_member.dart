@@ -67,7 +67,7 @@ class OSMMember {
   StringBuffer toXML([ StringBuffer? buffer ]) {
     return buffer ?? StringBuffer()
       ..write('<member')
-      ..write(' type="')..write(type.toShortString())..write('"')
+      ..write(' type="')..write(type.name)..write('"')
       ..write(' ref="')..write(ref)..write('"')
       ..write(' role="')..write(role)..write('"')
       ..writeln('/>');

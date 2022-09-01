@@ -16,7 +16,7 @@ mixin OSMElementAPICalls on OSMAPIBase {
    * Returns the updated [OSMElement] wrapped in a [Future] which resolves when the operation has been completed.
    */
   Future<T> createElement<T extends OSMElement>(T element, int changeset) async {
-    final type = element.type.toShortString();
+    final type = element.type.name;
 
     final stringBuffer = StringBuffer()
       ..write('<osm>');
@@ -49,7 +49,7 @@ mixin OSMElementAPICalls on OSMAPIBase {
    * Returns the updated [OSMElement] wrapped in a [Future] which resolves when the operation has been completed.
    */
   Future<T> updateElement<T extends OSMElement>(T element, int changeset) async {
-    final type = element.type.toShortString();
+    final type = element.type.name;
 
     final stringBuffer = StringBuffer()
       ..write('<osm>');
@@ -80,7 +80,7 @@ mixin OSMElementAPICalls on OSMAPIBase {
    * Returns the updated [OSMElement] wrapped in a [Future] which resolves when the operation has been completed.
    */
   Future<T> deleteElement<T extends OSMElement>(T element, int changeset) async {
-    final type = element.type.toShortString();
+    final type = element.type.name;
 
     final stringBuffer = StringBuffer()
       ..write('<osm>');

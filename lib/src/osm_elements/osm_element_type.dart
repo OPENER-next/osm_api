@@ -7,16 +7,6 @@ enum OSMElementType {
 
 
 /**
- * A function that returns the lowercase name of the [OSMElementType] as a [String].
- */
-extension ParseToString on OSMElementType {
-  String toShortString() {
-    return this.toString().split('.').last;
-  }
-}
-
-
-/**
  * A function that tries to convert a given [String] to a [OSMElementType].
  */
 OSMElementType osmElementTypeFromString(String value) {

@@ -47,7 +47,7 @@ class OSMNode extends OSMElement {
    */
   factory OSMNode.fromXMLString(String xmlString) {
     final xmlDoc = XmlDocument.parse(xmlString);
-    final nodeElement = xmlDoc.findAllElements(OSMElementType.node.toShortString()).first;
+    final nodeElement = xmlDoc.findAllElements(OSMElementType.node.name).first;
     return OSMNode.fromXMLElement(nodeElement);
   }
 

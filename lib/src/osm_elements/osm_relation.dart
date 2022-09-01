@@ -30,7 +30,7 @@ class OSMRelation extends OSMElement {
   factory OSMRelation.fromJSONObject(Map<String, dynamic> obj) {
     var members = <OSMMember>[];
     for (var memberObj in obj['members']) {
-      var typeEnum = OSMElementType.values.firstWhere((e) => e.toShortString() == memberObj['type']);
+      var typeEnum = OSMElementType.values.firstWhere((e) => e.name == memberObj['type']);
       members.add( OSMMember(typeEnum, memberObj['ref'], memberObj['role']) );
     }
 
@@ -48,7 +48,7 @@ class OSMRelation extends OSMElement {
    */
   factory OSMRelation.fromXMLString(String xmlString) {
     final xmlDoc = XmlDocument.parse(xmlString);
-    final relationElement = xmlDoc.findAllElements(OSMElementType.relation.toShortString()).first;
+    final relationElement = xmlDoc.findAllElements(OSMElementType.relation.name).first;
     return OSMRelation.fromXMLElement(relationElement);
   }
 

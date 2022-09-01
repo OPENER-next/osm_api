@@ -39,7 +39,7 @@ class OSMWay extends OSMElement {
    */
   factory OSMWay.fromXMLString(String xmlString) {
     final xmlDoc = XmlDocument.parse(xmlString);
-    final wayElement = xmlDoc.findAllElements(OSMElementType.way.toShortString()).first;
+    final wayElement = xmlDoc.findAllElements(OSMElementType.way.name).first;
     return OSMWay.fromXMLElement(wayElement);
   }
 
