@@ -1,8 +1,11 @@
 import 'dart:core';
+
+import '/src/osm_elements/osm_element_type.dart';
 import '/src/osm_elements/osm_element.dart';
 import '/src/osm_elements/osm_node.dart';
 import '/src/osm_elements/osm_way.dart';
 import '/src/osm_elements/osm_relation.dart';
+import '/src/osm_elements/osm_member.dart';
 
 
 /**
@@ -79,7 +82,7 @@ class OSMElementBundle {
    * A function to get all [OSMNode]s from the current [OSMElementBundle] that are contained in the given [OSMRelation].
    */
   Iterable<OSMNode> getNodesFromRelation(OSMRelation relation) {
-    return _getElementFromRelation(nodes, relation);
+    return _getElementsFromRelation(nodes, relation);
   }
 
 
@@ -87,7 +90,7 @@ class OSMElementBundle {
    * A function to get all [OSMWay]s from the current [OSMElementBundle] that are contained in the given [OSMRelation].
    */
   Iterable<OSMWay> getWaysFromRelation(OSMRelation relation) {
-    return _getElementFromRelation(ways, relation);
+    return _getElementsFromRelation(ways, relation);
   }
 
 
@@ -95,13 +98,31 @@ class OSMElementBundle {
    * A function to get all [OSMRelation]s from the current [OSMElementBundle] that are contained in the given [OSMRelation].
    */
   Iterable<OSMRelation> getRelationsFromRelation(OSMRelation relation) {
-    return _getElementFromRelation<OSMRelation>(relations, relation);
+    return _getElementsFromRelation(relations, relation);
   }
 
 
 
-  Iterable<T> _getElementFromRelation<T extends OSMElement>(Iterable<T> elements, OSMRelation relation) sync* {
-    for (final member in relation.members) {
+  Iterable<T> _getElementsFromRelation<T extends OSMElement>(Iterable<T> elements, OSMRelation relation) sync* {
+    // only loop through the members with the respective osm element type
+    final Iterable<OSMMember> relevantMembers;
+    switch (T) {
+      case OSMNode: relevantMembers = relation.members.where(
+        (member) => member.type == OSMElementType.node
+      ); break;
+
+      case OSMWay: relevantMembers = relation.members.where(
+        (member) => member.type == OSMElementType.way
+      ); break;
+
+      case OSMRelation: relevantMembers = relation.members.where(
+        (member) => member.type == OSMElementType.relation
+      ); break;
+
+      default: relevantMembers = relation.members;
+    }
+
+    for (final member in relevantMembers) {
       // skip elements that do not have a valid id yet
       if (member.ref == 0) continue;
 
