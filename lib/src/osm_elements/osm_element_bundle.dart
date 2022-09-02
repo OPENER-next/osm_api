@@ -10,23 +10,38 @@ import '/src/osm_elements/osm_member.dart';
 
 /**
  * A container class for multiple OSM elements of different types.
- * This provides also some helper functions to deal with the data more easily.
+ * This also provides some helper functions to deal with the data more easily.
  */
 class OSMElementBundle {
 
-  final nodes =  <OSMNode>{};
+  final Set<OSMNode> nodes;
 
-  final ways = <OSMWay>{};
+  final Set<OSMWay> ways;
 
-  final relations = <OSMRelation>{};
+  final Set<OSMRelation> relations;
+
+
+  /**
+   * This takes an iterable for each of the main OSM element types [OSMNode], [OSMWay] or [OSMRelation].
+   * Any duplicated elements will be removed automatically.
+   */
+  OSMElementBundle({
+    Iterable<OSMNode> nodes = const Iterable.empty(),
+    Iterable<OSMWay> ways = const Iterable.empty(),
+    Iterable<OSMRelation> relations = const Iterable.empty(),
+  }) :
+    nodes = Set.of(nodes),
+    ways = Set.of(ways),
+    relations = Set.of(relations);
 
 
   /**
    * This takes an iterable of [OSMElement]s and puts each element in its dedicated [nodes], [ways] or [relations] list.
+   * Any duplicated elements will be removed automatically.
    */
-  OSMElementBundle([
+  OSMElementBundle.fromElements([
     Iterable<OSMElement> elements = const Iterable.empty()
-  ]) {
+  ]) : nodes = {}, ways = {}, relations = {} {
     for (final element in elements) {
       switch (element.runtimeType) {
         case OSMNode:
@@ -102,7 +117,6 @@ class OSMElementBundle {
   }
 
 
-
   Iterable<T> _getElementsFromRelation<T extends OSMElement>(Iterable<T> elements, OSMRelation relation) sync* {
     // only loop through the members with the respective osm element type
     final Iterable<OSMMember> relevantMembers;
@@ -133,5 +147,28 @@ class OSMElementBundle {
         throw StateError('Member of type ${member.type.name} with ref ${member.ref} of relation ${relation.id} not found in $OSMElementBundle.');
       }
     }
+  }
+
+
+  /**
+   * Combines this and another [OSMElementBundle] to a new [OSMElementBundle] and returns it.
+   */
+  OSMElementBundle combine(OSMElementBundle otherBundle) {
+    return OSMElementBundle(
+      nodes: nodes.union(otherBundle.nodes),
+      ways: ways.union(otherBundle.ways),
+      relations: relations.union(otherBundle.relations),
+    );
+  }
+
+
+  /**
+   * Merges the elements of another [OSMElementBundle] into this and returns the updated [OSMElementBundle].
+   */
+  OSMElementBundle merge(OSMElementBundle otherBundle) {
+    nodes.addAll(otherBundle.nodes);
+    ways.addAll(otherBundle.ways);
+    relations.addAll(otherBundle.relations);
+    return this;
   }
 }

@@ -208,7 +208,7 @@ mixin OSMElementAPICalls on OSMAPIBase {
    */
   Future<OSMElementBundle> getFullWay(int id) async {
     final elements = await _getElements('/way/$id/full');
-    return OSMElementBundle(elements);
+    return OSMElementBundle.fromElements(elements);
   }
 
 
@@ -221,7 +221,7 @@ mixin OSMElementAPICalls on OSMAPIBase {
    */
   Future<OSMElementBundle> getFullRelation(int id) async {
     final elements = await _getElements('/relation/$id/full');
-    return OSMElementBundle(elements);
+    return OSMElementBundle.fromElements(elements);
   }
 
 
@@ -378,7 +378,7 @@ mixin OSMElementAPICalls on OSMAPIBase {
    */
   Future<OSMElementBundle> getElementsByBoundingBox(BoundingBox bbox) async {
     final elements = await _getElements<OSMElement>('/map?bbox=${bbox.toList().join(',')}');
-    return OSMElementBundle(elements);
+    return OSMElementBundle.fromElements(elements);
   }
 
 
