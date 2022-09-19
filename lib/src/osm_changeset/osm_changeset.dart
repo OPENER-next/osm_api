@@ -129,7 +129,10 @@ class OSMChangeset {
       final userName = changesetElement.getAttribute('user')!;
       final uidValue = changesetElement.getAttribute('uid');
       final uid = int.parse(uidValue!);
-      user = OSMUser(uid, userName);
+      user = OSMUser(
+        id: uid,
+        name: userName,
+      );
 
       final changesCountValue = changesetElement.getAttribute('changes_count');
       changesCount = int.parse(changesCountValue!);
@@ -175,9 +178,12 @@ class OSMChangeset {
 
         if (date != null && uid != null && userName != null && textElement != null) {
           comments!.add(OSMComment(
-            DateTime.parse(date),
-            OSMUser(int.parse(uid), userName),
-            textElement.text
+            user: OSMUser(
+              id: int.parse(uid),
+              name: userName,
+            ),
+            date: DateTime.parse(date),
+            text: textElement.text
           ));
         }
       });

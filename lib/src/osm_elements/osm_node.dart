@@ -20,10 +20,10 @@ class OSMNode extends OSMElement {
 
 
   OSMNode(this.lat, this.lon, {
-    Map<String, String>? tags,
-    int? id,
-    int? version
-  }) : super(id: id, version: version, tags: tags);
+    super.tags,
+    super.id,
+    super.version,
+  });
 
 
   /**
@@ -34,7 +34,7 @@ class OSMNode extends OSMElement {
     obj['lon'],
     id: obj['id'],
     version: obj['version'],
-    tags: obj['tags']?.cast<String, String>()
+    tags: obj['tags']?.cast<String, String>(),
   );
 
 
@@ -90,7 +90,7 @@ class OSMNode extends OSMElement {
       lat, lon,
       id: id,
       version: version,
-      tags: tags
+      tags: tags,
     );
   }
 
@@ -129,7 +129,9 @@ class OSMNode extends OSMElement {
     int? id,
     int? version
   }) {
-    return OSMNode(lat ?? this.lat, lon ?? this.lon,
+    return OSMNode(
+      lat ?? this.lat,
+      lon ?? this.lon,
       tags: tags ?? Map.of(this.tags),
       id: id ?? this.id,
       version: version ?? this.version

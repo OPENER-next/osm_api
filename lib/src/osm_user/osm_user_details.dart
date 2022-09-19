@@ -55,8 +55,8 @@ class OSMUserDetails extends OSMUser {
 
 
   OSMUserDetails({
-    required int uid,
-    required String userName,
+    required super.id,
+    required super.name,
     required this.createdAt,
     required this.profileDescription,
     this.profileImageUrl,
@@ -65,16 +65,16 @@ class OSMUserDetails extends OSMUser {
     required this.gpsTracesCount,
     required this.roles,
     required this.receivedBlocksCount,
-    required this.activeBlocksCount
-  }) : super(uid, userName);
+    required this.activeBlocksCount,
+  });
 
 
   /**
    * A factory method for constructing an [OSMUserDetails] object from a JSON object.
    */
   factory OSMUserDetails.fromJSONObject(Map<String, dynamic> obj) => OSMUserDetails(
-    uid: obj['id'],
-    userName: obj['display_name'],
+    id: obj['id'],
+    name: obj['display_name'],
     createdAt: DateTime.parse(obj['account_created']),
     profileImageUrl: obj['img']?['href'],
     profileDescription: obj['description'],
@@ -83,7 +83,7 @@ class OSMUserDetails extends OSMUser {
     gpsTracesCount: obj['traces']['count'],
     roles: obj['roles'].cast<String>(),
     receivedBlocksCount: obj['blocks']['received']['count'],
-    activeBlocksCount: obj['blocks']['received']['active']
+    activeBlocksCount: obj['blocks']['received']['active'],
   );
 
 

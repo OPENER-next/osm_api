@@ -18,10 +18,10 @@ class OSMRelation extends OSMElement {
 
 
   OSMRelation(this.members, {
-    Map<String, String>? tags,
-    int? id,
-    int? version
-  }) : super(id: id, version: version, tags: tags);
+    super.tags,
+    super.id,
+    super.version,
+  });
 
 
   /**
@@ -31,14 +31,20 @@ class OSMRelation extends OSMElement {
     var members = <OSMMember>[];
     for (var memberObj in obj['members']) {
       var typeEnum = OSMElementType.values.firstWhere((e) => e.name == memberObj['type']);
-      members.add( OSMMember(typeEnum, memberObj['ref'], memberObj['role']) );
+      members.add(
+        OSMMember(
+          type: typeEnum,
+          ref: memberObj['ref'],
+          role: memberObj['role'],
+        )
+      );
     }
 
     return OSMRelation(
       members,
       id: obj['id'],
       version: obj['version'],
-      tags: obj['tags']?.cast<String, String>()
+      tags: obj['tags']?.cast<String, String>(),
     );
   }
 
@@ -84,7 +90,7 @@ class OSMRelation extends OSMElement {
       members,
       id: id,
       version: version,
-      tags: tags
+      tags: tags,
     );
   }
 
@@ -114,12 +120,13 @@ class OSMRelation extends OSMElement {
     List<OSMMember>? members,
     Map<String, String>? tags,
     int? id,
-    int? version
+    int? version,
   }) {
-    return OSMRelation(members ?? List.of(this.members.map((m) => m.copyWith())),
+    return OSMRelation(
+      members ?? List.of(this.members.map((m) => m.copyWith())),
       tags: tags ?? Map.of(this.tags),
       id: id ?? this.id,
-      version: version ?? this.version
+      version: version ?? this.version,
     );
   }
 

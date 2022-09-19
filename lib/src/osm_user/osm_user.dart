@@ -15,7 +15,10 @@ class OSMUser {
   final String name;
 
 
-  OSMUser(this.id, this.name);
+  OSMUser({
+    required this.id,
+    required this.name,
+  });
 
 
   @override

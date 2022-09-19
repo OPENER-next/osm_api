@@ -46,17 +46,17 @@ class OSMUserPrivateDetails extends OSMUserDetails {
 
 
   OSMUserPrivateDetails({
-    required int uid,
-    required String userName,
-    required DateTime createdAt,
-    required String profileDescription,
-    String? profileImageUrl,
-    required bool hasAgreedToContributorTerms,
-    required int changesetsCount,
-    required int gpsTracesCount,
-    required List<String> roles,
-    required int receivedBlocksCount,
-    required int activeBlocksCount,
+    required super.id,
+    required super.name,
+    required super.createdAt,
+    required super.profileDescription,
+    String? super.profileImageUrl,
+    required super.hasAgreedToContributorTerms,
+    required super.changesetsCount,
+    required super.gpsTracesCount,
+    required super.roles,
+    required super.receivedBlocksCount,
+    required super.activeBlocksCount,
     required this.contributionsArePublicDomain,
     this.homeZoom,
     this.homeLat,
@@ -64,28 +64,16 @@ class OSMUserPrivateDetails extends OSMUserDetails {
     required this.preferredLanguages,
     required this.receivedMessageCount,
     required this.unreadMessagesCount,
-    required this.sentMessagesCount
-  }) : super(
-    uid: uid,
-    userName: userName,
-    createdAt: createdAt,
-    profileDescription: profileDescription,
-    profileImageUrl: profileImageUrl,
-    hasAgreedToContributorTerms: hasAgreedToContributorTerms,
-    changesetsCount: changesetsCount,
-    gpsTracesCount: gpsTracesCount,
-    roles: roles,
-    receivedBlocksCount: receivedBlocksCount,
-    activeBlocksCount: activeBlocksCount
-  );
+    required this.sentMessagesCount,
+  });
 
 
   /**
    * A factory method for constructing an [OSMUserPrivateDetails] object from a JSON object.
    */
   factory OSMUserPrivateDetails.fromJSONObject(Map<String, dynamic> obj) => OSMUserPrivateDetails(
-    uid: obj['id'],
-    userName: obj['display_name'],
+    id: obj['id'],
+    name: obj['display_name'],
     createdAt: DateTime.parse(obj['account_created']),
     profileImageUrl: obj['img']?['href'],
     profileDescription: obj['description'],
@@ -102,7 +90,7 @@ class OSMUserPrivateDetails extends OSMUserDetails {
     preferredLanguages: obj['languages']?.cast<String>() ?? List.empty(),
     receivedMessageCount: obj['messages']['received']['count'],
     unreadMessagesCount: obj['messages']['received']['unread'],
-    sentMessagesCount: obj['messages']['sent']['count']
+    sentMessagesCount: obj['messages']['sent']['count'],
   );
 
 

@@ -24,14 +24,18 @@ class OSMMember {
   String role;
 
 
-  OSMMember(this.type, this.ref, [String? role]) : this.role = role ?? '';
+  OSMMember({
+    required this.type,
+    required this.ref,
+    String? role,
+  }) : role = role ?? '';
 
 
   /**
    * Construct an [OSMMember] from an [OSMElement] with an optional [role].
    */
   OSMMember.fromOSMElement(OSMElement element, [String? role])
-    : ref = element.id, type = element.type, this.role = role ?? '';
+    : ref = element.id, type = element.type, role = role ?? '';
 
 
   /**
@@ -57,7 +61,11 @@ class OSMMember {
 
     role = memberElement.getAttribute('role');
 
-    return OSMMember(type, ref, role);
+    return OSMMember(
+      type: type,
+      ref: ref,
+      role: role,
+    );
   }
 
 
@@ -84,9 +92,9 @@ class OSMMember {
     String? role,
   }) {
     return OSMMember(
-      type ?? this.type,
-      ref ?? this.ref,
-      role ?? this.role,
+      type: type ?? this.type,
+      ref: ref ?? this.ref,
+      role: role ?? this.role,
     );
   }
 

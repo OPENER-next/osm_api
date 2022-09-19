@@ -36,9 +36,21 @@ void main() async {
 
 
     final members = [
-      OSMMember(OSMElementType.node, 1, 'inner'),
-      OSMMember(OSMElementType.way, 1, 'inner'),
-      OSMMember(OSMElementType.relation, 1, 'inner')
+      OSMMember(
+        type: OSMElementType.node,
+        ref: 1,
+        role: 'inner',
+      ),
+      OSMMember(
+        type: OSMElementType.way,
+        ref: 1,
+        role: 'inner',
+      ),
+      OSMMember(
+        type: OSMElementType.relation,
+        ref: 1,
+        role: 'inner',
+      )
     ];
 
     // create
@@ -225,8 +237,14 @@ void main() async {
     final node1 = await osmapi.createElement(OSMNode(1, 1, tags: tags), changeset01Id);
     final node2 = await osmapi.createElement(OSMNode(1, 2, tags: tags), changeset01Id);
     final way = await osmapi.createElement(OSMWay([node1.id, node2.id], tags: tags), changeset01Id);
-    final member1 = OSMMember(OSMElementType.node, node1.id);
-    final member2 = OSMMember(OSMElementType.way, way.id);
+    final member1 = OSMMember(
+      type: OSMElementType.node,
+      ref: node1.id,
+    );
+    final member2 = OSMMember(
+      type: OSMElementType.way,
+      ref: way.id,
+    );
     final relation = await osmapi.createElement(OSMRelation([member1, member2], tags: tags), changeset01Id);
 
     // modify example elements

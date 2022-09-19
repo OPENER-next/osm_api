@@ -6,14 +6,14 @@ import '/src/osm_user/osm_user.dart';
 class OSMComment {
 
   /**
-   * The date and time the comment was published.
-   */
-  final DateTime date;
-
-  /**
    * The user who posted the comment.
    */
   final OSMUser user;
+
+  /**
+   * The date and time the comment was published.
+   */
+  final DateTime date;
 
   /**
    * The text content of the comment.
@@ -21,7 +21,11 @@ class OSMComment {
   final String text;
 
 
-  OSMComment(this.date, this.user, this.text);
+  OSMComment({
+    required this.user,
+    required this.date,
+    required this.text,
+  });
 
 
   @override

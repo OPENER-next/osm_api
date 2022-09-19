@@ -37,11 +37,10 @@ abstract class OSMElement {
   OSMElement({
     Map<String, String>? tags,
     int? id,
-    int? version
-  }) :
-  this.tags = tags ?? <String, String>{},
-  this.id = id ?? 0,
-  this.version = version ?? 0;
+    int? version,
+  }) : tags = tags ?? <String, String>{},
+       id = id ?? 0,
+       version = version ?? 0;
 
 
   /**

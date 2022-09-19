@@ -17,10 +17,10 @@ class OSMWay extends OSMElement {
 
 
   OSMWay(this.nodeIds, {
-    Map<String, String>? tags,
-    int? id,
-    int? version
-  }) : super(id: id, version: version, tags: tags);
+    super.tags,
+    super.id,
+    super.version,
+  });
 
 
   /**
@@ -30,7 +30,7 @@ class OSMWay extends OSMElement {
     obj['nodes']?.cast<int>(),
     id: obj['id'],
     version: obj['version'],
-    tags: obj['tags']?.cast<String, String>()
+    tags: obj['tags']?.cast<String, String>(),
   );
 
 
@@ -76,7 +76,7 @@ class OSMWay extends OSMElement {
       nodeIds,
       id: id,
       version: version,
-      tags: tags
+      tags: tags,
     );
   }
 
@@ -117,12 +117,13 @@ class OSMWay extends OSMElement {
     List<int>? nodeIds,
     Map<String, String>? tags,
     int? id,
-    int? version
+    int? version,
   }) {
-    return OSMWay(nodeIds ?? List.of(this.nodeIds),
+    return OSMWay(
+      nodeIds ?? List.of(this.nodeIds),
       tags: tags ?? Map.of(this.tags),
       id: id ?? this.id,
-      version: version ?? this.version
+      version: version ?? this.version,
     );
   }
 
