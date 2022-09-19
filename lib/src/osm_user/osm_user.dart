@@ -15,7 +15,7 @@ class OSMUser {
   final String name;
 
 
-  OSMUser({
+  const OSMUser({
     required this.id,
     required this.name,
   });

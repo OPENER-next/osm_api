@@ -25,7 +25,7 @@ class OSMPermissions {
   final Set<String> _permissions;
 
 
-  OSMPermissions([this._permissions = const <String>{}]) ;
+  const OSMPermissions([this._permissions = const <String>{}]) ;
 
 
   /**

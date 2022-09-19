@@ -54,7 +54,7 @@ class OSMUserDetails extends OSMUser {
   final int activeBlocksCount;
 
 
-  OSMUserDetails({
+  const OSMUserDetails({
     required super.id,
     required super.name,
     required this.createdAt,

@@ -76,7 +76,7 @@ class OSMChangeset {
   bool get isClosed => closedAt != null;
 
 
-  OSMChangeset({
+  const OSMChangeset({
     required this.id,
     required this.tags,
     required this.createdAt,

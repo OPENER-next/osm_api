@@ -21,7 +21,7 @@ class OSMComment {
   final String text;
 
 
-  OSMComment({
+  const OSMComment({
     required this.user,
     required this.date,
     required this.text,

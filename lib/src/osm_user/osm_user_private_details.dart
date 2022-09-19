@@ -45,7 +45,7 @@ class OSMUserPrivateDetails extends OSMUserDetails {
 	final int sentMessagesCount;
 
 
-  OSMUserPrivateDetails({
+  const OSMUserPrivateDetails({
     required super.id,
     required super.name,
     required super.createdAt,
