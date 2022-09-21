@@ -18,15 +18,15 @@ abstract class OSMAPIBase {
 
 
   OSMAPIBase({
-    String? baseUrl,
-    int? connectTimeout,
-    int? receiveTimeout,
+    String baseUrl = 'http://127.0.0.1:3000/api/0.6',
+    int connectTimeout = 5000,
+    int receiveTimeout = 3000,
     this.authentication,
     String? userAgent
   }) {
-    this.baseUrl = baseUrl ?? 'http://127.0.0.1:3000/api/0.6';
-    this.connectTimeout = connectTimeout ?? 5000;
-    this.receiveTimeout = receiveTimeout ?? 3000;
+    this.baseUrl = baseUrl;
+    this.connectTimeout = connectTimeout;
+    this.receiveTimeout = receiveTimeout;
 
     _dio.options.responseType = ResponseType.plain;
     _dio.options.headers = {

@@ -1,14 +1,7 @@
-import '/src/osm_user/osm_user.dart';
-
 /**
- * An immutable container class for an OSM comment.
+ * An immutable base class for an OSM comment.
  */
-class OSMComment {
-
-  /**
-   * The user who posted the comment.
-   */
-  final OSMUser user;
+abstract class OSMComment {
 
   /**
    * The date and time the comment was published.
@@ -22,20 +15,18 @@ class OSMComment {
 
 
   const OSMComment({
-    required this.user,
     required this.date,
     required this.text,
   });
 
 
   @override
-  String toString() => '$runtimeType - date: $date; user: $user; text: $text';
+  String toString() => '$runtimeType - date: $date; user: text: $text';
 
 
   @override
   int get hashCode =>
     date.hashCode ^
-    user.hashCode ^
     text.hashCode;
 
 
@@ -45,6 +36,5 @@ class OSMComment {
     o is OSMComment &&
     runtimeType == o.runtimeType &&
     date == o.date &&
-    user == o.user &&
     text == o.text;
 }

@@ -21,7 +21,7 @@ class OAuth2 implements Auth {
    * Note: The parameters [url] and [method] do not affect this method thus they can be empty strings.
    */
   @override
-  String getAuthorizationHeader(String url, String method) {
+  String getAuthorizationHeader([ String? url, String? method ]) {
     return tokenType + ' ' + accessToken;
   }
 }

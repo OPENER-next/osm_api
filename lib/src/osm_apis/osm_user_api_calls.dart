@@ -60,7 +60,7 @@ mixin OSMUserAPICalls on OSMAPIBase {
    */
   Future<Iterable<OSMUserDetails>> getMultipleUsersDetails(Iterable<int> ids) async {
     final response = await sendRequest(
-      '/users?users=' + ids.join(','),
+      '/users?users=${ids.join(',')}',
       headers: const { 'Accept': 'application/json' }
     );
     // parse json

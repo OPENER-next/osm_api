@@ -8,10 +8,10 @@ environment:
 dev_dependencies:
   lints: ^2.0.0
   test: ^1.16.0
-  collection: ^1.15.0
   oauth1: ^2.0.0
 
 dependencies:
   xml: ^6.1.0
   dio: ^4.0.0
   crypto: ^3.0.1
+  collection: ^1.15.0

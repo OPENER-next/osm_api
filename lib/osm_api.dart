@@ -1,4 +1,3 @@
-import '/src/authentication/auth.dart';
 import '/src/osm_apis/osm_user_api_calls.dart';
 import '/src/osm_apis/osm_changeset_api_calls.dart';
 import '/src/osm_apis/osm_element_api_calls.dart';
@@ -24,16 +23,10 @@ export '/src/osm_user/osm_permissions.dart';
  */
 class OSMAPI extends OSMAPIBase with OSMUserAPICalls, OSMElementAPICalls, OSMChangesetAPICalls {
   OSMAPI({
-    String? baseUrl,
-    int? connectTimeout,
-    int? receiveTimeout,
-    Auth? authentication,
-    String? userAgent,
-  }) : super(
-    baseUrl: baseUrl,
-    connectTimeout: connectTimeout,
-    receiveTimeout: receiveTimeout,
-    authentication: authentication,
-    userAgent: userAgent,
-  );
+    super.baseUrl,
+    super.connectTimeout,
+    super.receiveTimeout,
+    super.authentication,
+    super.userAgent,
+  });
 }

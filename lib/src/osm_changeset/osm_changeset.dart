@@ -2,7 +2,7 @@ import 'package:xml/xml.dart';
 import 'package:collection/collection.dart';
 import '/src/commons/bounding_box.dart';
 import '/src/osm_user/osm_user.dart';
-import '/src/osm_changeset/osm_comment.dart';
+import 'osm_changeset_comment.dart';
 
 
 /**
@@ -58,11 +58,11 @@ class OSMChangeset {
   final int commentsCount;
 
   /**
-   * An optional [List] of [OSMComment]s containing the discussion of this changeset.
+   * An optional [List] of [OSMChangesetComment]s containing the discussion of this changeset.
    *
    * The [discussion] property is null if the discussion wasn't requested from the server, otherwise it's a [List] of zero ore more items.
    */
-  final List<OSMComment>? discussion;
+  final List<OSMChangesetComment>? discussion;
 
   /**
    * A short version for checking whether this chageset is still open.
@@ -111,7 +111,7 @@ class OSMChangeset {
     final int changesCount;
     final int commentsCount;
     BoundingBox? bbox;
-    List<OSMComment>? comments;
+    List<OSMChangesetComment>? comments;
 
     // try parsing the xml attributes
     try {
@@ -177,7 +177,7 @@ class OSMChangeset {
         final textElement = comment.getElement('text');
 
         if (date != null && uid != null && userName != null && textElement != null) {
-          comments!.add(OSMComment(
+          comments!.add(OSMChangesetComment(
             user: OSMUser(
               id: int.parse(uid),
               name: userName,

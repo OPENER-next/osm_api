@@ -23,14 +23,14 @@ mixin OSMChangesetAPICalls on OSMAPIBase {
    * Returns the [OSMChangeset] wrapped in a [Future] which resolves when the operation has been completed.
    */
   Future<OSMChangeset> getChangeset(int id, [ bool includeDiscussion = false ]) async {
-    var additionalParameters = '';
-    if (includeDiscussion) {
-      additionalParameters += '?include_discussion=true';
-    }
-
-    final response = await sendRequest(
-      '/changeset/$id' + additionalParameters
+    final queryUri = Uri(
+      path: '/changeset/$id',
+      queryParameters: {
+        if (includeDiscussion) 'include_discussion': 'true'
+      },
     );
+
+    final response = await sendRequest(queryUri.toString());
 
     return OSMChangeset.fromXMLString(response.data);
   }
@@ -79,8 +79,10 @@ mixin OSMChangesetAPICalls on OSMAPIBase {
    * A function to construct the XML message body [String] from a given tag Map..
    */
   String _tagsToXMLBody(Map<String, String> tags) {
-    var xmlString = '';
-    tags.forEach((key, value) => xmlString +='<tag k="$key" v="$value"/>');
+    final xmlString = tags.entries.fold<String>('',
+      (string, entry) => string += '<tag k="${entry.key}" v="${entry.value}"/>',
+    );
+
     return
     '<osm>'
       '<changeset>'
@@ -107,12 +109,19 @@ mixin OSMChangesetAPICalls on OSMAPIBase {
    * A function to query multiple [OSMChangeset]s by different parameters and properties.
    *
    * This call returns at most 100 changesets, it returns latest changesets ordered by `created_at`.
+   *
    * [bbox] can be used to query changesets located inside a given [BoundingBox].
+   *
    * [uid] indicates the user by its id which authored the changesets.
+   *
    * [userName] indicates the user by its name which authored the changesets. This parameter is ignored if the [uid] parameter is set.
+   *
    * [open] indicates whether only open or closed changesets should be returned.
+   *
    * [closedAfter] can be used to query changesets that have been closed after a certain date/time.
-   * [createdBefore] can be used in conjunction with [closedAfter] to retrieve only changesets that were open at a specifc period. This parameter is ignored if the [closedAfter] is not provided.
+   *
+   * [createdBefore] can be used in conjunction with [closedAfter] to retrieve only changesets that were open at a specific period. This parameter is ignored if the [closedAfter] is not provided.
+   *
    * [changesets] can be used to query multiple changesets by their ids.
    *
    * Visit https://wiki.openstreetmap.org/wiki/API_v0.6#Query:_GET_/api/0.6/changesets for more details.
@@ -152,11 +161,12 @@ mixin OSMChangesetAPICalls on OSMAPIBase {
       queryParameters['changesets'] = changesets.join(',');
     }
 
-    // build query string with url class
-    final queryString = Uri(queryParameters: queryParameters).query;
-    final response = await sendRequest(
-      '/changesets?$queryString'
+    final queryUri = Uri(
+      path: '/changesets',
+      queryParameters: queryParameters,
     );
+
+    final response = await sendRequest(queryUri.toString());
 
     var xmlDoc = XmlDocument.parse(response.data);
 
@@ -192,7 +202,7 @@ mixin OSMChangesetAPICalls on OSMAPIBase {
   /**
    * A function for adding a comment to a changeset on the server by its id.
    *
-   * The changeset needs to be closed inorder to add comments.
+   * The changeset needs to be closed in order to add comments.
    * If the changeset is still open an error will be thrown.
    */
   Future<void> addCommentToChangeset(int id, String text) async {
