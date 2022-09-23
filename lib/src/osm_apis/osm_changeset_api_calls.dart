@@ -25,7 +25,7 @@ mixin OSMChangesetAPICalls on OSMAPIBase {
   Future<OSMChangeset> getChangeset(int id, [ bool includeDiscussion = false ]) async {
     final queryUri = Uri(
       path: '/changeset/$id',
-      queryParameters: {
+      queryParameters: <String, String>{
         if (includeDiscussion) 'include_discussion': 'true'
       },
     );
@@ -120,7 +120,11 @@ mixin OSMChangesetAPICalls on OSMAPIBase {
    *
    * [closedAfter] can be used to query changesets that have been closed after a certain date/time.
    *
-   * [createdBefore] can be used in conjunction with [closedAfter] to retrieve only changesets that were open at a specific period. This parameter is ignored if the [closedAfter] is not provided.
+   * Note: This will only filter closed changesets so any matching open changesets will still be queried.
+   *
+   * [createdBefore] can be used in conjunction with [closedAfter] to retrieve only changesets that were open at a specific period.
+   *
+   * This parameter is ignored if the [closedAfter] is not provided.
    *
    * [changesets] can be used to query multiple changesets by their ids.
    *
