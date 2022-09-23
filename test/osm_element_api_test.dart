@@ -2,11 +2,11 @@ import 'package:osm_api/osm_api.dart';
 import 'package:test/test.dart';
 
 void main() async {
-  late OSMAPI osmapi;
-  late int changesetId;
-  late List<OSMNode> nodes;
-  late List<OSMWay> ways;
-  late OSMRelation relation;
+  late final OSMAPI osmapi;
+  late final int changesetId;
+  late final List<OSMNode> nodes;
+  late final List<OSMWay> ways;
+  late final OSMRelation relation;
 
   setUpAll(() async {
     osmapi = OSMAPI(
@@ -65,17 +65,17 @@ void main() async {
   });
 
   test('compare single local node and getNode()', () async {
-    var serverNode = await osmapi.getNode(nodes[0].id);
+    final serverNode = await osmapi.getNode(nodes[0].id);
     expect(serverNode, equals(nodes[0]));
   });
 
   test('compare single local way and getWay()', () async {
-    var serverWay = await osmapi.getWay(ways[0].id);
+    final serverWay = await osmapi.getWay(ways[0].id);
     expect(serverWay, equals(ways[0]));
   });
 
   test('compare single local relation and getRelation()', () async {
-    var serverRelation = await osmapi.getRelation(relation.id);
+    final serverRelation = await osmapi.getRelation(relation.id);
     expect(serverRelation, equals(relation));
   });
 
@@ -90,7 +90,7 @@ void main() async {
     nodes[1].lat = 23;
     await osmapi.updateElement(nodes[1], changesetId);
 
-    var serverNodes = await osmapi.getNodes(
+    final serverNodes = await osmapi.getNodes(
       nodes.map((node) => node.id).toList()
     );
     expect(serverNodes, equals(nodes));
@@ -103,7 +103,7 @@ void main() async {
     ways[1].nodeIds.add(nodes[0].id);
     await osmapi.updateElement(ways[1], changesetId);
 
-    var serverWays = await osmapi.getWays(
+    final serverWays = await osmapi.getWays(
       ways.map((way) => way.id).toList()
     );
     expect(serverWays, equals(ways));
@@ -113,7 +113,7 @@ void main() async {
     relation.members.add(OSMMember.fromOSMElement(ways[1]));
     await osmapi.updateElement(relation, changesetId);
 
-    var serverRelation = await osmapi.getRelations(
+    final serverRelation = await osmapi.getRelations(
       [relation.id]
     );
     expect(serverRelation, equals([relation]));
@@ -122,47 +122,47 @@ void main() async {
   // get elements by version
 
   test('compare local node and getNode() with version', () async {
-    var serverNodeV1 = await osmapi.getNode(nodes[0].id, 1);
+    final serverNodeV1 = await osmapi.getNode(nodes[0].id, 1);
     expect(serverNodeV1, isNot(equals(nodes[0])));
 
-    var serverNodeV2 = await osmapi.getNode(nodes[0].id, 2);
+    final serverNodeV2 = await osmapi.getNode(nodes[0].id, 2);
     expect(serverNodeV2, equals(nodes[0]));
   });
 
   test('compare local way and getWay() with version', () async {
-    var serverWayV1 = await osmapi.getWay(ways[0].id, 1);
+    final serverWayV1 = await osmapi.getWay(ways[0].id, 1);
     expect(serverWayV1, isNot(equals(ways[0])));
 
-    var serverWayV2 = await osmapi.getWay(ways[0].id, 2);
+    final serverWayV2 = await osmapi.getWay(ways[0].id, 2);
     expect(serverWayV2, equals(ways[0]));
   });
 
   test('compare local relation and getRelation() with version', () async {
-    var serverRelationV1 = await osmapi.getRelation(relation.id, 1);
+    final serverRelationV1 = await osmapi.getRelation(relation.id, 1);
     expect(serverRelationV1, isNot(equals(relation)));
 
-    var serverRelationV2 = await osmapi.getRelation(relation.id, 2);
+    final serverRelationV2 = await osmapi.getRelation(relation.id, 2);
     expect(serverRelationV2, equals(relation));
   });
 
   // get multiple elements by version
 
   test('compare local nodes with getNodesWithVersion()', () async {
-    var serverNodes = await osmapi.getNodesWithVersion(
+    final serverNodes = await osmapi.getNodesWithVersion(
       Map<int, int>.fromIterable(nodes, key: (e) => e.id, value: (e) => e.version)
     );
     expect(serverNodes, equals(nodes));
   });
 
   test('compare local ways with getWaysWithVersion()', () async {
-    var serverWays = await osmapi.getWaysWithVersion(
+    final serverWays = await osmapi.getWaysWithVersion(
       Map<int, int>.fromIterable(ways, key: (e) => e.id, value: (e) => e.version)
     );
     expect(serverWays, equals(ways));
   });
 
   test('compare local relation with getRelationsWithVersion()', () async {
-    var serverRelations = await osmapi.getRelationsWithVersion(
+    final serverRelations = await osmapi.getRelationsWithVersion(
       {relation.id: relation.version}
     );
     expect(serverRelations, equals([relation]));
@@ -171,14 +171,14 @@ void main() async {
   // check get full way and relation
 
   test('compare local way and child elements with getFullWay()', () async {
-    var elementBundle = await osmapi.getFullWay(ways[0].id);
+    final elementBundle = await osmapi.getFullWay(ways[0].id);
     expect(elementBundle.nodes, unorderedEquals({ nodes[0], nodes[1] }));
     expect(elementBundle.ways, unorderedEquals({ ways[0] }));
     expect(elementBundle.relations, isEmpty);
   });
 
   test('compare local relation and child elements with getFullRelation()', () async {
-    var elementBundle = await osmapi.getFullRelation(relation.id);
+    final elementBundle = await osmapi.getFullRelation(relation.id);
     expect(elementBundle.nodes, unorderedEquals({ nodes[0], nodes[1], nodes[2], nodes[3] }));
     expect(elementBundle.ways, unorderedEquals({ ways[0], ways[1] }));
     expect(elementBundle.relations, unorderedEquals({ relation }));
@@ -190,7 +190,7 @@ void main() async {
     // try to get the first node by bouding box
     // this will also return every way element and relation that the node belongs to
     // ways will also contain their nodes
-    var elementBundle = await osmapi.getElementsByBoundingBox(
+    final elementBundle = await osmapi.getElementsByBoundingBox(
       BoundingBox(19.999, 9.999, 20.001, 10.001)
     );
     // use contains instead of equals to prevent local test from failing, because they might return additional elements
@@ -204,48 +204,48 @@ void main() async {
 
   test('check for correct return of getWaysWithNode()', () async {
     // nodes[1] should be present in all ways
-    var serverWays = await osmapi.getWaysWithNode(nodes[1].id);
+    final serverWays = await osmapi.getWaysWithNode(nodes[1].id);
     expect(serverWays, unorderedEquals(ways));
   });
 
   // check get relations by element
 
   test('check for correct return of getRelationsWithNode()', () async {
-    var serverRelations = await osmapi.getRelationsWithNode(nodes[0].id);
+    final serverRelations = await osmapi.getRelationsWithNode(nodes[0].id);
     expect(serverRelations, equals([relation]));
   });
 
   test('check for correct return of getRelationsWithWay()', () async {
-    var serverRelations = await osmapi.getRelationsWithWay(ways[0].id);
+    final serverRelations = await osmapi.getRelationsWithWay(ways[0].id);
     expect(serverRelations, equals([relation]));
   });
 
   test('check for correct return of getRelationsWithNode()', () async {
-    var serverRelations = await osmapi.getRelationsWithRelation(relation.id);
+    final serverRelations = await osmapi.getRelationsWithRelation(relation.id);
     expect(serverRelations.isEmpty, true);
   });
 
   // check get element history
 
   test('check for correct return of getNodeHistory()', () async {
-    var nodeHistory = await osmapi.getNodeHistory(nodes[0].id);
-    var nodeHistoryList = nodeHistory.toList();
+    final nodeHistory = await osmapi.getNodeHistory(nodes[0].id);
+    final nodeHistoryList = nodeHistory.toList();
     expect(nodeHistoryList.length == 2, true);
     // check if newest element equals local element
     expect(nodeHistoryList.last, equals(nodes[0]));
   });
 
   test('check for correct return of getWayHistory()', () async {
-    var wayHistory = await osmapi.getWayHistory(ways[0].id);
-    var wayHistoryList = wayHistory.toList();
+    final wayHistory = await osmapi.getWayHistory(ways[0].id);
+    final wayHistoryList = wayHistory.toList();
     expect(wayHistoryList.length == 2, true);
     // check if newest element equals local element
     expect(wayHistoryList.last, equals(ways[0]));
   });
 
   test('check for correct return of getRelationHistory()', () async {
-    var relationHistory = await osmapi.getRelationHistory(relation.id);
-    var relationHistoryList = relationHistory.toList();
+    final relationHistory = await osmapi.getRelationHistory(relation.id);
+    final relationHistoryList = relationHistory.toList();
     expect(relationHistoryList.length == 2, true);
     // check if newest element equals local element
     expect(relationHistoryList.last, equals(relation));

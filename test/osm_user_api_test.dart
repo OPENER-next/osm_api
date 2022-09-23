@@ -2,9 +2,9 @@ import 'package:osm_api/osm_api.dart';
 import 'package:test/test.dart';
 
 void main() async {
-  late OSMAPI osmapiWithAuth;
-  late OSMAPI osmapiNoAuth;
-  late OSMAPI osmapi;
+  late final OSMAPI osmapiWithAuth;
+  late final OSMAPI osmapiNoAuth;
+  late final OSMAPI osmapi;
 
   setUpAll(() async {
     osmapi = osmapiWithAuth = OSMAPI(
@@ -23,7 +23,7 @@ void main() async {
   // permissions tests
 
   test('check for correct permissions for authenticated user', () async {
-    var permWithAuth = await osmapiWithAuth.getPermissions();
+    final permWithAuth = await osmapiWithAuth.getPermissions();
 
     expect(permWithAuth.hasAll({
       OSMPermissions.READ_GPS_TRACES,
@@ -47,7 +47,7 @@ void main() async {
   });
 
   test('check for correct permissions for unauthenticated user', () async {
-    var permNoAuth = await osmapiNoAuth.getPermissions();
+    final permNoAuth = await osmapiNoAuth.getPermissions();
 
     expect(permNoAuth, equals(OSMPermissions()));
 
@@ -83,7 +83,7 @@ void main() async {
   // user details tests
 
   test('check for correct user details (private) of current user', () async {
-    var userDetails = await osmapi.getCurrentUserDetails();
+    final userDetails = await osmapi.getCurrentUserDetails();
 
     expect(userDetails.homeLat, isNull);
     expect(userDetails.homeLon, isNull);
@@ -107,9 +107,9 @@ void main() async {
   });
 
   test('check for correct user details of specific user', () async {
-    var currentUserDetails = await osmapi.getCurrentUserDetails();
+    final currentUserDetails = await osmapi.getCurrentUserDetails();
 
-    var userDetails = await osmapi.getUserDetails(currentUserDetails.id);
+    final userDetails = await osmapi.getUserDetails(currentUserDetails.id);
 
     expect(userDetails.changesetsCount, greaterThanOrEqualTo(0));
     expect(userDetails.gpsTracesCount, greaterThanOrEqualTo(0));
@@ -125,12 +125,12 @@ void main() async {
   });
 
   test('check for correct user details of multiple specific users', () async {
-    var currentUserDetails = await osmapi.getCurrentUserDetails();
+    final currentUserDetails = await osmapi.getCurrentUserDetails();
 
-    var usersDetails = await osmapi.getMultipleUsersDetails([currentUserDetails.id]);
+    final usersDetails = await osmapi.getMultipleUsersDetails([currentUserDetails.id]);
     expect(usersDetails.length, equals(1));
 
-    var userDetails = usersDetails.first;
+    final userDetails = usersDetails.first;
     expect(userDetails.changesetsCount, greaterThanOrEqualTo(0));
     expect(userDetails.gpsTracesCount, greaterThanOrEqualTo(0));
     expect(userDetails.profileDescription, isEmpty);
@@ -153,7 +153,7 @@ void main() async {
     var allPreferences = await osmapi.getAllPreferences();
     expect(allPreferences, isEmpty);
 
-    var preferences = {
+    final preferences = {
       'CustomPref1': 2332,
       '?§%&7>89<!2=': true
     };
@@ -161,7 +161,7 @@ void main() async {
 
     allPreferences = await osmapi.getAllPreferences();
     // preference values re retunred as strings thus convert the current preference map to string
-    var prerferencesAsStrings = preferences.map((key, value) => MapEntry(key, value.toString()));
+    final prerferencesAsStrings = preferences.map((key, value) => MapEntry(key, value.toString()));
     expect(allPreferences, equals(prerferencesAsStrings));
 
     await osmapi.setPreference('CustomPref1', 'test');

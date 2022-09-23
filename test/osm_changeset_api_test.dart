@@ -2,7 +2,7 @@ import 'package:osm_api/osm_api.dart';
 import 'package:test/test.dart';
 
 void main() async {
-  late OSMAPI osmapi;
+  late final OSMAPI osmapi;
 
   setUpAll(() async {
     osmapi = OSMAPI(
@@ -15,17 +15,17 @@ void main() async {
   });
 
   test('check for correct return of createChangeset() and getChangeset()', () async {
-    var tags = {
+    final tags = {
       'created_by': 'Opener Next',
       'comment': 'Just adding some streetnames'
     };
 
-    var changesetId = await osmapi.createChangeset(tags);
+    final changesetId = await osmapi.createChangeset(tags);
 
     // add example node so changeset will generate a bbox
-    var node = await osmapi.createElement(OSMNode(1, 1), changesetId);
+    final node = await osmapi.createElement(OSMNode(1, 1), changesetId);
 
-    var changeset = await osmapi.getChangeset(changesetId);
+    final changeset = await osmapi.getChangeset(changesetId);
 
     expect(changeset.id, greaterThan(0));
     expect(changeset.tags, equals(tags));
@@ -52,7 +52,7 @@ void main() async {
     // changeset needs to be closed to add comments
     await osmapi.addCommentToChangeset(changesetId, 'my comment');
 
-    var changeset = await osmapi.getChangeset(changesetId, true);
+    final changeset = await osmapi.getChangeset(changesetId, true);
 
     expect(changeset.discussion?.first.text, equals('my comment'));
     expect(changeset.discussion?.first.user.name, equals('testuser'));
@@ -64,29 +64,31 @@ void main() async {
 
 
   test('check if updateChangeset() works correctly', () async {
-    var changesetId = await osmapi.createChangeset({
+    final changesetId = await osmapi.createChangeset({
       'created_by': 'Opener Next',
       'comment': 'Just adding some streetnames'
     });
 
-    var newTags = {
+    final newTags = {
       'created_by': 'Opener Next 2',
       'test': '123',
     };
-    var changeset = await osmapi.updateChangeset(changesetId, newTags);
+    final changeset = await osmapi.updateChangeset(changesetId, newTags);
 
     expect(changeset.tags, equals(newTags));
   });
 
 
   test('check for correct return of queryChangesets()', () async {
-    var dateTime = DateTime.now();
+    // ensure at least one second difference to previous date
+    await Future.delayed(Duration(seconds: 1));
+    final beforeChange = DateTime.now();
 
-    var changesetId01 = await osmapi.createChangeset({
+    final changesetId01 = await osmapi.createChangeset({
       'created_by': 'Opener Next',
       'comment': 'Just adding some streetnames'
     });
-    var changesetId02 = await osmapi.createChangeset({
+    final changesetId02 = await osmapi.createChangeset({
       'created_by': 'Opener Next',
       'comment': 'Just adding some streetnames'
     });
@@ -98,20 +100,22 @@ void main() async {
 
     await osmapi.closeChangeset(changesetId01);
 
-    // query changesets with get for later comparison
-    var changeset01 = await osmapi.getChangeset(changesetId01);
-    var changeset02 = await osmapi.getChangeset(changesetId02);
+    final afterChange = DateTime.now().add(Duration(seconds: 1));
 
-    var query01 = await osmapi.queryChangesets(userName: 'testuser', closedAfter: dateTime);
-    var query02 = await osmapi.queryChangesets(userName: 'testuser', open: true);
-    var query03 = await osmapi.queryChangesets(userName: 'testuser', closedAfter: dateTime, open: false);
-    var query04 = await osmapi.queryChangesets(userName: 'testuser', closedAfter: dateTime, bbox: BoundingBox(
+    // query changesets with get for later comparison
+    final changeset01 = await osmapi.getChangeset(changesetId01);
+    final changeset02 = await osmapi.getChangeset(changesetId02);
+
+    final query01 = await osmapi.queryChangesets(userName: 'testuser', closedAfter: beforeChange);
+    final query02 = await osmapi.queryChangesets(userName: 'testuser', open: true);
+    final query03 = await osmapi.queryChangesets(userName: 'testuser', closedAfter: beforeChange, open: false);
+    final query04 = await osmapi.queryChangesets(userName: 'testuser', closedAfter: beforeChange, bbox: BoundingBox(
       19.999, 9.999, 20.001, 10.001
     ));
-    var query05 = await osmapi.queryChangesets(userName: 'testuser', closedAfter: dateTime, createdBefore: dateTime.add(Duration(seconds: 1)), open: false);
-    var query06 = await osmapi.queryChangesets(changesets: [changesetId01, changesetId02]);
+    final query05 = await osmapi.queryChangesets(userName: 'testuser', closedAfter: beforeChange, createdBefore: afterChange, open: false);
+    final query06 = await osmapi.queryChangesets(changesets: [changesetId01, changesetId02]);
 
-    expect(query01, containsAll([changeset01, changeset02]));
+    expect(query01, containsAllInOrder([changeset02, changeset01]));
     expect(query02.first, equals(changeset02));
     expect(query03, contains(changeset01));
     expect(query04.first, equals(changeset01));
@@ -121,7 +125,7 @@ void main() async {
 
 
   test('check if subscribeToChangeset() and unsubscribeFromChangeset() methods exist', () async {
-    var changesetId = await osmapi.createChangeset({
+    final changesetId = await osmapi.createChangeset({
       'created_by': 'Opener Next',
       'comment': 'Just adding some streetnames'
     });
