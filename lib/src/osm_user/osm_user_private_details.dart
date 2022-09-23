@@ -1,3 +1,4 @@
+import '/src/commons/date_time_utils.dart';
 import '/src/osm_user/osm_user_details.dart';
 
 /**
@@ -74,7 +75,7 @@ class OSMUserPrivateDetails extends OSMUserDetails {
   factory OSMUserPrivateDetails.fromJSONObject(Map<String, dynamic> obj) => OSMUserPrivateDetails(
     id: obj['id'],
     name: obj['display_name'],
-    createdAt: DateTime.parse(obj['account_created']),
+    createdAt: parseUTCDate(obj['account_created']),
     profileImageUrl: obj['img']?['href'],
     profileDescription: obj['description'],
     hasAgreedToContributorTerms: obj['contributor_terms']['agreed'],

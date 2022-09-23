@@ -1,5 +1,6 @@
 import 'package:xml/xml.dart';
 import 'package:collection/collection.dart';
+import '/src/commons/date_time_utils.dart';
 import '/src/commons/bounding_box.dart';
 import '/src/osm_user/osm_user.dart';
 import 'osm_changeset_comment.dart';
@@ -119,11 +120,11 @@ class OSMChangeset {
       id = int.parse(idValue!);
 
       final createdAtValue = changesetElement.getAttribute('created_at');
-      createdAt = DateTime.parse(createdAtValue!);
+      createdAt = parseUTCDate(createdAtValue!);
 
       final closedAtValue = changesetElement.getAttribute('closed_at');
       if (closedAtValue != null) {
-        closedAt = DateTime.parse(closedAtValue);
+        closedAt = parseUTCDate(closedAtValue);
       }
 
       final userName = changesetElement.getAttribute('user')!;
@@ -182,7 +183,7 @@ class OSMChangeset {
               id: int.parse(uid),
               name: userName,
             ),
-            date: DateTime.parse(date),
+            date: parseUTCDate(date),
             text: textElement.text
           ));
         }
