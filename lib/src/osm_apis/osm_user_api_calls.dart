@@ -116,12 +116,15 @@ mixin OSMUserAPICalls on OSMAPIBase {
    */
   Future<void> setAllPreferences(Map<String, dynamic> preferences) async {
     final sanitizer = const HtmlEscape(HtmlEscapeMode.attribute);
-    var xmlPreferencesString = '';
-    preferences.forEach((key, value) {
-      key = sanitizer.convert(key);
-      value = sanitizer.convert(value.toString());
-      xmlPreferencesString += '<preference k="$key" v="$value" />';
-    });
+    final xmlPreferencesString = preferences.entries.fold(StringBuffer(),
+      (StringBuffer stringBuffer, entry) {
+        final key = sanitizer.convert(entry.key);
+        final value = sanitizer.convert(entry.value.toString());
+        return stringBuffer
+          ..write('<preference k="')..write(key)..write('" ')
+          ..write('v="')..write(value)..write('" />');
+      },
+    );
 
     await sendRequest(
       '/user/preferences',
@@ -129,7 +132,7 @@ mixin OSMUserAPICalls on OSMAPIBase {
       body:
         '<osm>'
           '<preferences>'
-            '$xmlPreferencesString'
+            '${xmlPreferencesString.toString()}'
           '</preferences>'
         '</osm>'
     );

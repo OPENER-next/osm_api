@@ -160,9 +160,9 @@ void main() async {
     await osmapi.setAllPreferences(preferences);
 
     allPreferences = await osmapi.getAllPreferences();
-    // preference values re retunred as strings thus convert the current preference map to string
-    final prerferencesAsStrings = preferences.map((key, value) => MapEntry(key, value.toString()));
-    expect(allPreferences, equals(prerferencesAsStrings));
+    // preference values re returned as strings thus convert the current preference map to string
+    final preferencesAsStrings = preferences.map((key, value) => MapEntry(key, value.toString()));
+    expect(allPreferences, equals(preferencesAsStrings));
 
     await osmapi.setPreference('CustomPref1', 'test');
     var preference01Value = await osmapi.getPreference('CustomPref1');
