@@ -8,7 +8,7 @@ import 'package:dio/dio.dart';
  */
 abstract class OSMAPIException implements Exception {
   final int errorCode;
-  
+
   final String description;
 
   final String response;
@@ -28,7 +28,7 @@ abstract class OSMAPIException implements Exception {
 
 /**
  * 400 - Bad Request
- * 
+ *
  * This exception may occur when:
  * - the size of the key or value exceeds 255 characters
  * - there are errors parsing the uploaded XML
@@ -47,7 +47,7 @@ class OSMBadRequestException extends OSMAPIException {
 
 /**
  * 401 - Unauthorized
- * 
+ *
  * This exception occurs when the user login failed or authentication is required.
  */
 class OSMUnauthorizedException extends OSMAPIException {
@@ -58,7 +58,7 @@ class OSMUnauthorizedException extends OSMAPIException {
 
 /**
  * 403 - Forbidden
- * 
+ *
  * This exception may occur when:
  * - login was successful but the user is blocked
  * - the version of the element is not available (due to redaction)
@@ -71,7 +71,7 @@ class OSMForbiddenException extends OSMAPIException {
 
 /**
  * 404 - Not Found
- * 
+ *
  * This exception may occur when:
  * - no changeset, or element with the given id could be found
  * - no user with the given uid or display_name could be found
@@ -84,7 +84,7 @@ class OSMNotFoundException extends OSMAPIException {
 
 /**
  * 405 - Method Not Allowed
- * 
+ *
  * This exception occurs when the client is using the wrong request method.
  */
 class OSMMethodNotAllowedException extends OSMAPIException {
@@ -95,7 +95,7 @@ class OSMMethodNotAllowedException extends OSMAPIException {
 
 /**
  * 406 - Not Acceptable
- * 
+ *
  * This exception occurs when the same key occurs more than once in a set of preferences.
  */
 class OSMNotAcceptableException extends OSMAPIException {
@@ -106,12 +106,14 @@ class OSMNotAcceptableException extends OSMAPIException {
 
 /**
  * 409 - Conflict
- * 
+ *
  * This exception may occur when:
  * - the user tries to update a changeset that has already been closed
  * - the user trying to update the changeset is not the same as the one that created it
  * - the user tries to comment on a changeset which is not closed
  * - the version of the provided element does not match the current database version of the element
+ * - the user tries to close an already closed note
+ * - the user tries to reopen an already opened note
  */
 class OSMConflictException extends OSMAPIException {
   OSMConflictException(String? response) :
@@ -121,7 +123,7 @@ class OSMConflictException extends OSMAPIException {
 
 /**
  * 410 - Gone
- * 
+ *
  * This exception occurs when the element in question has been deleted.
  */
 class OSMGoneException extends OSMAPIException {
@@ -132,7 +134,7 @@ class OSMGoneException extends OSMAPIException {
 
 /**
  * 412 - Precondition Failed
- * 
+ *
  * This exception occurs when
  * - the user tries to upload a way or relation which has elements that do not exist or are deleted
  * - the user tries to delete an element that is still used by another element
@@ -145,7 +147,7 @@ class OSMPreconditionFailedException extends OSMAPIException {
 
 /**
  * 413 - Payload Too Large
- * 
+ *
  * This exception occurs when the user tries to upload more than 150 preferences at once.
  */
 class OSMPayloadTooLargeException extends OSMAPIException {
@@ -156,7 +158,7 @@ class OSMPayloadTooLargeException extends OSMAPIException {
 
 /**
  * 414 - Request-URI Too Large
- * 
+ *
  * This exception occurs when fetching multiple elements and the URI was too long (tested to be > 8213 characters in the URI, or > 725 elements for 10 digit IDs when not specifying versions).
  */
 class OSMRequestURITooLargeException extends OSMAPIException {
@@ -167,7 +169,7 @@ class OSMRequestURITooLargeException extends OSMAPIException {
 
 /**
  * 509 - Bandwidth Limit Exceeded
- * 
+ *
  * This exception occurs when the user downloaded too much data in a short period of time.
  */
 class OSMBandwidthLimitExceededException extends OSMAPIException {

@@ -51,11 +51,11 @@ Dart bindings for the OpenStreetMap API
 - [x] Preferences of the logged-in user
 
 ### Map Notes API
-- [ ] Retrieving notes data by bounding box
-- [ ] Read
-- [ ] Create a new note
-- [ ] Create a new comment
-- [ ] Close
-- [ ] Reopen
-- [ ] Search for notes
+- [x] Retrieving notes data by bounding box
+- [x] Read
+- [x] Create a new note
+- [x] Create a new comment
+- [x] Close
+- [x] Reopen
+- [x] Search for notes
 - [ ] RSS Feed
