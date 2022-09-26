@@ -1,8 +1,7 @@
-import 'package:xml/xml.dart';
 import 'package:collection/collection.dart';
 
 /**
- * A container class for granted OSM permissions.
+ * An immutable container class for granted OSM permissions.
  */
 class OSMPermissions {
 
@@ -25,21 +24,9 @@ class OSMPermissions {
   final Set<String> _permissions;
 
 
-  const OSMPermissions([this._permissions = const <String>{}]) ;
-
-
-  /**
-   * A factory method for constructing an [OSMPermissions] object from an XML [String].
-   */
-  factory OSMPermissions.fromXMLString(xmlString) {
-    var xmlDoc = XmlDocument.parse(xmlString);
-    return OSMPermissions(
-      xmlDoc.findAllElements('permission').expand((element) {
-        var name = element.getAttribute('name');
-        return name != null ? [name] : const Iterable<String>.empty();
-      }).toSet()
-    );
-  }
+  OSMPermissions([
+    Iterable<String> permissions = const Iterable<String>.empty(),
+  ]) : _permissions = Set.of(permissions);
 
 
   /**

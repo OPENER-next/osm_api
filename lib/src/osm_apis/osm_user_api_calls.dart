@@ -16,8 +16,16 @@ mixin OSMUserAPICalls on OSMAPIBase {
    * This returns an [OSMPermissions] object wrapped in a [Future] which resolves when the operation has been completed.
    */
   Future<OSMPermissions> getPermissions() async {
-    final response = await sendRequest('/permissions');
-    return OSMPermissions.fromXMLString(response.data);
+    final response = await sendRequest(
+      '/permissions',
+       headers: const { 'Accept': 'application/json' },
+    );
+    // parse json
+    final jsonData = json.decode(response.data);
+    // get single user object
+    final permissionList = jsonData['permissions'].cast<String>();
+
+    return OSMPermissions(permissionList);
   }
 
 
@@ -27,7 +35,10 @@ mixin OSMUserAPICalls on OSMAPIBase {
    * This returns an [OSMUserPrivateDetails] object wrapped in a [Future] which resolves when the operation has been completed.
    */
   Future<OSMUserPrivateDetails> getCurrentUserDetails() async {
-    final response = await sendRequest('/user/details', headers: const { 'Accept': 'application/json' });
+    final response = await sendRequest(
+      '/user/details',
+      headers: const { 'Accept': 'application/json' },
+    );
     // parse json
     final jsonData = json.decode(response.data);
     // get single user object
@@ -43,7 +54,10 @@ mixin OSMUserAPICalls on OSMAPIBase {
    * This returns an [OSMUserDetails] object wrapped in a [Future] which resolves when the operation has been completed.
    */
   Future<OSMUserDetails> getUserDetails(int id) async {
-    final response = await sendRequest('/user/$id', headers: const { 'Accept': 'application/json' });
+    final response = await sendRequest(
+      '/user/$id',
+      headers: const { 'Accept': 'application/json' },
+    );
     // parse json
     final jsonData = json.decode(response.data);
     // get single user object
@@ -61,26 +75,16 @@ mixin OSMUserAPICalls on OSMAPIBase {
   Future<Iterable<OSMUserDetails>> getMultipleUsersDetails(Iterable<int> ids) async {
     final response = await sendRequest(
       '/users?users=${ids.join(',')}',
-      headers: const { 'Accept': 'application/json' }
+      headers: const { 'Accept': 'application/json' },
     );
     // parse json
     final jsonData = json.decode(response.data);
     // get users array
     final jsonObject = jsonData['users'].cast<Map<String, dynamic>>();
 
-    return _lazyJSONtoOSMUserDetails(jsonObject);
-  }
-
-
-  /**
-   * A generator/lazy iterable for converting JSON Objects to multiple [OSMUserDetails].
-   */
-  Iterable<OSMUserDetails> _lazyJSONtoOSMUserDetails(Iterable<Map<String, dynamic>> objects) sync* {
-    for (final jsonObj in objects) {
-      // get single user object
-      final userObj = jsonObj['user'].cast<String, dynamic>();
-      yield OSMUserDetails.fromJSONObject(userObj);
-    }
+    return jsonObject.map<OSMUserDetails>((jsonEntry) => OSMUserDetails.fromJSONObject(
+      jsonEntry['user'].cast<String, dynamic>(),
+    ));
   }
 
 
@@ -91,7 +95,10 @@ mixin OSMUserAPICalls on OSMAPIBase {
    * This returns a [Map] with all preferences and values as [String]s wrapped in a [Future] which resolves when the operation has been completed.
    */
   Future<Map<String, String>> getAllPreferences() async {
-    final response = await sendRequest('/user/preferences', headers: const { 'Accept': 'application/json' });
+    final response = await sendRequest(
+      '/user/preferences',
+      headers: const { 'Accept': 'application/json' },
+    );
     // parse json
     final jsonData = json.decode(response.data);
 
