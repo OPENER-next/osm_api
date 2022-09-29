@@ -77,6 +77,11 @@ class OSMElementBundle {
 
   /**
    * A function to get all [OSMNode]s from the current [OSMElementBundle] that are contained in the given [OSMWay].
+   *
+   * Note: This may return the same node multiple times.
+   * For Example if the way is closed the first and the last node will be identical.
+   *
+   * The nodes are returned in the order they are defined in the way element.
    */
   Iterable<OSMNode> getNodesFromWay(OSMWay way) sync* {
     for (final nodeId in way.nodeIds) {
@@ -94,7 +99,23 @@ class OSMElementBundle {
 
 
   /**
+   * A function to get all [OSMElement]s from the current [OSMElementBundle] that are contained in the given [OSMRelation].
+   *
+   * Note: This will contain duplicates for elements that are references multiple times.
+   *
+   * The elements are returned in the order they are defined in the relation element.
+   */
+  Iterable<OSMElement> getElementsFromRelation(OSMRelation relation) {
+    return _getElementsFromRelation(elements, relation);
+  }
+
+
+  /**
    * A function to get all [OSMNode]s from the current [OSMElementBundle] that are contained in the given [OSMRelation].
+   *
+   * Note: This will contain duplicates for nodes that are referenced multiple times.
+   *
+   * The nodes are returned in the order they are defined in the relation element.
    */
   Iterable<OSMNode> getNodesFromRelation(OSMRelation relation) {
     return _getElementsFromRelation(nodes, relation);
@@ -103,6 +124,10 @@ class OSMElementBundle {
 
   /**
    * A function to get all [OSMWay]s from the current [OSMElementBundle] that are contained in the given [OSMRelation].
+   *
+   * Note: This will contain duplicates for ways that are referenced multiple times.
+   *
+   * The ways are returned in the order they are defined in the relation element.
    */
   Iterable<OSMWay> getWaysFromRelation(OSMRelation relation) {
     return _getElementsFromRelation(ways, relation);
@@ -111,6 +136,10 @@ class OSMElementBundle {
 
   /**
    * A function to get all [OSMRelation]s from the current [OSMElementBundle] that are contained in the given [OSMRelation].
+   *
+   * Note: This will contain duplicates for relations that are referenced multiple times.
+   *
+   * The relations are returned in the order they are defined in the relation element.
    */
   Iterable<OSMRelation> getRelationsFromRelation(OSMRelation relation) {
     return _getElementsFromRelation(relations, relation);
