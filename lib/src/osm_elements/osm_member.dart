@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:xml/xml.dart';
 
 import '/src/osm_elements/osm_element.dart';
@@ -73,6 +75,10 @@ class OSMMember {
    * A function to serialize the element to an XML [String].
    */
   StringBuffer toXML([ StringBuffer? buffer ]) {
+    final sanitizer = const HtmlEscape(HtmlEscapeMode.attribute);
+    // escape special XML characters
+    final role = sanitizer.convert(this.role);
+
     return buffer ?? StringBuffer()
       ..write('<member')
       ..write(' type="')..write(type.name)..write('"')

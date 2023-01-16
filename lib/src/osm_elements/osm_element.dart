@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:collection/collection.dart';
 import '/src/osm_elements/osm_element_type.dart';
 
@@ -79,12 +81,15 @@ abstract class OSMElement {
 
     final elementName = type.name;
 
+    final sanitizer = const HtmlEscape(HtmlEscapeMode.attribute);
     final stringBuffer = buffer ?? StringBuffer()
     ..write('<')..write(elementName);
     for (final attributeEntry in attributes.entries) {
+      // escape special XML characters
+      final key = sanitizer.convert(attributeEntry.key);
+      final value = sanitizer.convert(attributeEntry.value.toString());
       stringBuffer
-      ..write(' ')..write(attributeEntry.key)
-      ..write('="')..write(attributeEntry.value.toString())..write('"');
+      ..write(' ')..write(key)..write('="')..write(value)..write('"');
     }
     if (!includeBody || !hasBody) {
       stringBuffer.writeln('/>');
@@ -106,8 +111,13 @@ abstract class OSMElement {
    * Optionally an already existing [StringBuffer] can be passed to write the changes to.
    */
   StringBuffer bodyToXML([ StringBuffer? buffer ]) {
+    final sanitizer = const HtmlEscape(HtmlEscapeMode.attribute);
     final stringBuffer = buffer ?? StringBuffer();
     tags.forEach((key, value) {
+      // escape special XML characters
+      key = sanitizer.convert(key);
+      value = sanitizer.convert(value);
+
       stringBuffer
       ..write('<tag')
       ..write(' k="')..write(key)..write('"')

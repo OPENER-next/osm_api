@@ -64,6 +64,18 @@ void main() async {
     );
   });
 
+  test('create element with special XML characters in tags', () async {
+    final changesetId = await osmapi.createChangeset({
+      'created_by': 'Opener Next',
+    });
+    final node = await osmapi.createElement(
+      OSMNode(10, 20, tags: {'key': '<>&"\''}),
+      changesetId,
+    );
+    final serverNode = await osmapi.getNode(node.id);
+    expect(serverNode, equals(node));
+  });
+
   test('compare single local node and getNode()', () async {
     final serverNode = await osmapi.getNode(nodes[0].id);
     expect(serverNode, equals(nodes[0]));

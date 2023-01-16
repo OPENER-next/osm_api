@@ -17,7 +17,8 @@ void main() async {
   test('check for correct return of createChangeset() and getChangeset()', () async {
     final tags = {
       'created_by': 'Opener Next',
-      'comment': 'Just adding some streetnames'
+      'comment': 'Just adding some streetnames',
+      'test_special_characters': '<>&"\'',
     };
 
     final changesetId = await osmapi.createChangeset(tags);

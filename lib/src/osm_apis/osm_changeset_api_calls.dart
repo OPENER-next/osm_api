@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:xml/xml.dart';
 import '/src/osm_change.dart';
 import '/src/commons/bounding_box.dart';
@@ -79,14 +81,21 @@ mixin OSMChangesetAPICalls on OSMAPIBase {
    * A function to construct the XML message body [String] from a given tag Map..
    */
   String _tagsToXMLBody(Map<String, String> tags) {
-    final xmlString = tags.entries.fold<String>('',
-      (string, entry) => string += '<tag k="${entry.key}" v="${entry.value}"/>',
-    );
+    final sanitizer = const HtmlEscape(HtmlEscapeMode.attribute);
+    final stringBuffer = StringBuffer();
+
+    tags.forEach((key, value) {
+      // escape special XML characters
+      key = sanitizer.convert(key);
+      value = sanitizer.convert(value);
+      stringBuffer
+      ..write('<tag k="')..write(key)..write('" v="')..write(value)..write('"/>');
+    });
 
     return
     '<osm>'
       '<changeset>'
-        '$xmlString'
+        '${stringBuffer.toString()}'
       '</changeset>'
     '</osm>';
   }
