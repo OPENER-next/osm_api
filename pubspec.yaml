@@ -14,4 +14,4 @@ dependencies:
   xml: ^6.2.2
   dio: ^5.1.0
   crypto: ^3.0.2
-  collection: ^1.17.1
+  collection: ^1.17.0
