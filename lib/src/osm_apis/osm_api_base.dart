@@ -19,8 +19,8 @@ abstract class OSMAPIBase {
 
   OSMAPIBase({
     String baseUrl = 'http://127.0.0.1:3000/api/0.6',
-    int connectTimeout = 5000,
-    int receiveTimeout = 3000,
+    Duration connectTimeout = const Duration(seconds: 5),
+    Duration receiveTimeout = const Duration(seconds: 5),
     this.authentication,
     String? userAgent
   }) {
@@ -56,12 +56,12 @@ abstract class OSMAPIBase {
   /**
    * Connection timeout in milliseconds.
    *
-   * Defaults to 5000
+   * Defaults to 5 seconds
    */
-  int get connectTimeout {
-    return _dio.options.connectTimeout;
+  Duration get connectTimeout {
+    return _dio.options.connectTimeout!;
   }
-  set connectTimeout(int value) {
+  set connectTimeout(Duration value) {
     _dio.options.connectTimeout = value;
   }
 
@@ -69,12 +69,12 @@ abstract class OSMAPIBase {
   /**
    * Receiving timeout in milliseconds.
    *
-   * Defaults to 3000
+   * Defaults to 5 seconds
    */
-  int get receiveTimeout {
-    return _dio.options.receiveTimeout;
+  Duration get receiveTimeout {
+    return _dio.options.receiveTimeout!;
   }
-  set receiveTimeout(int value) {
+  set receiveTimeout(Duration value) {
     _dio.options.receiveTimeout = value;
   }
 

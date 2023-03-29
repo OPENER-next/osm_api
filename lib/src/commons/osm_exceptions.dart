@@ -206,8 +206,7 @@ Future<Response<dynamic>> handleDioErrors(DioError error, StackTrace stackTrace)
   final response = error.response;
   final message = response?.data ?? response?.statusMessage ?? error.message;
 
-  if (error.type == DioErrorType.response && error.response?.statusCode != null) {
-
+  if (error.type == DioErrorType.badResponse && error.response?.statusCode != null) {
     switch (response!.statusCode) {
       case 400: return Future.error(OSMBadRequestException(message));
       case 401: return Future.error(OSMUnauthorizedException(message));
@@ -225,7 +224,7 @@ Future<Response<dynamic>> handleDioErrors(DioError error, StackTrace stackTrace)
       default: return Future.error(OSMUnknownException(response.statusCode!, message));
 		}
   }
-  else if (error.type == DioErrorType.other && error.error is SocketException) {
+  else if (error.type == DioErrorType.connectionError && error.error is SocketException) {
     return Future.error(OSMConnectionException(message));
   }
   return Future.error(error);
