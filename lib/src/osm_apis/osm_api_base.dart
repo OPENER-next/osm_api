@@ -134,7 +134,7 @@ abstract class OSMAPIBase {
       path,
       data: body,
       options: options
-    ).onError<DioError>(handleDioErrors);
+    ).onError<DioException>(handleDioException);
   }
 
 
