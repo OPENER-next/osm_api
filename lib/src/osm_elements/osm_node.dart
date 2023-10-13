@@ -43,7 +43,7 @@ class OSMNode extends OSMElement {
    *
    * Parsing an OsmChange from OSM will not include the lat/lon attributes,
    * for this very tiny exception instead of making [lat] and [lon] nullable we set them to [double.nan].
-   * Find an example OsmChange here: https://www.openstreetmap.org/api/0.6/changeset/118455458/download
+   * Find an example OsmChange here: https://api.openstreetmap.org/api/0.6/changeset/118455458/download
    */
   factory OSMNode.fromXMLString(String xmlString) {
     final xmlDoc = XmlDocument.parse(xmlString);
@@ -57,7 +57,7 @@ class OSMNode extends OSMElement {
    *
    * Parsing an OsmChange from OSM will not include the lat/lon attributes,
    * for this very tiny exception instead of making [lat] and [lon] nullable we set them to [double.nan].
-   * Find an example OsmChange here: https://www.openstreetmap.org/api/0.6/changeset/118455458/download
+   * Find an example OsmChange here: https://api.openstreetmap.org/api/0.6/changeset/118455458/download
    */
   factory OSMNode.fromXMLElement(XmlElement nodeElement) {
     final double lat, lon;
