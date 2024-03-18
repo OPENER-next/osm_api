@@ -281,4 +281,19 @@ void main() async {
       expect(e,  isA<OSMGoneException>());
     }
   });
+
+  test('test parsing empty relation', () async {
+    final emptyRel01 = OSMRelation.fromJSONObject({});
+    expect(emptyRel01.members, isEmpty);
+    expect(emptyRel01.tags, isEmpty);
+    expect(emptyRel01.id, isZero);
+    expect(emptyRel01.version, isZero);
+
+    final emptyRel02 = OSMRelation.fromXMLString('<relation></relation>');
+    expect(emptyRel02.members, isEmpty);
+    expect(emptyRel02.tags, isEmpty);
+    expect(emptyRel02.id, isZero);
+    expect(emptyRel02.version, isZero);
+  });
 }
+
