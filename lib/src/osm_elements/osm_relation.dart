@@ -28,17 +28,16 @@ class OSMRelation extends OSMElement {
    * A factory method for constructing an [OSMRelation] from a JSON object.
    */
   factory OSMRelation.fromJSONObject(Map<String, dynamic> obj) {
-    var members = <OSMMember>[];
-    for (var memberObj in obj['members']) {
-      var typeEnum = OSMElementType.values.firstWhere((e) => e.name == memberObj['type']);
-      members.add(
-        OSMMember(
-          type: typeEnum,
-          ref: memberObj['ref'],
-          role: memberObj['role'],
-        )
-      );
-    }
+    // Relations unfortunately can have no members (see https://wiki.openstreetmap.org/wiki/Empty_relations)
+    // In this case the "members" property is omitted/missing.
+    // Therefore a check and fallback to an empty Iterable is required.
+    final List<OSMMember> members = (obj['members'] ?? const Iterable.empty())
+      .map<OSMMember>((memberObj) => OSMMember(
+        type: OSMElementType.values.firstWhere((e) => e.name == memberObj['type']),
+        ref: memberObj['ref'],
+        role: memberObj['role'],
+      ))
+      .toList();
 
     return OSMRelation(
       members,
@@ -50,7 +49,7 @@ class OSMRelation extends OSMElement {
 
 
   /**
-   * A factory method for constructing an [OSMRelation] from a XML [String].
+   * A factory method for constructing an [OSMRelation] from an XML [String].
    */
   factory OSMRelation.fromXMLString(String xmlString) {
     final xmlDoc = XmlDocument.parse(xmlString);
@@ -60,7 +59,7 @@ class OSMRelation extends OSMElement {
 
 
   /**
-   * A factory method for constructing an [OSMRelation] from a XML [XmlElement].
+   * A factory method for constructing an [OSMRelation] from an XML [XmlElement].
    */
   factory OSMRelation.fromXMLElement(XmlElement relationElement) {
     final List<OSMMember> members;
