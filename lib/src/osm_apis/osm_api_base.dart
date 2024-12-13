@@ -9,7 +9,7 @@ abstract class OSMAPIBase {
   final _dio = Dio();
 
  /**
-   * User authentication either via [BasicAuth] or [OAuth]
+   * User authentication via [OAuth2]
    *
    * If no authentication is given certain API calls will fail.
    * For example you won't be able to make any changes to data on the server.
@@ -107,22 +107,14 @@ abstract class OSMAPIBase {
    * Additional headers can be applied via the [headers] parameter.
    * A list of status codes that shall not throw an exception can be provided via [ignoreStatusCodes].
    */
-  Future<Response> sendRequest(String path, { String type = 'GET', String? body, Map<String, String>?headers, List<int>? ignoreStatusCodes }) {
-    var options = Options(
+  Future<Response> sendRequest(String path, { String type = 'GET', String? body, Map<String, String> headers = const {}, List<int>? ignoreStatusCodes }) {
+    final options = Options(
       method: type,
-      headers: <String, String>{}
+      headers: <String, String>{
+        if (authentication != null) 'Authorization': authentication!.getAuthorizationHeader(),
+        ...headers,
+      }
     );
-
-    if (authentication != null) {
-      options.headers!['Authorization'] = authentication!.getAuthorizationHeader(
-        _dio.options.baseUrl + path,
-        type
-      );
-    }
-
-    if (headers != null) {
-      options.headers!.addAll(headers);
-    }
 
     if (ignoreStatusCodes != null) {
       options.validateStatus = (int? status) {
