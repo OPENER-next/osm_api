@@ -8,10 +8,9 @@ void main() async {
   setUpAll(() async {
     osmapi = OSMAPI(
       baseUrl: 'http://127.0.0.1:3000/api/0.6',
-      authentication: BasicAuth(
-        username: 'testuser',
-        password: 'testpass'
-      )
+      authentication: OAuth2(
+        accessToken: 'DummyTestToken',
+      ),
     );
   });
 
