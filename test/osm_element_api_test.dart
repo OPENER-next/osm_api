@@ -29,15 +29,15 @@ void main() async {
         changesetId
       ),
       osmapi.createElement(
-        OSMNode(30, 40),
+        OSMNode(10.1, 20),
         changesetId
       ),
       osmapi.createElement(
-        OSMNode(80, 60),
+        OSMNode(10, 20.1),
         changesetId
       ),
       osmapi.createElement(
-        OSMNode(40, 100),
+        OSMNode(10.1, 20.1),
         changesetId
       )
     ]);
@@ -98,7 +98,7 @@ void main() async {
     nodes[0].tags['one'] = 'more';
     await osmapi.updateElement(nodes[0], changesetId);
 
-    nodes[1].lat = 23;
+    nodes[1].lat = 9.9;
     await osmapi.updateElement(nodes[1], changesetId);
 
     final serverNodes = await osmapi.getNodes(

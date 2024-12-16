@@ -209,8 +209,8 @@ void main() async {
     ]));
 
     // close already closed note and check for conflict error
-    expect(
-      () async => await osmapi.closeNote(originalNote.id),
+    await expectLater(
+      () => osmapi.closeNote(originalNote.id),
       throwsA(isA<OSMConflictException>()),
     );
 

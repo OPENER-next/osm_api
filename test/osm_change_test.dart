@@ -249,7 +249,7 @@ void main() async {
     // modify example elements
 
     final node1Mod = await osmapi.updateElement(
-      OSMNode(node1.lat, 10, id: node1.id, version: node1.version, tags: node1.tags), changeset01Id
+      OSMNode(node1.lat, 1.1, id: node1.id, version: node1.version, tags: node1.tags), changeset01Id
     );
     final node2Mod = await osmapi.updateElement(
       OSMNode(node2.lat, node2.lon, id: node2.id, version: node2.version, tags: tagsMod), changeset01Id

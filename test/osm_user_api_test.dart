@@ -31,7 +31,11 @@ void main() async {
       OSMPermissions.WRITE_GPS_TRACES,
       OSMPermissions.WRITE_MAP,
       OSMPermissions.WRITE_NOTES,
-      OSMPermissions.WRITE_USER_PREFERENCES
+      OSMPermissions.WRITE_USER_PREFERENCES,
+      OSMPermissions.READ_MESSAGES,
+      OSMPermissions.WRITE_MESSAGES,
+      OSMPermissions.REDACTIONS,
+      OSMPermissions.OPENID,
     }), true);
 
     expect(permWithAuth, equals(OSMPermissions({
@@ -41,7 +45,11 @@ void main() async {
       OSMPermissions.WRITE_GPS_TRACES,
       OSMPermissions.WRITE_MAP,
       OSMPermissions.WRITE_NOTES,
-      OSMPermissions.WRITE_USER_PREFERENCES
+      OSMPermissions.WRITE_USER_PREFERENCES,
+      OSMPermissions.READ_MESSAGES,
+      OSMPermissions.WRITE_MESSAGES,
+      OSMPermissions.REDACTIONS,
+      OSMPermissions.OPENID,
     })));
   });
 
@@ -77,6 +85,22 @@ void main() async {
     expect(permNoAuth.has(
       OSMPermissions.WRITE_USER_PREFERENCES
     ), false);
+
+    expect(permNoAuth.has(
+      OSMPermissions.READ_MESSAGES,
+    ), false);
+
+    expect(permNoAuth.has(
+      OSMPermissions.WRITE_MESSAGES,
+    ), false);
+
+    expect(permNoAuth.has(
+      OSMPermissions.REDACTIONS,
+    ), false);
+
+    expect(permNoAuth.has(
+      OSMPermissions.OPENID
+    ), false);
   });
 
   // user details tests
@@ -88,7 +112,7 @@ void main() async {
     expect(userDetails.homeLon, isNull);
     expect(userDetails.homeZoom, isNull);
     expect(userDetails.contributionsArePublicDomain, isFalse);
-    expect(userDetails.preferredLanguages, contains('en-US'));
+    expect(userDetails.preferredLanguages, isEmpty);
     expect(userDetails.receivedMessageCount, isZero);
     expect(userDetails.sentMessagesCount, isZero);
     expect(userDetails.unreadMessagesCount, isZero);
