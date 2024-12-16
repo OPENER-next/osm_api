@@ -11,10 +11,9 @@ void main() async {
   setUpAll(() async {
     osmapi = OSMAPI(
       baseUrl: 'http://127.0.0.1:3000/api/0.6',
-      authentication: BasicAuth(
-        username: 'testuser',
-        password: 'testpass'
-      )
+      authentication: OAuth2(
+        accessToken: 'DummyTestToken',
+      ),
     );
 
     changesetId = await osmapi.createChangeset({
@@ -30,15 +29,15 @@ void main() async {
         changesetId
       ),
       osmapi.createElement(
-        OSMNode(30, 40),
+        OSMNode(10.1, 20),
         changesetId
       ),
       osmapi.createElement(
-        OSMNode(80, 60),
+        OSMNode(10, 20.1),
         changesetId
       ),
       osmapi.createElement(
-        OSMNode(40, 100),
+        OSMNode(10.1, 20.1),
         changesetId
       )
     ]);
@@ -99,7 +98,7 @@ void main() async {
     nodes[0].tags['one'] = 'more';
     await osmapi.updateElement(nodes[0], changesetId);
 
-    nodes[1].lat = 23;
+    nodes[1].lat = 9.9;
     await osmapi.updateElement(nodes[1], changesetId);
 
     final serverNodes = await osmapi.getNodes(

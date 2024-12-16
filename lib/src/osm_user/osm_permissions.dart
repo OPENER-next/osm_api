@@ -15,7 +15,11 @@ class OSMPermissions {
   WRITE_MAP = 'allow_write_api',
   READ_GPS_TRACES = 'allow_read_gpx',
   WRITE_GPS_TRACES = 'allow_write_gpx',
-  WRITE_NOTES = 'allow_write_notes';
+  WRITE_NOTES = 'allow_write_notes',
+  READ_MESSAGES = 'allow_consume_messages',
+  WRITE_MESSAGES = 'allow_send_messages',
+  REDACTIONS = 'allow_write_redactions',
+  OPENID = 'allow_openid';
 
 
   /**

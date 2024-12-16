@@ -12,9 +12,8 @@ void main() async {
   setUpAll(() async {
     osmapi = OSMAPI(
       baseUrl: 'http://127.0.0.1:3000/api/0.6',
-      authentication: BasicAuth(
-        username: 'testuser',
-        password: 'testpass'
+      authentication: OAuth2(
+        accessToken: 'DummyTestToken',
       ),
     );
 
@@ -210,8 +209,8 @@ void main() async {
     ]));
 
     // close already closed note and check for conflict error
-    expect(
-      () async => await osmapi.closeNote(originalNote.id),
+    await expectLater(
+      () => osmapi.closeNote(originalNote.id),
       throwsA(isA<OSMConflictException>()),
     );
 

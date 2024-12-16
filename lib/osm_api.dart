@@ -5,8 +5,6 @@ import '/src/osm_apis/osm_note_api_calls.dart';
 import '/src/osm_apis/osm_api_base.dart';
 
 export '/src/authentication/auth.dart';
-export '/src/authentication/basic_auth.dart';
-export '/src/authentication/oauth_auth.dart';
 export '/src/authentication/oauth2_auth.dart';
 
 export '/src/commons/bounding_box.dart';

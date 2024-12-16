@@ -148,11 +148,12 @@ class OSMPreconditionFailedException extends OSMAPIException {
 /**
  * 413 - Payload Too Large
  *
- * This exception occurs when the user tries to upload more than 150 preferences at once.
+ * - the user tried to upload more than 150 preferences at once
+ * - the permitted changeset bounding box size is exceeded
  */
 class OSMPayloadTooLargeException extends OSMAPIException {
   OSMPayloadTooLargeException(String? response) :
-  super(413, 'Payload Too Large: The user tried to upload more than 150 preferences at once.', response);
+  super(413, 'Payload Too Large: Visit the documentation for potential error causes.', response);
 }
 
 

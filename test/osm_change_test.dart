@@ -8,10 +8,9 @@ void main() async {
   setUpAll(() async {
     osmapi = OSMAPI(
       baseUrl: 'http://127.0.0.1:3000/api/0.6',
-      authentication: BasicAuth(
-        username: 'testuser',
-        password: 'testpass'
-      )
+      authentication: OAuth2(
+        accessToken: 'DummyTestToken',
+      ),
     );
   });
 
@@ -250,7 +249,7 @@ void main() async {
     // modify example elements
 
     final node1Mod = await osmapi.updateElement(
-      OSMNode(node1.lat, 10, id: node1.id, version: node1.version, tags: node1.tags), changeset01Id
+      OSMNode(node1.lat, 1.1, id: node1.id, version: node1.version, tags: node1.tags), changeset01Id
     );
     final node2Mod = await osmapi.updateElement(
       OSMNode(node2.lat, node2.lon, id: node2.id, version: node2.version, tags: tagsMod), changeset01Id
